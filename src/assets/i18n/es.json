@@ -1,0 +1,148 @@
+{
+	"AREA": {
+		"TITLE": "Área privada"
+	},
+	"CARGANDO": {
+		"ESPERE": "Por favor, espere..."
+	},
+	"HOME": {
+		"ENTRAR": "Entrar",
+		"SALIR": "Salir",
+		"TITLE": "Inicio"
+	},
+	"INTERVALO": {
+		"TITLE": "Intervalo"
+	},
+	"LISTA-ADMINISTRADORES": {
+		"SIN_ADMINISTRADORES": "No hay administradores para mostrar",
+		"TITLE": "Lista de administradores"
+	},
+	"LISTA-CLIENTES": {
+		"SIN_CLIENTES": "No hay clientes para mostrar",
+		"TITLE": "Lista de clientes"
+	},
+	"LOGIN": {
+		"CAMPO_REQUERIDO": "Campo obligatorio",
+		"CLAVE": "Contraseña",
+		"EMAIL": "Correo electrónico",
+		"ENTRAR": "Acceder",
+		"ESPERA": "Por favor, espere...",
+		"FALLO": "El correo electrónico introducido no se encuentra en el sistema. Por favor, inténtelo de nuevo."
+	},
+	"LOGINADMIN": {
+		"CAMPO_REQUERIDO": "Campo obligatorio",
+		"EMAIL": "Correo electrónico",
+		"ENTRAR": "Acceder",
+		"FALLO": "Las credenciales introducidas no se encuentran en el sistema. Por favor, inténtelo de nuevo.",
+		"TITULO": "Acceso empresa"
+	},
+	"MENU": {
+		"AREA": "Área privada",
+		"CERRAR_SESION": "Cerrar sesión",
+		"INICIO": "Inicio",
+		"INTERVALO": "Intervalo",
+		"TITLE": "Menú"
+	},
+	"NUEVA-EMPRESA": {
+		"ACEPTAR": "Aceptar",
+		"ANYO": "Año",
+		"CANCELAR": "Cancelar",
+		"CIF": "CIF",
+		"CLIENTE_NO_EXISTE": "El cliente seleccionado no existe.",
+		"CUENTA-BANCARIA": "Cuenta bancaria",
+		"CVC": "CVC",
+		"DATOS-EMPRESA": "Datos de la empresa",
+		"DATOS-OPCIONALES": "Datos opcionales",
+		"EDITAR": "Editar",
+		"ELIJA-FORMA-PAGO": "Elija una forma de pago",
+		"ERROR-EMAIL": "Ya existe una cuenta con el mismo correo electrónico",
+		"ESPACIOS-DISPONIBLES": "Espacios disponibles para añadir centros de trabajo",
+		"FORMA-PAGO": "Forma de pago",
+		"IBAN": "IBAN",
+		"MES": "Mes",
+		"NOMBRE": "Nombre",
+		"NUM-TARJETA": "Número de tarjeta",
+		"REALIZADO": "Realizado",
+		"REGISTRAR": "Registrar nueva empresa",
+		"REGISTRO-REALIZADO": "Registro realizado con éxito",
+		"TARJETA": "Tarjeta",
+		"TITLE": "Nueva empresa"
+	},
+	"NUEVO-ADMINISTRADOR": {
+		"CLAVE": "Constraseña",
+		"DATOS-USUARIO": "Datos de acceso",
+		"EDITAR": "Editar administrador",
+		"EMAIL": "Correo electrónico",
+		"ERROR_EMAIL": "Ya existe una cuenta con el mismo correo electrónico",
+		"REALIZADO": "Realizado",
+		"REGISTRAR": "Registrar nuevo administrador",
+		"REGISTRO-REALIZADO": "Registro realizado con éxito",
+		"TITLE": "Nuevo administrador"
+	},
+	"NUEVO-CENTRO": {
+		"DATOS-CENTRO": "Datos del centro de trabajo",
+		"DATOS-OPCIONALES": "Datos opcionales",
+		"EDITAR": "Editar centro de trabajo",
+		"EMPRESA_NO_EXISTE": "La empresa seleccionada no existe",
+		"ERROR-NOMBRE": "Ya dispone de una empresa con el mismo nombre",
+		"ESPACIOS_DISPONIBLES": "Espacios disponibles",
+		"LATITUD": "Latitud",
+		"LONGITUD": "Longitud",
+		"MARGEN_ENTRADA": "Margen de entrada (en minutos)",
+		"NOMBRE": "Nombre",
+		"REALIZADO": "Realizado",
+		"REGISTRAR": "Registrar nuevo centro de trabajo",
+		"REGISTRO-REALIZADO": "Registro realizado con éxito",
+		"TITLE": "Nuevo centro de trabajo"
+	},
+	"NUEVO-CLIENTE": {
+		"CLAVE": "Contraseña",
+		"DATOS-USUARIO": "Datos del cliente",
+		"EDITAR": "Editar cliente",
+		"EMAIL": "Correo electrónico",
+		"ERROR-EMAIL": "Ya existe una cuenta con el mismo correo electrónico",
+		"REALIZADO": "Realizado",
+		"REGISTRAR": "Registrar nuevo cliente",
+		"REGISTRO-REALIZADO": "Registro realizado con éxito",
+		"TITLE": "Nuevo cliente"
+	},
+	"NUEVO-TRABAJADOR": {
+		"ACEPTAR": "Aceptar",
+		"APELLIDOS": "Apellidos",
+		"CANCELAR": "Cancelar",
+		"CENTRO": "En oficina",
+		"DATOS-OPCIONALES": "Datos opcionales",
+		"DATOS-TRABAJADOR": "Datos del trabajador",
+		"EDITAR": "Editar",
+		"ELIJA-TIPO": "Elija un tipo",
+		"EMAIL": "Correo electrónico",
+		"ERROR-EMAIL": "Ya existe una cuenta con el mismo correo electrónico",
+		"MARGEN_ENTRADA": "Margen de entrada (en minutos)",
+		"MOVILIDAD": "Movilidad",
+		"NOMBRE": "Nombre",
+		"REALIZADO": "Realizado",
+		"REGISTRAR": "Registrar nuevo trabajador",
+		"REGISTRO-REALIZADO": "Registro realizado con éxito",
+		"TELETRABAJO": "Teletrabajo",
+		"TIPO": "Tipo de trabajo",
+		"TITLE": "Nuevo trabajador"
+	},
+	"VER-CENTRO": {
+		"NUEVO-TRABAJADOR": "Crear nuevo trabajador",
+		"SIN_TRABAJADORES": "No hay trabajadores asignados a este centro de trabajo",
+		"TITLE": "Centro de trabajo",
+		"TRABAJADORES": "Trabajadores del centro de trabajo"
+	},
+	"VER-CLIENTE": {
+		"EMPRESAS": "Empresas",
+		"NUEVA-EMPRESA": "Crear nueva empresa",
+		"SIN_EMPRESAS": "No dispone de empresas todavía",
+		"TITLE": "Cliente"
+	},
+	"VER-EMPRESA": {
+		"CENTROS": "Centros de trabajo",
+		"NUEVO-CENTRO": "Crear nuevo centro de trabajo",
+		"SIN_CENTROS": "No dispone de centros de trabajo todavía",
+		"TITLE": "Empresa"
+	}
+}

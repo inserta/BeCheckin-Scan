@@ -1,0 +1,7 @@
+{
+  "name": "Becheckin-Scan",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,148 @@
+{
+	"AREA": {
+		"TITLE": "Private area"
+	},
+	"CARGANDO": {
+		"ESPERE": ""
+	},
+	"HOME": {
+		"ENTRAR": "Start",
+		"SALIR": "Stop",
+		"TITLE": "Home"
+	},
+	"INTERVALO": {
+		"TITLE": "Interval"
+	},
+	"LISTA-ADMINISTRADORES": {
+		"SIN_ADMINISTRADORES": "",
+		"TITLE": ""
+	},
+	"LISTA-CLIENTES": {
+		"SIN_CLIENTES": "",
+		"TITLE": ""
+	},
+	"LOGIN": {
+		"CAMPO_REQUERIDO": "Required field",
+		"CLAVE": "Password",
+		"EMAIL": "Email",
+		"ENTRAR": "Sign in",
+		"ESPERA": "Please wait...",
+		"FALLO": "The email introduced was not found in the system. Please try again."
+	},
+	"LOGINADMIN": {
+		"CAMPO_REQUERIDO": "Required field",
+		"EMAIL": "Email",
+		"ENTRAR": "Sign in",
+		"FALLO": "The credentials introduced were not found in the system. Please try again.",
+		"TITULO": "Business access"
+	},
+	"MENU": {
+		"AREA": "Private area",
+		"CERRAR_SESION": "",
+		"INICIO": "Home",
+		"INTERVALO": "Interval",
+		"TITLE": "Menu"
+	},
+	"NUEVA-EMPRESA": {
+		"ACEPTAR": "",
+		"ANYO": "",
+		"CANCELAR": "",
+		"CIF": "",
+		"CLIENTE_NO_EXISTE": "",
+		"CUENTA-BANCARIA": "",
+		"CVC": "",
+		"DATOS-EMPRESA": "",
+		"DATOS-OPCIONALES": "",
+		"EDITAR": "",
+		"ELIJA-FORMA-PAGO": "",
+		"ERROR-EMAIL": "",
+		"ESPACIOS-DISPONIBLES": "",
+		"FORMA-PAGO": "",
+		"IBAN": "",
+		"MES": "",
+		"NOMBRE": "",
+		"NUM-TARJETA": "",
+		"REALIZADO": "",
+		"REGISTRAR": "",
+		"REGISTRO-REALIZADO": "",
+		"TARJETA": "",
+		"TITLE": ""
+	},
+	"NUEVO-ADMINISTRADOR": {
+		"CLAVE": "",
+		"DATOS-USUARIO": "",
+		"EDITAR": "",
+		"EMAIL": "",
+		"ERROR_EMAIL": "",
+		"REALIZADO": "",
+		"REGISTRAR": "",
+		"REGISTRO-REALIZADO": "",
+		"TITLE": ""
+	},
+	"NUEVO-CENTRO": {
+		"DATOS-CENTRO": "",
+		"DATOS-OPCIONALES": "",
+		"EDITAR": "",
+		"EMPRESA_NO_EXISTE": "",
+		"ERROR-NOMBRE": "",
+		"ESPACIOS_DISPONIBLES": "",
+		"LATITUD": "",
+		"LONGITUD": "",
+		"MARGEN_ENTRADA": "",
+		"NOMBRE": "",
+		"REALIZADO": "",
+		"REGISTRAR": "",
+		"REGISTRO-REALIZADO": "",
+		"TITLE": ""
+	},
+	"NUEVO-CLIENTE": {
+		"CLAVE": "",
+		"DATOS-USUARIO": "",
+		"EDITAR": "",
+		"EMAIL": "",
+		"ERROR-EMAIL": "",
+		"REALIZADO": "",
+		"REGISTRAR": "",
+		"REGISTRO-REALIZADO": "",
+		"TITLE": ""
+	},
+	"NUEVO-TRABAJADOR": {
+		"ACEPTAR": "",
+		"APELLIDOS": "",
+		"CANCELAR": "",
+		"CENTRO": "",
+		"DATOS-OPCIONALES": "",
+		"DATOS-TRABAJADOR": "",
+		"EDITAR": "",
+		"ELIJA-TIPO": "",
+		"EMAIL": "",
+		"ERROR-EMAIL": "",
+		"MARGEN_ENTRADA": "",
+		"MOVILIDAD": "",
+		"NOMBRE": "",
+		"REALIZADO": "",
+		"REGISTRAR": "",
+		"REGISTRO-REALIZADO": "",
+		"TELETRABAJO": "",
+		"TIPO": "",
+		"TITLE": ""
+	},
+	"VER-CENTRO": {
+		"NUEVO-TRABAJADOR": "",
+		"SIN_TRABAJADORES": "",
+		"TITLE": "",
+		"TRABAJADORES": ""
+	},
+	"VER-CLIENTE": {
+		"EMPRESAS": "",
+		"NUEVA-EMPRESA": "",
+		"SIN_EMPRESAS": "",
+		"TITLE": ""
+	},
+	"VER-EMPRESA": {
+		"CENTROS": "",
+		"NUEVO-CENTRO": "",
+		"SIN_CENTROS": "",
+		"TITLE": ""
+	}
+}
