@@ -30,3 +30,5 @@
 1. Ejecutar ```npm run extract-translations```
 2. Repasar los ficheros generados en la carpeta 'src/assets/i18n/'
 3. Escribir las nuevas traducciones
+
+### Cómo construir la aplicación

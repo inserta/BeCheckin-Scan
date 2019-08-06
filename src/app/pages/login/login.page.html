@@ -1,0 +1,64 @@
+<!-- 
+<ion-content color="primary" padding>
+  <form #form="ngForm" (ngSubmit)="login(form)">
+    <ion-grid>
+      <ion-row color="primary" justify-content-center>
+        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+          <div text-center>
+            <h3>Login</h3>
+          </div>
+          <div padding>
+            <ion-item>
+              <ion-input name="email" type="email" placeholder="your@email.com" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input name="password" type="password" placeholder="Password" ngModel required></ion-input>
+            </ion-item>
+          </div>
+          <div padding>
+            <ion-button size="large" type="submit" [disabled]="form.invalid" expand="block">Login</ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content> -->
+
+<ion-content>
+
+  <!-- Logo -->
+  <div padding-horizontal text-center class="animated fadeInDown">
+    <div class="logoCircle"></div>
+  </div>
+
+  <!-- Login form -->
+  <form [formGroup]="onLoginForm" class="list-form">
+    <ion-item no-padding class="animated fadeInUp">
+      <ion-label position="floating">
+        <ion-icon name="person" item-start></ion-icon>
+        {{ 'LOGINADMIN.EMAIL' | translate}}
+      </ion-label>
+      <ion-input [(ngModel)]="credenciales.usuario" maxlength="30" color="secondary" type="text"
+        formControlName="usuario" (keypress)="eventHandler($event)">
+      </ion-input>
+    </ion-item>
+    <ion-item no-padding class="animated fadeInUp">
+      <ion-label position="floating">
+        <ion-icon name="lock" item-start></ion-icon>
+        {{ 'LOGIN.CLAVE' | translate}}
+      </ion-label>
+      <ion-input [(ngModel)]="credenciales.clave" maxlength="30" color="secondary" type="password"
+        formControlName="clave" (keypress)="eventHandler($event)"></ion-input>
+    </ion-item>
+  </form>
+
+  <br><br>
+
+<div class="centrado">
+  <ion-button icon-left size="medium" expand="full" shape="round" color="dark" (click)="login()"
+    [disabled]="!onLoginForm.valid" tappable>
+    <ion-icon name="log-in"></ion-icon>
+    {{ 'LOGINADMIN.ENTRAR' | translate}}
+  </ion-button>
+</div>
+</ion-content>

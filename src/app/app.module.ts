@@ -17,6 +17,9 @@ import { AppComponent } from './app.component';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { GlobalService } from './services/globalService';
+import { DataManagement } from './services/dataManagement';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, '../assets/i18n/', '.json');
@@ -30,6 +33,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     IonicModule.forRoot(), 
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -43,6 +48,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     SplashScreen,
     RestWS,
     LoadingService,
+    DataManagement,
+    GlobalService,
     ConfigService,
     CookieService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
