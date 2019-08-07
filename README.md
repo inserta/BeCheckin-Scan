@@ -15,15 +15,22 @@
 2. Check json files in 'src/assets/i18n/'
 3. Write your translations
 
-## Aplicación para control de horas
+### Deploy
+    The app will be build in "platform/browser/www" folder.
+1. ```ionic cordova build browser --prod```
+    
+### Add plugin
+1. ```ionic cordova plugin add ./[Nombre_plugin]```
+
+## Aplicación para recepcionistas
 ### Cómo construir nuestra aplicación
 
 #### Front-end
     En la carpeta raiz del proyecto, deberías:
 1. Instalar [node](https://nodejs.org/es/)
 2. Luego, ejecutar ```npm install```
-3. Lo siguiente, ```npm install -g ionic cordova´´´
-4. Por último, ``ìonic serve```
+3. Lo siguiente, ```npm install -g ionic cordova```
+4. Por último, ```ionic serve```
 
 ### Cómo actualizar campos de traducción
     Las traducciones se generan por defecto vacías.
@@ -31,4 +38,9 @@
 2. Repasar los ficheros generados en la carpeta 'src/assets/i18n/'
 3. Escribir las nuevas traducciones
 
-### Cómo construir la aplicación
+### Despliegue
+    Se construirá en la carpeta "platform/browser/www"
+1. ```ionic cordova build browser --prod```
+
+### Añadir plugin
+1. ```ionic cordova plugin add ./[Nombre_plugin]```
