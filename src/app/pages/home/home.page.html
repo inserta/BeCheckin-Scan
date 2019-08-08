@@ -1,29 +1,29 @@
 <ion-header>
     <ion-toolbar>
-        <ion-button class="filtro">
+        <ion-button size="large" expand="full">
             Filtros <ion-icon slot="icon-only" name="list"></ion-icon>
         </ion-button>
     </ion-toolbar>
     <ion-toolbar>
       <ion-searchbar [(ngModel)]="buscarReserva"></ion-searchbar>
     </ion-toolbar>
+    <ion-toolbar class="ion-text-center">
+      <ion-text>HOY</ion-text>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-list>
-    <ion-list-header>
-      <ion-label class="center">HOY</ion-label>
-    </ion-list-header>
     <ion-card *ngFor="let item of items">
       <ion-card-header>
         <ion-card-title>{{ item.name }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>{{ item.content }}</ion-card-content>
     </ion-card>
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{ 'HOME.CARGANDO_RESERVAS' | translate}}">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
   </ion-list>
 
-  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{ 'HOME.CARGANDO_RESERVAS' | translate}}">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
 </ion-content>

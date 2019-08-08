@@ -11,7 +11,8 @@ const routes: Routes = [
     redirectTo: '/login',
     pathMatch: 'full'
   },
-  { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' }
+  { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' },  { path: 'filtros', loadChildren: './pages/filtros/filtros.module#FiltrosPageModule' }
+
 
 ];
 @NgModule({
