@@ -28,7 +28,7 @@
 
   <!-- Logo -->
   <div padding-horizontal text-center class="animated fadeInDown" [routerLink]="['/app/home']">
-    <div class="logoCircle"></div>
+    <div class="logo"></div>
   </div>
 
   <!-- Login form -->
@@ -55,7 +55,7 @@
   <br><br>
 
 <div class="centrado">
-  <ion-button icon-left size="medium" expand="full" shape="round" color="dark" (click)="login()"
+  <ion-button class="boton_centrado" icon-left size="medium" expand="full" shape="round" color="dark" (click)="login()"
     [disabled]="!onLoginForm.valid" tappable>
     <ion-icon name="log-in"></ion-icon>
     {{ 'LOGINADMIN.ENTRAR' | translate}}

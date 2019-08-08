@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonInfiniteScroll, ModalController } from '@ionic/angular';
+import { IonInfiniteScroll, ModalController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +15,8 @@ export class HomePage implements OnInit {
   buscarReserva: any;
 
   constructor(
-    public modalController: ModalController
+    public modalController: ModalController,
+    private nav: NavController
   ) { }
 
   ngOnInit() {
@@ -58,6 +59,9 @@ export class HomePage implements OnInit {
   // toggleInfiniteScroll() {
   //   this.infiniteScroll.disabled = !this.infiniteScroll.disabled;
   // }
+  abrirFiltros(){
+    this.nav.navigateForward('/filtros');
+  }
 
 
 }
