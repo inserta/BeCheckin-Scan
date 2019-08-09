@@ -2,6 +2,7 @@ export class Recepcionista {
     _id: string;
     usuario: string;
     hotel: string;
+    bienvenida: boolean;
 }
 
 export class Reserva {
