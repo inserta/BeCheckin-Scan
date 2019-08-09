@@ -7,8 +7,10 @@ import { IonInfiniteScroll, ModalController, NavController } from '@ionic/angula
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  
-  @ViewChild(IonInfiniteScroll, {static: false}) infiniteScroll: IonInfiniteScroll;
+
+  ready: boolean = false;
+
+  @ViewChild(IonInfiniteScroll, { static: false }) infiniteScroll: IonInfiniteScroll;
   items: any[] = []
 
   reservas: string[] = [];
@@ -24,15 +26,27 @@ export class HomePage implements OnInit {
   }
 
   index: number = 1;
-  
-  cargaReservas(){
-    for (let i = 0; i < 10; i++) {
-      this.items.push({
-        name: this.index + ' - ',
-        content: lorem.substring(0, Math.random() * (lorem.length - 100) + 100)
-      });
-      this.index++;
-    }
+
+  cargaReservas() {
+    setTimeout(() => {
+      for (let i = 0; i < 10; i++) {
+        this.items.push({
+          name: this.index + ' - ',
+          content: lorem.substring(0, Math.random() * (lorem.length - 100) + 100)
+        });
+        this.index++;
+      }
+      this.ready = true;
+    }, 1000);
+  }
+
+  doRefresh(event) {
+    console.log('Begin async operation');
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      event.target.complete();
+    }, 2000);
   }
 
   loadData(event) {
@@ -41,7 +55,7 @@ export class HomePage implements OnInit {
       event.target.complete();
 
       // App logic to determine if all data is loaded
-      
+
       for (let i = 0; i < 10; i++) {
         this.items.push({
           name: this.index + ' - ',
@@ -59,10 +73,9 @@ export class HomePage implements OnInit {
   // toggleInfiniteScroll() {
   //   this.infiniteScroll.disabled = !this.infiniteScroll.disabled;
   // }
-  abrirFiltros(){
+  abrirFiltros() {
     this.nav.navigateForward('/filtros');
   }
-
 
 }
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, seddo eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';

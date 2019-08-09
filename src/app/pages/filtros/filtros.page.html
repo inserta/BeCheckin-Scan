@@ -7,5 +7,21 @@
 </ion-header>
 
 <ion-content>
+  <ion-item class="ion-text-center">
+      <ion-label>
+        FASTCHECKIN
+      </ion-label>
+  </ion-item>
+    <ion-segment (ionChange)="segmentChanged($event)" color="secondary">
+        <ion-segment-button value="standard">
+          <ion-label>TODOS</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="hybrid">
+          <ion-label>CON</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="sat">
+          <ion-label>SIN</ion-label>
+        </ion-segment-button>
+      </ion-segment>
   
 </ion-content>

@@ -1,19 +1,65 @@
 <ion-header>
-    <ion-toolbar color="tertiary">
-        <ion-button color="tertiary" size="large" expand="full" (click)="abrirFiltros()">
-          <ion-icon slot="start" name="list"></ion-icon> VER FILTROS 
-        </ion-button>
-    </ion-toolbar>
-    <ion-toolbar>
-      <ion-searchbar [(ngModel)]="buscarReserva"></ion-searchbar>
-    </ion-toolbar>
-    <ion-toolbar class="ion-text-center">
-      <ion-text>HOY</ion-text>
-    </ion-toolbar>
+  <ion-toolbar color="tertiary">
+    <ion-button color="tertiary" size="large" expand="full" (click)="abrirFiltros()">
+      <ion-icon slot="start" name="list"></ion-icon> VER FILTROS
+    </ion-button>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="buscarReserva"></ion-searchbar>
+  </ion-toolbar>
+  <ion-toolbar class="ion-text-center">
+    <ion-text>HOY</ion-text>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-list *ngIf="!ready">
+    <ion-item>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-list *ngIf="ready">
     <ion-card *ngFor="let item of items">
       <ion-card-header>
         <ion-card-title>{{ item.name }}</ion-card-title>
