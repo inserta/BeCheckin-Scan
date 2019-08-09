@@ -9,11 +9,13 @@ const routes: Routes = [
   { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' },
   { path: 'filtros', loadChildren: './pages/filtros/filtros.module#FiltrosPageModule' },
   { path: 'bienvenida', loadChildren: './pages/bienvenida/bienvenida.module#BienvenidaPageModule' },
+  { path: 'reserva', loadChildren: './pages/reserva/reserva.module#ReservaPageModule' },
   {
     path: '**',
     redirectTo: '/login',
     pathMatch: 'full'
   },
+
 
 
 

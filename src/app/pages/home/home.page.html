@@ -12,7 +12,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="noselect">
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
       refreshingText="Refreshing...">
@@ -60,12 +60,19 @@
     </ion-item>
   </ion-list>
   <ion-list *ngIf="ready">
-    <ion-card *ngFor="let item of items">
-      <ion-card-header>
-        <ion-card-title>{{ item.name }}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>{{ item.content }}</ion-card-content>
-    </ion-card>
+    <ion-item *ngFor="let item of items">
+      <ion-label class="cursor-boton" (click)="abrirReserva(item.name)">
+          <h1>{{ item.name }}</h1>
+          <p>{{ item.content }}</p>
+      </ion-label>
+
+        <!-- <ion-card (click)="abrirReserva(item.name)">
+          <ion-card-header>
+            <ion-card-title></ion-card-title>
+          </ion-card-header>
+          <ion-card-content></ion-card-content>
+        </ion-card> -->
+    </ion-item>
     <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
       <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{ 'HOME.CARGANDO_RESERVAS' | translate}}">
       </ion-infinite-scroll-content>

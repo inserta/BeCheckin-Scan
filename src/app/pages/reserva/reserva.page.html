@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="app/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>RESERVA</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="ion-text-center">Datos reserva</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Nombre: Juan Ramos</p>
+        <p>Id reserva: 111222333</p>
+        <p>Email: email@email.com</p>
+      </ion-card-content>
+    </ion-card>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- <ion-card>
+      <ion-toolbar class="ion-text-center">
+          <ion-text>HUÉSPEDES</ion-text>
+        </ion-toolbar>
+    <ion-list>
+      
+      <ion-item>
+        huesped 1
+      </ion-item>
+      <ion-item>
+
+      </ion-item>
+      <ion-item>
+        huesped 2
+      </ion-item>
+      <ion-item>
+        huesped 3
+      </ion-item>
+      <ion-item>
+        huesped 4
+      </ion-item>
+      <ion-item>
+        huesped 5
+      </ion-item>
+      <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{ 'HOME.CARGANDO_RESERVAS' | translate}}">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </ion-list>
+  </ion-card> -->
+  <ion-scroll style="height: 200px">
+    <ion-item *ngFor="let item of items">
+      {{ item.name }}
+  </ion-item>
+  </ion-scroll>
+  <ion-text>
+    Nuevo huesped
+  </ion-text><h3>Static Bottom</h3>
+</ion-content>
