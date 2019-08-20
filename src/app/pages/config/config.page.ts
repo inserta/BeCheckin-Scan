@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
 import { FiltrosPage } from 'src/app/pages/filtros/filtros.page';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-config',
@@ -10,14 +11,16 @@ import { FiltrosPage } from 'src/app/pages/filtros/filtros.page';
 export class ConfigPage implements OnInit {
 
   constructor(
-    private nav: NavController
+    private nav: NavController,
+    private router: Router,
   ) { }
 
   ngOnInit() {
   }
 
   cerrarSesion(){
-    this.nav.navigateRoot("/login");
+    // this.nav.navigateRoot("/login");
+    this.router.navigateByUrl("/login");
   }
 
 }

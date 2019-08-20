@@ -7,21 +7,42 @@
 </ion-header>
 
 <ion-content>
-  <ion-item class="ion-text-center">
+    <br />
+    <br />
+  <ion-item lines="none" class="ion-text-center">
+    <ion-label>
+      FASTCHECKIN
+    </ion-label>
+  </ion-item>
+  <ion-item lines="full" class="ion-text-center">
+    <ion-segment (ionChange)="filtroFastcheckin($event)" color="secondary">
+      <ion-segment-button value="todos" checked="true">
+        <ion-label>TODOS</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="con_fastcheckin">
+        <ion-label>CON</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="sin_fastcheckin">
+        <ion-label>SIN</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-item>
+
+  <br />
+  <br />
+  <ion-item lines="full" class="ion-text-center">
       <ion-label>
-        FASTCHECKIN
+        FILTRO POR FECHAS
       </ion-label>
   </ion-item>
-    <ion-segment (ionChange)="segmentChanged($event)" color="secondary">
-        <ion-segment-button value="standard">
-          <ion-label>TODOS</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="hybrid">
-          <ion-label>CON</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="sat">
-          <ion-label>SIN</ion-label>
-        </ion-segment-button>
-      </ion-segment>
-  
+  <ion-item>
+    <ion-label>Fecha límite Inicial</ion-label>
+    <ion-datetime cancel-text="cancelar" done-text="guardar" value="2019-08-20" min="1990" displayFormat="DD MMMM YYYY">
+    </ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label>Fecha límite final</ion-label>
+    <ion-datetime cancel-text="cancelar" done-text="guardar" value="2019-08-20" min="1990" displayFormat="DD MMMM YYYY">
+    </ion-datetime>
+  </ion-item>
 </ion-content>

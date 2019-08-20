@@ -8,10 +8,14 @@ export class ConfigService {
   public config() {
     let urlPrefix = 'http://booking.becheckin.com/';
     let urlAPI = '';
-    if (environment.production) {
-      urlPrefix = '';
-      urlAPI = '';
-    }
+    return {
+      restUrlPrefix: urlPrefix + urlAPI
+    };
+  }
+
+  public configInsinno() {
+    let urlPrefix = 'https://insinno.api.becheckin.es/';
+    let urlAPI = 'api/v1/utils/';
     return {
       restUrlPrefix: urlPrefix + urlAPI
     };

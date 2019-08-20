@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonInfiniteScroll, ModalController, NavController } from '@ionic/angular';
+import { LoadingService } from 'src/app/services/loading.service';
+import { CookieService } from 'ngx-cookie-service';
+import { GlobalService } from 'src/app/services/globalService';
 
 @Component({
   selector: 'app-home',
@@ -18,11 +21,19 @@ export class HomePage implements OnInit {
 
   constructor(
     public modalController: ModalController,
-    private nav: NavController
+    private nav: NavController,
+    private loader: LoadingService,
+    private cookieService: CookieService,
+    private globalService: GlobalService
   ) { }
 
   ngOnInit() {
+    console.log(this.globalService.leerCookies());
     this.cargaReservas();
+  }
+
+  ionViewWillEnter() {
+    console.log("ionViewWillEnter")
   }
 
   index: number = 1;
@@ -74,12 +85,27 @@ export class HomePage implements OnInit {
   //   this.infiniteScroll.disabled = !this.infiniteScroll.disabled;
   // }
   abrirFiltros() {
-    this.nav.navigateForward('/filtros');
+    this.nav.navigateRoot('/filtros');
   }
 
-  abrirReserva(){
-    this.nav.navigateForward('/reserva');
+  abrirReserva() {
+    this.loader.present();
+    setTimeout(() => {
+      this.nav.navigateForward('/reserva');
+    }, 100);
   }
 
 }
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, seddo eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+
+window.addEventListener( "pageshow", function ( event ) {
+  this.console.log("entrando en listener");
+  var historyTraversal = event.persisted || 
+                         ( typeof window.performance != "undefined" && 
+                              window.performance.navigation.type === 2 );
+  if ( historyTraversal ) {
+    // Handle page restore.
+
+    window.location.reload();
+  }
+});

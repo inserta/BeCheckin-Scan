@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-reserva',
@@ -8,8 +9,10 @@ import { Component, OnInit } from '@angular/core';
 export class ReservaPage implements OnInit {
 
   items: any[] = [];
-  constructor() { 
-    for (let i = 0; i < 1000; i++) {
+  constructor(
+    private loader: LoadingService
+  ) { 
+    for (let i = 0; i < 10; i++) {
       this.items.push({
         name: i + ' - ' + images[rotateImg],
         imgSrc: getImgSrc(),
@@ -22,6 +25,9 @@ export class ReservaPage implements OnInit {
       if (rotateImg === images.length) {
         rotateImg = 0;
       }
+    }
+    if(this.loader.isLoading){
+      this.loader.dismiss();
     }
   }
 

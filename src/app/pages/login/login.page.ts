@@ -8,6 +8,7 @@ import { LoadingService } from 'src/app/services/loading.service';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Credenciales } from 'src/app/models/form.model';
+import { Cookies, Filtro, Recepcionista } from 'src/app/models/data.model';
 
 @Component({
   selector: 'app-login',
@@ -31,22 +32,21 @@ export class LoginPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.credenciales = new Credenciales();
-    this.onLoginForm = this.formBuilder.group({
-      usuario: [null, Validators.compose([Validators.required])],
-      clave: [null, Validators.compose([Validators.required])]
-    });
     this.inicializaCredenciales();
   }
 
   ionViewLoaded() {
+    console.log("ionViewLoaded");
     // this.credenciales.usuario = 'javier@becheckin.com';
     // this.credenciales.clave = 'javier';
   }
 
   inicializaCredenciales() {
-    // this.credenciales.usuario = 'javier@becheckin.com';
-    // this.credenciales.clave = 'javier';
+    this.credenciales = new Credenciales();
+    this.onLoginForm = this.formBuilder.group({
+      usuario: [null, Validators.compose([Validators.required])],
+      clave: [null, Validators.compose([Validators.required])]
+    });
   }
 
   eventHandler(event) {
@@ -60,16 +60,51 @@ export class LoginPage implements OnInit {
     this.loading.present();
     this.dm.login(this.credenciales).then(data => {
       setTimeout(() => {
-        this.cookieService.set('tokenCliente', data.cliente[0]._id);
-        console.log("Iniciando sesión con:");
-        console.log("Usuario:" + this.credenciales.usuario);
-        console.log("Clave:" + this.credenciales.clave);
-        console.log(data.recepcionista[0]);
-        this.globalService.recepcionista = data.recepcionista[0];
-        this.credenciales.clave = '';
-        this.credenciales.usuario = '';
-        this.loading.dismiss();
-        this.router.navigateByUrl("dashboard");
+        if(data.length > 0){
+          let cookies: Cookies = new Cookies();
+          cookies.idRecepcionista = data[0]._id;
+          cookies.idHotel = data[0].hotel;
+          cookies.filtros = new Filtro();
+          cookies.filtros.buscador = "";
+          cookies.filtros.fastcheckin = "todo";
+          cookies.filtros.fechaFinal = new Date();
+          cookies.filtros.fechaInicial = new Date();
+          this.globalService.guardarCookies(cookies);
+          console.log("Iniciando sesión con:");
+          console.log("Usuario:" + this.credenciales.usuario);
+          console.log("Clave:" + this.credenciales.clave);
+          console.log("Data: ", data);
+
+          this.inicializaCredenciales();
+
+          let recepcionista: Recepcionista = data[0];
+          
+          this.loading.dismiss();
+          if(recepcionista.bienvenida){
+            this.router.navigateByUrl("/bienvenida");
+          } else {
+            this.router.navigateByUrl("/app/home");
+          }
+        } else {
+          
+          this.alertCtrl
+            .create({
+              header: 'Error',
+              message: translation,
+              buttons: [
+                {
+                  text: 'Ok',
+                  role: 'ok'
+                }
+              ]
+            })
+            .then(alertEl => {
+              alertEl.present();
+            });
+          this.credenciales.clave = '';
+          this.credenciales.usuario = '';
+          this.loading.dismiss();
+        }
       }, 200);
     }).catch(error => {
         setTimeout(() => {

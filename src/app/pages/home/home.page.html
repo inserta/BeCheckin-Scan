@@ -5,7 +5,7 @@
     </ion-button>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-searchbar [(ngModel)]="buscarReserva"></ion-searchbar>
+    <ion-searchbar [(ngModel)]="buscarReserva" placeholder="Buscar"></ion-searchbar>
   </ion-toolbar>
   <ion-toolbar class="ion-text-center">
     <ion-text>HOY</ion-text>
@@ -14,8 +14,8 @@
 
 <ion-content class="noselect">
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
-      refreshingText="Refreshing...">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Arrastra para refrescar" refreshingSpinner="circles"
+      refreshingText="Refrescando...">
     </ion-refresher-content>
   </ion-refresher>
   <ion-list *ngIf="!ready">

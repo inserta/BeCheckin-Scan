@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
 
 @Component({
   selector: 'app-filtros',
@@ -16,7 +17,10 @@ export class FiltrosPage implements OnInit {
   }
 
   cerrarFiltros(){
-    this.nav.navigateForward('/app/home');
+    this.nav.navigateRoot('/app/home');
   }
 
+  filtroFastcheckin(event){
+    console.log(event);
+  }
 }

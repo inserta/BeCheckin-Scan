@@ -1,0 +1,10 @@
+// Custom toolbar (overriding Shadow DOM)
+ion-toolbar {
+    &.ion-color-primary {
+      --ion-color-base: #ac9797;
+    }
+  
+    ion-button{
+      margin: 0;
+    }
+  }
