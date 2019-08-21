@@ -73,4 +73,17 @@ export class RestWS extends AbstractWS {
       });
   }
 
+  public getHotel(idCliente: string) {
+    const fd = new HttpParams()
+    .set('idCliente',idCliente);
+    return this.makePostRequest(this.path + 'populate', fd)
+      .then(res => {
+        return Promise.resolve(res);
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+        return Promise.reject(error);
+      });
+  }
+
 }

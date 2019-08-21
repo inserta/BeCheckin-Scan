@@ -36,10 +36,10 @@ export class DataManagement {
   }
 
   /**
-   * Obtener datos del hotel
+   * Obtener datos del cliente
    * @param id Id del hotel 
    */
-  public getHotel(id: string): Promise<any> {
+  public getCliente(id: string): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       let promises = [];
       promises.push(this.restService.getHijosHotel(id));
@@ -48,8 +48,15 @@ export class DataManagement {
         resolve(res);
       })
     });
+  }
+
+  /**
+   * Obtener datos del hotel
+   * @param idCliente Id del cliente 
+   */
+  public getHotel(idCliente: string): Promise<any> {
     return this.restService
-      .getRecepcionista(id)
+      .getHotel(idCliente)
       .then(data => {
         return Promise.resolve(data);
       })

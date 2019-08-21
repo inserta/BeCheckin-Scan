@@ -3,6 +3,7 @@ import { IonInfiniteScroll, ModalController, NavController } from '@ionic/angula
 import { LoadingService } from 'src/app/services/loading.service';
 import { CookieService } from 'ngx-cookie-service';
 import { GlobalService } from 'src/app/services/globalService';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +13,7 @@ import { GlobalService } from 'src/app/services/globalService';
 export class HomePage implements OnInit {
 
   ready: boolean = false;
+  sinPermisos: boolean = false;
 
   @ViewChild(IonInfiniteScroll, { static: false }) infiniteScroll: IonInfiniteScroll;
   items: any[] = []
@@ -23,17 +25,25 @@ export class HomePage implements OnInit {
     public modalController: ModalController,
     private nav: NavController,
     private loader: LoadingService,
+    private router: Router,
     private cookieService: CookieService,
     private globalService: GlobalService
   ) { }
 
   ngOnInit() {
-    console.log(this.globalService.leerCookies());
-    this.cargaReservas();
   }
 
   ionViewWillEnter() {
     console.log("ionViewWillEnter")
+    this.globalService.leerCookies().then(res => {
+      if(!res){
+        this.sinPermisos = true;
+        this.router.navigateByUrl("/login");
+      } else {
+        this.sinPermisos = false;
+      }
+    });
+    this.cargaReservas();
   }
 
   index: number = 1;

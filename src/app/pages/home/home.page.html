@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header *ngIf="!sinPermisos">
   <ion-toolbar color="tertiary">
     <ion-button color="tertiary" size="large" expand="full" (click)="abrirFiltros()">
       <ion-icon slot="start" name="list"></ion-icon> VER FILTROS
@@ -12,7 +12,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="noselect">
+<ion-content class="noselect" *ngIf="!sinPermisos">
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Arrastra para refrescar" refreshingSpinner="circles"
       refreshingText="Refrescando...">

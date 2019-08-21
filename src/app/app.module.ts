@@ -20,6 +20,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { GlobalService } from './services/globalService';
 import { DataManagement } from './services/dataManagement';
+import { CryptProvider } from './providers/crypt/crypt';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, '../assets/i18n/', '.json');
@@ -51,6 +52,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     DataManagement,
     GlobalService,
     ConfigService,
+    CryptProvider,
     CookieService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

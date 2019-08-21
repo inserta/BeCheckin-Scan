@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
 import { FiltrosPage } from 'src/app/pages/filtros/filtros.page';
 import { Router } from '@angular/router';
+import { GlobalService } from 'src/app/services/globalService';
 
 @Component({
   selector: 'app-config',
@@ -12,6 +13,7 @@ export class ConfigPage implements OnInit {
 
   constructor(
     private nav: NavController,
+    private globalService: GlobalService,
     private router: Router,
   ) { }
 
@@ -20,7 +22,7 @@ export class ConfigPage implements OnInit {
 
   cerrarSesion(){
     // this.nav.navigateRoot("/login");
-    this.router.navigateByUrl("/login");
+    this.globalService.cerrarSesion();
   }
 
 }

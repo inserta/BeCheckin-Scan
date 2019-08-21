@@ -33,6 +33,11 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.inicializaCredenciales();
+    this.globalService.leerCookies().then(res => {
+      if(res){
+        this.router.navigateByUrl("/app/home");
+      }
+    });
   }
 
   ionViewLoaded() {
@@ -74,17 +79,35 @@ export class LoginPage implements OnInit {
           console.log("Usuario:" + this.credenciales.usuario);
           console.log("Clave:" + this.credenciales.clave);
           console.log("Data: ", data);
+          this.globalService.cargarDatos(cookies).then(res=>{
+            if(res){
+              this.inicializaCredenciales();
+              this.loading.dismiss();
+              if(this.globalService.recepcionista.bienvenida){
+                this.router.navigateByUrl("/bienvenida");
+              } else {
+                this.router.navigateByUrl("/app/home");
+              }
+            } else {
+              this.alertCtrl
+              .create({
+                header: 'Error',
+                message: translation,
+                buttons: [
+                  {
+                    text: 'Ok',
+                    role: 'ok'
+                  }
+                ]
+              })
+              .then(alertEl => {
+                alertEl.present();
+              });
+              this.loading.dismiss();
+            }
+          });
 
-          this.inicializaCredenciales();
-
-          let recepcionista: Recepcionista = data[0];
           
-          this.loading.dismiss();
-          if(recepcionista.bienvenida){
-            this.router.navigateByUrl("/bienvenida");
-          } else {
-            this.router.navigateByUrl("/app/home");
-          }
         } else {
           
           this.alertCtrl
