@@ -142,7 +142,9 @@ export class GlobalService {
               datosReserva.reserva = reserva;
               datosReserva.huespedes = this.huespedesDeReserva(reserva.id);
               datosReserva.tieneFastCheckin = datosReserva.huespedes.length > 0;
-              this.datosReservas.push(datosReserva);
+              if(this.cookies.filtros.fechaInicial >= roomReservation.checkin && this.cookies.filtros.fechaFinal<= roomReservation.checkin){
+                this.datosReservas.push(datosReserva);
+              }
             }
           }
         }

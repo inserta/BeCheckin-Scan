@@ -13,22 +13,21 @@ import { DatosReserva } from 'src/app/models/data.model';
 })
 export class HomePage implements OnInit {
 
-  ready: boolean = false;
-  sinPermisos: boolean = false;
-  datosReservas: DatosReserva[] = [];
-  datosReservasFiltradas: DatosReserva[] = [];
+  ready: boolean;
+  sinPermisos: boolean;
+  datosReservasMostrados: DatosReserva[];
+  datosReservasCompletos: DatosReserva[];
+  datosReservasFiltrados: DatosReserva[];
 
   @ViewChild(IonInfiniteScroll, { static: false }) infiniteScroll: IonInfiniteScroll;
-  items: any[] = []
 
-  reservas: string[] = [];
   buscarReserva: any;
 
   //El siguiente índice definirá el máximo número de reservas que se mostrarán en la carga inicial.
   //Este índice se irá modificando para indicar el número de reservas que se están mostrando.
-  index: number = 10;
+  index: number;
   //El numReservasCargadas indica el número de reservas que se cargarán al realizar el scroll cada vez que lleguemos al final.
-  numReservasCargadas = 10;
+  numReservasCargadas: number;
 
   constructor(
     public modalController: ModalController,
@@ -40,10 +39,14 @@ export class HomePage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.datosReservas = [];
-    this.datosReservasFiltradas = [];
+    this.ready = false;
+    this.datosReservasMostrados = [];
+    this.datosReservasFiltrados = [];
+    this.datosReservasCompletos = [];
     this.index = 10;
     this.numReservasCargadas = 10;
+    this.sinPermisos = false;
+    console.log("ngOnInit")
   }
 
   ionViewWillEnter() {
@@ -55,13 +58,16 @@ export class HomePage implements OnInit {
       } else {
         this.sinPermisos = false;
         //Los datos de las reservas ya están filtrados y ordenados.
-        this.datosReservas = this.globalService.datosReservas;
+        this.globalService.datosReservas.forEach(datosRes=>{
+          this.datosReservasFiltrados.push(datosRes);
+          this.datosReservasCompletos.push(datosRes);
+        });
         //Cargamos en otra variable una copia de los datos de las reservas obtenidos, únicamente para mostrar.
         for (let i = 0; i < this.index; i++) {
-          if (this.datosReservasFiltradas.length == this.datosReservas.length) {
+          if (this.datosReservasFiltrados.length == this.datosReservasMostrados.length) {
             break;
           } else {
-            this.datosReservasFiltradas.push(this.datosReservas[i]);
+            this.datosReservasMostrados.push(this.datosReservasFiltrados[i]);
           }
         }
         this.ready = true;
@@ -76,19 +82,19 @@ export class HomePage implements OnInit {
   }
 
   loadData(event) {
-    if (this.datosReservas.length == this.datosReservasFiltradas.length) {
+    if (this.datosReservasMostrados.length == this.datosReservasFiltrados.length) {
       event.target.disabled = true;
     } else {
       setTimeout(() => {
         event.target.complete();
         // App logic to determine if all data is loaded
         for (let i = 0; i < this.numReservasCargadas; i++) {
-          if (this.datosReservas.length == this.datosReservasFiltradas.length) {
+          if (this.datosReservasMostrados.length == this.datosReservasFiltrados.length) {
             // disable the infinite scroll
             event.target.disabled = true;
             break;
           } else {
-            this.datosReservasFiltradas.push(this.datosReservas[this.index]);
+            this.datosReservasMostrados.push(this.datosReservasFiltrados[this.index]);
             this.index++;
           }
         }

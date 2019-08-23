@@ -60,7 +60,7 @@
     </ion-item>
   </ion-list>
   <ion-list *ngIf="ready">
-    <ion-item *ngFor="let datosReserva of datosReservasFiltradas">
+    <ion-item *ngFor="let datosReserva of datosReservasMostrados">
       <ion-label class="cursor-boton" (click)="abrirReserva(datosReserva.reserva.id)">
         <h1>
           <img src="../../../assets/img/true.png" *ngIf="datosReserva.tieneFastCheckin" width="25" height="25" />
