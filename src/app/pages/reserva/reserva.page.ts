@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingService } from 'src/app/services/loading.service';
+import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-reserva',
@@ -10,7 +12,8 @@ export class ReservaPage implements OnInit {
 
   items: any[] = [];
   constructor(
-    private loader: LoadingService
+    private loader: LoadingService,
+    private nav: NavController,
   ) { 
     for (let i = 0; i < 10; i++) {
       this.items.push({
@@ -53,6 +56,10 @@ export class ReservaPage implements OnInit {
 
       event.target.disabled = true;
     }, 500);
+  }
+
+  nuevoHuesped (){
+    this.nav.navigateForward("/nuevo-huesped");
   }
 }
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, seddo eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';

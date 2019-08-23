@@ -16,8 +16,10 @@ export class ConfigService {
   public configInsinno() {
     let urlPrefix = 'https://insinno.api.becheckin.es/';
     let urlAPI = 'api/v1/utils/';
+    let urlAPIGuest = 'api/guest/v1';
     return {
-      restUrlPrefix: urlPrefix + urlAPI
+      restUrlPrefix: urlPrefix + urlAPI,
+      restUrlPrefixGuest: urlPrefix + urlAPIGuest
     };
   }
 }

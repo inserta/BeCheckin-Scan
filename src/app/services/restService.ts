@@ -9,6 +9,7 @@ import { Credenciales } from '../models/form.model';
 export class RestWS extends AbstractWS {
   path = '';
   pathInsinno = '';
+  pathInsinnoGuest = '';
 
   constructor(
     private config: ConfigService,
@@ -18,6 +19,7 @@ export class RestWS extends AbstractWS {
     super(http);
     this.path = this.config.config().restUrlPrefix;
     this.pathInsinno = this.config.configInsinno().restUrlPrefix;
+    this.pathInsinnoGuest = this.config.configInsinno().restUrlPrefixGuest;
   }
 
   public login(credenciales: Credenciales) {
@@ -77,6 +79,59 @@ export class RestWS extends AbstractWS {
     const fd = new HttpParams()
     .set('idCliente',idCliente);
     return this.makePostRequest(this.path + 'populate', fd)
+      .then(res => {
+        return Promise.resolve(res);
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+        return Promise.reject(error);
+      });
+  }
+
+  public subirArchivo(body) {
+    return this.makePostRequest('https://dashboard.becheckin.com/php/fileUploadHotel.php', body)
+      .then(res => {
+        return Promise.resolve(res);
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+        return Promise.reject(error);
+      });
+  }
+
+  public setPermissionPersonalData(idGuest: string, idClient: string, client: string, response: string) {
+    
+    const fd = new HttpParams()
+    .set('idGuest',idGuest)
+    .set('idClient',idClient)
+    .set('client',client)
+    .set('response',response);
+
+    return this.makePostRequest(this.pathInsinnoGuest+'personalDataPermissions', fd)
+      .then(res => {
+        return Promise.resolve(res);
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+        return Promise.reject(error);
+      });
+  }
+
+  public sendGenericMail(asunto, mensaje, mailTo, cc?, cco?) {
+    
+    let fd = new HttpParams()
+    .set('asunto',asunto)
+    .set('mensaje',mensaje)
+    .set('mailTo',mailTo);
+
+    if (cc) {
+      fd = fd.append('cc', cc);
+    }
+    if (cco) {
+      fd = fd.append('cc', cco);
+    }
+
+    return this.makePostRequest(this.path+'gmail', fd)
       .then(res => {
         return Promise.resolve(res);
       })

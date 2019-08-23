@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  googleCloudVisionAPIKey: 'AIzaSyAUuoGyUcXJ2eRD952aM4PDXt_iGlktodw'
 };

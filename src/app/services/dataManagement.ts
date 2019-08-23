@@ -64,4 +64,56 @@ export class DataManagement {
         return Promise.reject('error');
       });
   }
+
+  /**
+   * Subir archivos a servidor
+   * @param body Parámetros de la subida (FormData) con selectFile, path y remotename.
+   */
+  public subirArchivo(body): Promise<any> {
+    return this.restService
+      .subirArchivo(body)
+      .then(data => {
+        return Promise.resolve(data);
+      })
+      .catch(error => {
+        return Promise.reject('error');
+      });
+  }
+
+  /**
+   * 
+   * @param idGuest 
+   * @param idClient 
+   * @param client 
+   * @param response 
+   */
+  public setPermissionPersonalData(idGuest: string, idClient: string, client: string, response: string): Promise<any> {
+    return this.restService
+      .setPermissionPersonalData(idGuest, idClient, client, response)
+      .then(data => {
+        return Promise.resolve(data);
+      })
+      .catch(error => {
+        return Promise.reject('error');
+      });
+  }
+
+  /**
+   * Enviar correo electrónico desde servidor
+   * @param asunto 
+   * @param mensaje 
+   * @param mailTo 
+   * @param cc Opcional
+   * @param cco Opcional
+   */
+  public sendGenericMail(asunto, mensaje, mailTo, cc?, cco?): Promise<any> {
+    return this.restService
+      .sendGenericMail(asunto, mensaje, mailTo, cc, cco)
+      .then(data => {
+        return Promise.resolve(data);
+      })
+      .catch(error => {
+        return Promise.reject('error');
+      });
+  }
 }
