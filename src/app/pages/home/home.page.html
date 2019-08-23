@@ -67,8 +67,8 @@
           <img src="../../../assets/img/false.png" *ngIf="!datosReserva.tieneFastCheckin" width="25" height="25" />
           {{ datosReserva.reserva.id }}
         </h1>
-        <p>{{ datosReserva.reserva.roomReservations[0].checkin }} -
-          {{ datosReserva.reserva.roomReservations[0].checkout }}</p>
+        <p>{{ muestraFechaString(datosReserva.reserva.roomReservations[0].checkin) }} -
+          {{ muestraFechaString(datosReserva.reserva.roomReservations[0].checkout) }}</p>
       </ion-label>
 
       <!-- <ion-card (click)="abrirReserva(item.name)">

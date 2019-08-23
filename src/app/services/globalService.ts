@@ -38,7 +38,11 @@ export class GlobalService {
 
   }
 
-  leerCookies() {
+  /**
+   * Método para leer las cookies y cargar todos los datos de la aplicación.
+   * @param sinLoader Opcional, para que no aparezca el icono de carga.
+   */
+  leerCookies(sinLoader?:boolean) {
     return new Promise<boolean>((resolve, reject) => {
       //Comprobamos si existen las cookies, se comprueba cadena "null" ya que en algunos navegadores no funciona bien el borrado.
       //Para solucionarlo lo que hacemos es setear la variable a null (pero por defecto en las cookies todo son strings)
@@ -59,7 +63,7 @@ export class GlobalService {
         }
         //En caso de no tener un recepcionista, cargaremos todos los datos de la aplicación en base a las cookies obtenidas
         if (cargarDatos) {
-          if (!this.loader.isLoading) {
+          if (!this.loader.isLoading && !sinLoader) {
             //Inicializamos el icono de carga
             this.loader.present();
           }
@@ -67,7 +71,9 @@ export class GlobalService {
             //Cargamos todos los datos.
             this.cargarDatos(this.cookies).then(res => {
               //Paramos el icono de carga
-              this.loader.dismiss();
+              if(!sinLoader){
+                this.loader.dismiss();
+              }
               //Comprobamos que los datos se han cargado correctamente.
               if (res) {
                 resolve(true);
