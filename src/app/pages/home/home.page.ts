@@ -4,6 +4,7 @@ import { LoadingService } from 'src/app/services/loading.service';
 import { CookieService } from 'ngx-cookie-service';
 import { GlobalService } from 'src/app/services/globalService';
 import { Router } from '@angular/router';
+import { DatosReserva } from 'src/app/models/data.model';
 
 @Component({
   selector: 'app-home',
@@ -14,12 +15,20 @@ export class HomePage implements OnInit {
 
   ready: boolean = false;
   sinPermisos: boolean = false;
+  datosReservas: DatosReserva[] = [];
+  datosReservasFiltradas: DatosReserva[] = [];
 
   @ViewChild(IonInfiniteScroll, { static: false }) infiniteScroll: IonInfiniteScroll;
   items: any[] = []
 
   reservas: string[] = [];
   buscarReserva: any;
+
+  //El siguiente índice definirá el máximo número de reservas que se mostrarán en la carga inicial.
+  //Este índice se irá modificando para indicar el número de reservas que se están mostrando.
+  index: number = 5;
+  //El numReservasCargadas indica el número de reservas que se cargarán al realizar el scroll cada vez que lleguemos al final.
+  numReservasCargadas = 5;
 
   constructor(
     public modalController: ModalController,
@@ -41,31 +50,34 @@ export class HomePage implements OnInit {
         this.router.navigateByUrl("/login");
       } else {
         this.sinPermisos = false;
+        //Los datos de las reservas ya están filtrados y ordenados.
+        this.datosReservas = this.globalService.datosReservas;
+        //Cargamos en otra variable una copia de los datos de las reservas obtenidos, únicamente para mostrar.
+        for(let i = 0; i<this.index; i++){
+          this.datosReservasFiltradas.push(this.datosReservas[i]);
+        }
+        this.ready = true;
       }
     });
-    this.cargaReservas();
+    // this.cargaReservas();
   }
 
-  index: number = 1;
-
-  cargaReservas() {
-    setTimeout(() => {
-      for (let i = 0; i < 10; i++) {
-        this.items.push({
-          name: this.index + ' - ',
-          content: lorem.substring(0, Math.random() * (lorem.length - 100) + 100)
-        });
-        this.index++;
-      }
-      this.ready = true;
-    }, 1000);
-  }
+  // TODO: Borrar método
+  // cargaReservas() {
+  //   setTimeout(() => {
+  //     for (let i = 0; i < 10; i++) {
+  //       this.items.push({
+  //         name: this.index + ' - ',
+  //         content: lorem.substring(0, Math.random() * (lorem.length - 100) + 100)
+  //       });
+  //       this.index++;
+  //     }
+  //     this.ready = true;
+  //   }, 1000);
+  // }
 
   doRefresh(event) {
-    console.log('Begin async operation');
-
     setTimeout(() => {
-      console.log('Async operation has ended');
       event.target.complete();
     }, 2000);
   }
@@ -76,17 +88,14 @@ export class HomePage implements OnInit {
       event.target.complete();
 
       // App logic to determine if all data is loaded
-
-      for (let i = 0; i < 10; i++) {
-        this.items.push({
-          name: this.index + ' - ',
-          content: lorem.substring(0, Math.random() * (lorem.length - 100) + 100)
-        });
+      for (let i = 0; i < this.numReservasCargadas; i++) {
+        this.datosReservasFiltradas.push(this.datosReservas[this.index]);
+        if(this.datosReservas.length == this.datosReservasFiltradas.length){
+          // disable the infinite scroll
+          event.target.disabled = true;
+          break;
+        }
         this.index++;
-      }
-      // and disable the infinite scroll
-      if (this.items.length > 35) {
-        event.target.disabled = true;
       }
     }, 500);
   }

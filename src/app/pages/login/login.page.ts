@@ -34,7 +34,7 @@ export class LoginPage implements OnInit {
   ngOnInit() {
     this.inicializaCredenciales();
     this.globalService.leerCookies().then(res => {
-      if(res){
+      if (res) {
         this.router.navigateByUrl("/app/home");
       }
     });
@@ -65,31 +65,37 @@ export class LoginPage implements OnInit {
     this.loading.present();
     this.dm.login(this.credenciales).then(data => {
       setTimeout(() => {
-        if(data.length > 0){
-          let cookies: Cookies = new Cookies();
-          cookies.idRecepcionista = data[0]._id;
-          cookies.idHotel = data[0].hotel;
-          cookies.filtros = new Filtro();
-          cookies.filtros.buscador = "";
-          cookies.filtros.fastcheckin = "todo";
-          cookies.filtros.fechaFinal = new Date();
-          cookies.filtros.fechaInicial = new Date();
-          this.globalService.guardarCookies(cookies);
-          console.log("Iniciando sesión con:");
-          console.log("Usuario:" + this.credenciales.usuario);
-          console.log("Clave:" + this.credenciales.clave);
-          console.log("Data: ", data);
-          this.globalService.cargarDatos(cookies).then(res=>{
-            if(res){
-              this.inicializaCredenciales();
-              this.loading.dismiss();
-              if(this.globalService.recepcionista.bienvenida){
-                this.router.navigateByUrl("/bienvenida");
-              } else {
-                this.router.navigateByUrl("/app/home");
-              }
+
+        let hijos = data.hijos;
+        let recepcionista = data.recepcionista[0];
+        console.log(data);
+        console.log(hijos);
+        console.log(recepcionista);
+        let cookies: Cookies = new Cookies();
+        cookies.idRecepcionista = recepcionista._id;
+        cookies.idHotel = recepcionista.hotel._id;
+        cookies.idCliente = recepcionista.hotel.idCliente;
+        cookies.filtros = new Filtro();
+        cookies.filtros.buscador = "";
+        cookies.filtros.fastcheckin = "todo";
+        cookies.filtros.fechaFinal = new Date();
+        cookies.filtros.fechaInicial = new Date();
+        this.globalService.guardarCookies(cookies);
+        console.log("Iniciando sesión con:");
+        console.log("Usuario:" + this.credenciales.usuario);
+        console.log("Clave:" + this.credenciales.clave);
+        console.log("Data: ", data);
+        this.globalService.cargarDatos(cookies).then(res => {
+          if (res) {
+            this.inicializaCredenciales();
+            this.loading.dismiss();
+            if (this.globalService.recepcionista.bienvenida) {
+              this.router.navigateByUrl("/bienvenida");
             } else {
-              this.alertCtrl
+              this.router.navigateByUrl("/app/home");
+            }
+          } else {
+            this.alertCtrl
               .create({
                 header: 'Error',
                 message: translation,
@@ -103,53 +109,32 @@ export class LoginPage implements OnInit {
               .then(alertEl => {
                 alertEl.present();
               });
-              this.loading.dismiss();
-            }
-          });
+            this.loading.dismiss();
+          }
+        });
 
-          
-        } else {
-          
-          this.alertCtrl
-            .create({
-              header: 'Error',
-              message: translation,
-              buttons: [
-                {
-                  text: 'Ok',
-                  role: 'ok'
-                }
-              ]
-            })
-            .then(alertEl => {
-              alertEl.present();
-            });
-          this.credenciales.clave = '';
-          this.credenciales.usuario = '';
-          this.loading.dismiss();
-        }
       }, 200);
     }).catch(error => {
-        setTimeout(() => {
-          this.alertCtrl
-            .create({
-              header: 'Error',
-              message: translation,
-              buttons: [
-                {
-                  text: 'Ok',
-                  role: 'ok'
-                }
-              ]
-            })
-            .then(alertEl => {
-              alertEl.present();
-            });
-          this.credenciales.clave = '';
-          this.credenciales.usuario = '';
-          this.loading.dismiss();
-        }, 500);
-      });
+      setTimeout(() => {
+        this.alertCtrl
+          .create({
+            header: 'Error',
+            message: translation,
+            buttons: [
+              {
+                text: 'Ok',
+                role: 'ok'
+              }
+            ]
+          })
+          .then(alertEl => {
+            alertEl.present();
+          });
+        this.credenciales.clave = '';
+        this.credenciales.usuario = '';
+        this.loading.dismiss();
+      }, 500);
+    });
   }
 
 }

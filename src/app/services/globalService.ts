@@ -106,8 +106,8 @@ export class GlobalService {
       }
 
       // promises.push(this.dm.getHotel(cookies.idHotel));
-      promises.push(this.dm.getCliente("5cf8cd32a793490015d36f19"));
-      promises.push(this.dm.getHotel("5cf8cd32a793490015d36f19"));
+      promises.push(this.dm.getCliente(cookies.idCliente));
+      promises.push(this.dm.getHotel(cookies.idCliente));
 
       Promise.all(promises).then(res => {
         console.log(res);

@@ -141,6 +141,7 @@ export class FastCheckin {
 export class Cookies {
     idRecepcionista: string;
     idHotel: string;
+    idCliente: string;
     filtros: Filtro;
 }
 

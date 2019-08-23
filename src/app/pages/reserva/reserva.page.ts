@@ -36,6 +36,11 @@ export class ReservaPage implements OnInit {
 
   ngOnInit() {
     // this.cargaReservas();
+    console.log("ngOnInit reserva");
+  }
+
+  ionViewWillEnter(){
+    console.log("ionViewWillEnter reserva");
   }
 
   cargaReservas() {
