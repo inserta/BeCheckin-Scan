@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
+import { SignaturePadModule } from 'angular2-signaturepad';
 import { IonicModule } from '@ionic/angular';
 
 import { NuevoHuespedPage } from './nuevo-huesped.page';
@@ -22,6 +23,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     TranslateModule,
+    SignaturePadModule,
     RouterModule.forChild(routes)
   ],
   declarations: [NuevoHuespedPage],

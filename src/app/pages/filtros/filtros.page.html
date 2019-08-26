@@ -37,12 +37,12 @@
   </ion-item>
   <ion-item>
     <ion-label>Fecha límite Inicial</ion-label>
-    <ion-datetime cancel-text="cancelar" done-text="guardar" value="2019-08-20" min="1990" displayFormat="DD MMMM YYYY">
+    <ion-datetime [(ngModel)]="fechaLimiteInicial" (ionChange)="cambiaFecha($event)" cancel-text="cancelar" done-text="guardar" displayFormat="DD MMMM YYYY">
     </ion-datetime>
   </ion-item>
   <ion-item>
     <ion-label>Fecha límite final</ion-label>
-    <ion-datetime cancel-text="cancelar" done-text="guardar" value="2019-08-20" min="1990" displayFormat="DD MMMM YYYY">
+    <ion-datetime [(ngModel)]="fechaLimiteFinal" (ionChange)="cambiaFecha($event)" cancel-text="cancelar" done-text="guardar" displayFormat="DD MMMM YYYY">
     </ion-datetime>
   </ion-item>
 </ion-content>

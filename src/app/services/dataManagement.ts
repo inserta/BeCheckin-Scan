@@ -36,18 +36,15 @@ export class DataManagement {
   }
 
   /**
-   * Obtener datos del cliente
+   * Obtener datos del cliente (llaves)
    * @param id Id del hotel 
    */
   public getCliente(id: string): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      let promises = [];
-      promises.push(this.restService.getHijosHotel(id));
-      promises.push(this.restService.getAllOfClient(id));
-      Promise.all(promises).then(res=>{
-        resolve(res);
-      })
-    });
+    return this.restService.getAllOfClient(id).then(data => {
+      return Promise.resolve(data);
+    }).catch(error=>{
+      return Promise.reject('error');
+    })
   }
 
   /**

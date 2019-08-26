@@ -6,7 +6,7 @@ export class ConfigService {
   constructor() {}
 
   public config() {
-    let urlPrefix = 'http://booking.becheckin.com/';
+    let urlPrefix = 'https://booking.becheckin.com/';
     let urlAPI = '';
     return {
       restUrlPrefix: urlPrefix + urlAPI

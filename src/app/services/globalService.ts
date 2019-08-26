@@ -12,6 +12,7 @@ export class GlobalService {
   //Variables
   recepcionista: Recepcionista;
   hotel: Hotel;
+  hijos: any;
 
   llaves: any[];
   datosReservas: DatosReserva[] = [];
@@ -41,8 +42,9 @@ export class GlobalService {
   /**
    * Método para leer las cookies y cargar todos los datos de la aplicación.
    * @param sinLoader Opcional, para que no aparezca el icono de carga.
+   * @param forzarCarga Opcional, "true" para forzar la carga de datos en la lectura.
    */
-  leerCookies(sinLoader?:boolean) {
+  leerCookies(sinLoader?:boolean, forzarCarga?: boolean) {
     return new Promise<boolean>((resolve, reject) => {
       //Comprobamos si existen las cookies, se comprueba cadena "null" ya que en algunos navegadores no funciona bien el borrado.
       //Para solucionarlo lo que hacemos es setear la variable a null (pero por defecto en las cookies todo son strings)
@@ -59,6 +61,8 @@ export class GlobalService {
         if (!this.recepcionista) {
           cargarDatos = true;
         } else if (!this.recepcionista._id) {
+          cargarDatos = true;
+        } else if(forzarCarga){
           cargarDatos = true;
         }
         //En caso de no tener un recepcionista, cargaremos todos los datos de la aplicación en base a las cookies obtenidas
@@ -107,25 +111,21 @@ export class GlobalService {
     return new Promise<boolean>((resolve, reject) => {
       let promises = [];
 
-      if (!recepcionista) {
-        promises.push(this.dm.getRecepcionista(cookies.idRecepcionista));
-      }
-
-      // promises.push(this.dm.getHotel(cookies.idHotel));
+      //Obtenemos todos los datos del recepcionista, hotel e "hijos" del hotel.
+      promises.push(this.dm.getRecepcionista(cookies.idRecepcionista));
       promises.push(this.dm.getCliente(cookies.idCliente));
-      promises.push(this.dm.getHotel(cookies.idCliente));
 
       Promise.all(promises).then(res => {
         console.log(res);
         let datosRecepcionista = res[0];
         let datosCliente = res[1];
-        let datosHotel = res[2];
 
         //Recepcionista
-        this.recepcionista = datosRecepcionista[0];
+        this.hijos = datosRecepcionista.hijos;
+        this.recepcionista = datosRecepcionista.recepcionista[0];
 
         //Cliente
-        this.llaves = datosCliente[1].keysRooms;
+        this.llaves = datosCliente.keysRooms;
         this.datosReservas = [];
         for (let fc of this.llaves) {
           if (!this.compruebaId(fc)) {
@@ -142,7 +142,7 @@ export class GlobalService {
               datosReserva.reserva = reserva;
               datosReserva.huespedes = this.huespedesDeReserva(reserva.id);
               datosReserva.tieneFastCheckin = datosReserva.huespedes.length > 0;
-              if(this.cookies.filtros.fechaInicial >= roomReservation.checkin && this.cookies.filtros.fechaFinal<= roomReservation.checkin){
+              if(new Date(this.cookies.filtros.fechaInicial) <= roomReservation.checkin && new Date(this.cookies.filtros.fechaFinal) >= roomReservation.checkin){
                 this.datosReservas.push(datosReserva);
               }
             }
@@ -153,9 +153,6 @@ export class GlobalService {
         });
         console.log("this.datosReservas");
         console.log(this.datosReservas);
-
-        // Hotel
-        console.log(datosHotel);
 
         // this.todosDatosReservas = this.datosReservas;
         // this.filtrarTodo();

@@ -147,8 +147,8 @@ export class Cookies {
 
 export class Filtro {
     fastcheckin: string;
-    fechaInicial: Date;
-    fechaFinal: Date;
+    fechaInicial: string;
+    fechaFinal: string;
     buscador: string;
 }
 

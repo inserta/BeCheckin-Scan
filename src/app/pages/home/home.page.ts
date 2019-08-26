@@ -3,7 +3,7 @@ import { IonInfiniteScroll, ModalController, NavController } from '@ionic/angula
 import { LoadingService } from 'src/app/services/loading.service';
 import { CookieService } from 'ngx-cookie-service';
 import { GlobalService } from 'src/app/services/globalService';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DatosReserva } from 'src/app/models/data.model';
 
 @Component({
@@ -14,6 +14,7 @@ import { DatosReserva } from 'src/app/models/data.model';
 export class HomePage implements OnInit {
 
   ready: boolean;
+  iniciado: boolean;
   sinPermisos: boolean;
   datosReservasMostrados: DatosReserva[];
   datosReservasCompletos: DatosReserva[];
@@ -35,47 +36,64 @@ export class HomePage implements OnInit {
     private loader: LoadingService,
     private router: Router,
     private cookieService: CookieService,
+    private route: ActivatedRoute,
     private globalService: GlobalService
   ) { }
 
   ngOnInit() {
     this.ready = false;
+    this.iniciado = false;
     this.datosReservasMostrados = [];
     this.datosReservasFiltrados = [];
     this.datosReservasCompletos = [];
     this.index = 10;
     this.numReservasCargadas = 10;
     this.sinPermisos = false;
-    console.log("ngOnInit")
   }
 
   ionViewWillEnter() {
-    console.log("ionViewWillEnter")
-    this.globalService.leerCookies(true).then(res => {
+    this.ready = false;
+    let cargarDatos = false;
+    //Comprobamos si llega el parámetro cargarDatos por url para forzar la carga de datos tras haber realizado cambios en los filtros.
+    if(this.route.snapshot.queryParamMap.get('cargarDatos')){
+      cargarDatos = true;
+    }
+    //Llamamos al método leer cookies
+    //Le pedimos que no muestre el icono de carga, ya que esta pantalla posee otro icono distinto.
+    this.globalService.leerCookies(true, cargarDatos).then(res => {
+      // Si devuelve falso es porque no tenemos la sesión iniciada, o no tenemos acceso a esta sección.
+      // Por lo que redirigimos a la pantalla de login.
       if (!res) {
         this.sinPermisos = true;
         this.router.navigateByUrl("/login");
       } else {
         this.sinPermisos = false;
-        //Los datos de las reservas ya están filtrados y ordenados.
-        this.globalService.datosReservas.forEach(datosRes=>{
-          this.datosReservasFiltrados.push(datosRes);
-          this.datosReservasCompletos.push(datosRes);
-        });
-        //Cargamos en otra variable una copia de los datos de las reservas obtenidos, únicamente para mostrar.
-        for (let i = 0; i < this.index; i++) {
-          if (this.datosReservasFiltrados.length == this.datosReservasMostrados.length) {
-            break;
-          } else {
-            this.datosReservasMostrados.push(this.datosReservasFiltrados[i]);
+        // Los datos de las reservas ya están filtrados y ordenados.
+        // Comprobamos si la página ya ha sido inicializada anteriormente antes de cargar todos los datos en las variables.
+        if(!this.iniciado){
+          this.globalService.datosReservas.forEach(datosRes=>{
+            this.datosReservasFiltrados.push(datosRes);
+            this.datosReservasCompletos.push(datosRes);
+          });
+          // Recorremos tan sólo el número indicado por el index para mostrar las "x" primeras reservas, e ir cargando las demás posteriormente poco a poco.   
+          for (let i = 0; i < this.index; i++) {
+            if (this.datosReservasFiltrados.length == this.datosReservasMostrados.length) {
+              break;
+            } else {
+              //Cargamos en otra variable una copia de los datos de las reservas obtenidos, únicamente para mostrar.
+              this.datosReservasMostrados.push(this.datosReservasFiltrados[i]);
+            }
           }
+          this.iniciado = true;
         }
+
         this.ready = true;
       }
     });
   }
 
   doRefresh(event) {
+    //TODO: Refrescar todos los datos de las reservas
     setTimeout(() => {
       event.target.complete();
     }, 2000);

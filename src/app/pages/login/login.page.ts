@@ -78,40 +78,45 @@ export class LoginPage implements OnInit {
         cookies.filtros = new Filtro();
         cookies.filtros.buscador = "";
         cookies.filtros.fastcheckin = "todo";
-        cookies.filtros.fechaFinal = new Date();
-        cookies.filtros.fechaInicial = new Date("12-08-2019");
+        cookies.filtros.fechaFinal = new Date().toISOString();
+        cookies.filtros.fechaInicial = new Date().toISOString();
         this.globalService.guardarCookies(cookies);
         console.log("Iniciando sesión con:");
         console.log("Usuario:" + this.credenciales.usuario);
         console.log("Clave:" + this.credenciales.clave);
         console.log("Data: ", data);
-        this.globalService.cargarDatos(cookies).then(res => {
-          if (res) {
-            this.inicializaCredenciales();
-            this.loading.dismiss();
-            if (this.globalService.recepcionista.bienvenida) {
-              this.router.navigateByUrl("/bienvenida");
-            } else {
-              this.router.navigateByUrl("/app/home");
-            }
-          } else {
-            this.alertCtrl
-              .create({
-                header: 'Error',
-                message: translation,
-                buttons: [
-                  {
-                    text: 'Ok',
-                    role: 'ok'
-                  }
-                ]
-              })
-              .then(alertEl => {
-                alertEl.present();
-              });
-            this.loading.dismiss();
-          }
-        });
+        this.loading.dismiss();
+        if(recepcionista.bienvenida){
+          this.router.navigateByUrl("/bienvenida");
+        } else {
+          this.router.navigateByUrl("/app/home");
+        }
+        // this.globalService.cargarDatos(cookies).then(res => {
+        //   if (res) {
+        //     this.inicializaCredenciales();
+        //     this.loading.dismiss();
+        //     if (this.globalService.recepcionista.bienvenida) {
+        //     } else {
+        //       this.router.navigateByUrl("/app/home");
+        //     }
+        //   } else {
+        //     this.alertCtrl
+        //       .create({
+        //         header: 'Error',
+        //         message: translation,
+        //         buttons: [
+        //           {
+        //             text: 'Ok',
+        //             role: 'ok'
+        //           }
+        //         ]
+        //       })
+        //       .then(alertEl => {
+        //         alertEl.present();
+        //       });
+        //     this.loading.dismiss();
+        //   }
+        // });
 
       }, 200);
     }).catch(error => {
