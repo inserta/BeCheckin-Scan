@@ -22,6 +22,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { GlobalService } from './services/globalService';
 import { DataManagement } from './services/dataManagement';
 import { CryptProvider } from './providers/crypt/crypt';
+import { DateFormatPipe } from './pipes/dateFormat/dateFormatPipe';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, '../assets/i18n/', '.json');
@@ -55,6 +56,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     ConfigService,
     CryptProvider,
     CookieService,
+    DateFormatPipe,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

@@ -5,6 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { GlobalService } from 'src/app/services/globalService';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatosReserva } from 'src/app/models/data.model';
+import { DateFormatPipe } from 'src/app/pipes/dateFormat/dateFormatPipe';
 
 @Component({
   selector: 'app-home',
@@ -30,6 +31,9 @@ export class HomePage implements OnInit {
   //El numReservasCargadas indica el número de reservas que se cargarán al realizar el scroll cada vez que lleguemos al final.
   numReservasCargadas: number;
 
+  //La variable fechaFiltro se usa para mostrar la fecha (o fechas) que componen el filtro en cada momento.
+  fechaFiltro: string = "";
+
   constructor(
     public modalController: ModalController,
     private nav: NavController,
@@ -37,7 +41,8 @@ export class HomePage implements OnInit {
     private router: Router,
     private cookieService: CookieService,
     private route: ActivatedRoute,
-    private globalService: GlobalService
+    private globalService: GlobalService,
+    private dateFormatPipe: DateFormatPipe
   ) { }
 
   ngOnInit() {
@@ -54,6 +59,10 @@ export class HomePage implements OnInit {
   ionViewWillEnter() {
     this.ready = false;
     let cargarDatos = false;
+
+    //Escribimos la fecha del filtro seleccionada.
+    this.escribeFechaFiltro();
+
     //Comprobamos si llega el parámetro cargarDatos por url para forzar la carga de datos tras haber realizado cambios en los filtros.
     if(this.route.snapshot.queryParamMap.get('cargarDatos')){
       cargarDatos = this.route.snapshot.queryParamMap.get('cargarDatos')=='true';
@@ -97,6 +106,22 @@ export class HomePage implements OnInit {
     //TODO: Refrescar todos los datos de las reservas
     this.globalService.cargarDatos(this.globalService.cookies).then(res =>{
       event.target.complete();
+      this.datosReservasMostrados = [];
+      this.datosReservasFiltrados = [];
+      this.datosReservasCompletos = [];
+      this.globalService.datosReservas.forEach(datosRes=>{
+        this.datosReservasFiltrados.push(datosRes);
+        this.datosReservasCompletos.push(datosRes);
+      });
+      // Recorremos tan sólo el número indicado por el index para mostrar las "x" primeras reservas, e ir cargando las demás posteriormente poco a poco.   
+      for (let i = 0; i < this.index; i++) {
+        if (this.datosReservasFiltrados.length == this.datosReservasMostrados.length) {
+          break;
+        } else {
+          //Cargamos en otra variable una copia de los datos de las reservas obtenidos, únicamente para mostrar.
+          this.datosReservasMostrados.push(this.datosReservasFiltrados[i]);
+        }
+      }
       this.ready = true;
     });
   }
@@ -122,6 +147,27 @@ export class HomePage implements OnInit {
     }
   }
 
+  escribeFechaFiltro(){
+    
+    this.fechaFiltro = "";
+    let cookies = JSON.parse(this.cookieService.get('directScanData'));
+    let fechaIni = new Date(cookies.filtros.fechaInicial);
+    let fechaFin = new Date(cookies.filtros.fechaFinal);
+    let hoy = new Date();
+    hoy.setHours(0,0,0,0);
+    fechaIni.setHours(0,0,0,0);
+    fechaFin.setHours(0,0,0,0);
+
+    if(fechaIni>fechaFin || fechaFin>fechaIni){
+      this.fechaFiltro = "Del " + this.dateFormatPipe.transform(fechaIni) + " al " + this.dateFormatPipe.transform(fechaFin);
+    } else {
+      if(fechaIni<hoy || fechaIni>hoy){
+        this.fechaFiltro = this.dateFormatPipe.transform(fechaIni);
+      } else {
+        this.fechaFiltro = "HOY";
+      }
+    }
+  }
 
   muestraFechaString(fecha: Date): string {
     return this.leftpad(fecha.getDate(), 2) + "-" + this.leftpad(fecha.getMonth() + 1, 2) + '-' + fecha.getFullYear();
@@ -143,4 +189,7 @@ export class HomePage implements OnInit {
     }, 100);
   }
 
+  filtrarReservas(){
+    
+  }
 }

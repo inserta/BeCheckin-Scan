@@ -5,7 +5,7 @@ import { DataManagement } from 'src/app/services/dataManagement';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { GlobalService } from 'src/app/services/globalService';
 import { LoadingService } from 'src/app/services/loading.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Credenciales } from 'src/app/models/form.model';
 import { Cookies, Filtro, Recepcionista } from 'src/app/models/data.model';
@@ -28,6 +28,7 @@ export class LoginPage implements OnInit {
     private globalService: GlobalService,
     public loading: LoadingService,
     public alertCtrl: AlertController,
+    private nav: NavController,
     private router: Router,
   ) { }
 
@@ -87,9 +88,9 @@ export class LoginPage implements OnInit {
         console.log("Data: ", data);
         this.loading.dismiss();
         if(recepcionista.bienvenida){
-          this.router.navigateByUrl("/bienvenida");
+          this.nav.navigateRoot("/bienvenida");
         } else {
-          this.router.navigateByUrl("/app/home");
+          this.nav.navigateRoot("/app/home");
         }
         // this.globalService.cargarDatos(cookies).then(res => {
         //   if (res) {

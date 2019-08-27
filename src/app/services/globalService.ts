@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Recepcionista, Cookies, Hotel, DatosReserva, Reservation, RoomReservation } from '../models/data.model';
 import { LoadingService } from './loading.service';
 import { CryptProvider } from '../providers/crypt/crypt';
+import { NavController } from '@ionic/angular';
 
 @Injectable()
 export class GlobalService {
@@ -23,6 +24,7 @@ export class GlobalService {
     private cookieService: CookieService,
     private loader: LoadingService,
     private dm: DataManagement,
+    private nav: NavController,
     private router: Router
   ) {
     this.initialize();
@@ -111,18 +113,25 @@ export class GlobalService {
     return new Promise<boolean>((resolve, reject) => {
       let promises = [];
 
-      //Obtenemos todos los datos del recepcionista, hotel e "hijos" del hotel.
-      promises.push(this.dm.getRecepcionista(cookies.idRecepcionista));
       promises.push(this.dm.getCliente(cookies.idCliente));
+
+      //Obtenemos todos los datos del recepcionista, hotel e "hijos" del hotel.
+      if(!recepcionista){
+        promises.push(this.dm.getRecepcionista(cookies.idRecepcionista));
+      }
 
       Promise.all(promises).then(res => {
         console.log(res);
-        let datosRecepcionista = res[0];
-        let datosCliente = res[1];
+        let datosCliente = res[0];
 
         //Recepcionista
-        this.hijos = datosRecepcionista.hijos;
-        this.recepcionista = datosRecepcionista.recepcionista[0];
+        if(!recepcionista){
+          let datosRecepcionista = res[1];
+          this.hijos = datosRecepcionista.hijos;
+          this.recepcionista = datosRecepcionista.recepcionista[0];
+        } else {
+          this.recepcionista = recepcionista;
+        }
 
         //Cliente
         this.llaves = datosCliente.keysRooms;
@@ -155,7 +164,6 @@ export class GlobalService {
         // this.todosDatosReservas = this.datosReservas;
         // this.filtrarTodo();
         // this.reservasReady = true;
-
 
         resolve(true);
       }).catch(res => {
@@ -305,7 +313,7 @@ export class GlobalService {
     this.initialize();
     setTimeout(() => {
       this.loader.dismiss();
-      this.router.navigateByUrl("/login");
+      this.nav.navigateRoot("/login");
     }, 1000);
   }
 }

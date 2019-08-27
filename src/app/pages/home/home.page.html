@@ -5,10 +5,10 @@
     </ion-button>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-searchbar [(ngModel)]="buscarReserva" placeholder="Buscar"></ion-searchbar>
+    <ion-searchbar [(ngModel)]="buscarReserva" (ionChange)="filtrarReservas()" placeholder="Buscar"></ion-searchbar>
   </ion-toolbar>
   <ion-toolbar class="ion-text-center">
-    <ion-text>HOY</ion-text>
+    <ion-text>{{ fechaFiltro }}</ion-text>
   </ion-toolbar>
 </ion-header>
 
