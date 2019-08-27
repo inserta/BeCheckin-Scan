@@ -56,7 +56,7 @@ export class HomePage implements OnInit {
     let cargarDatos = false;
     //Comprobamos si llega el parámetro cargarDatos por url para forzar la carga de datos tras haber realizado cambios en los filtros.
     if(this.route.snapshot.queryParamMap.get('cargarDatos')){
-      cargarDatos = true;
+      cargarDatos = this.route.snapshot.queryParamMap.get('cargarDatos')=='true';
     }
     //Llamamos al método leer cookies
     //Le pedimos que no muestre el icono de carga, ya que esta pantalla posee otro icono distinto.
@@ -93,10 +93,12 @@ export class HomePage implements OnInit {
   }
 
   doRefresh(event) {
+    this.ready = false;
     //TODO: Refrescar todos los datos de las reservas
-    setTimeout(() => {
+    this.globalService.cargarDatos(this.globalService.cookies).then(res =>{
       event.target.complete();
-    }, 2000);
+      this.ready = true;
+    });
   }
 
   loadData(event) {

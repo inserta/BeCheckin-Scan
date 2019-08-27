@@ -13,8 +13,10 @@ import { GlobalService } from 'src/app/services/globalService';
 export class FiltrosPage implements OnInit {
 
   cookies: Cookies;
+  copiaCookies: Cookies;
   fechaLimiteInicial: string;
   fechaLimiteFinal: string;
+  fastcheckin: string;
 
   constructor(
     private nav: NavController,
@@ -24,21 +26,41 @@ export class FiltrosPage implements OnInit {
 
   ngOnInit() {
     this.cookies = JSON.parse(this.cookieService.get('directScanData'));
+    this.copiaCookies = JSON.parse(this.cookieService.get('directScanData'));
     this.fechaLimiteInicial = this.cookies.filtros.fechaInicial;
     this.fechaLimiteFinal = this.cookies.filtros.fechaFinal;
+    this.fastcheckin = this.cookies.filtros.fastcheckin;
   }
 
-  cambiaFecha(date){
+  cambiaFecha(date) {
     this.cookies.filtros.fechaInicial = this.fechaLimiteInicial;
     this.cookies.filtros.fechaFinal = this.fechaLimiteFinal;
     this.globalService.guardarCookies(this.cookies);
   }
 
-  cerrarFiltros(){
-    this.nav.navigateRoot('/app/home');
+  cerrarFiltros() {
+    
+    //Si se han realizado cambios, se fuerza la carga de las nuevas reservas.
+    if (this.compruebaCambios()) {
+      this.nav.navigateRoot('/app/home?cargarDatos=true');
+    } else {
+      //En caso contrario, volvemos a la página de reservas anterior sin cargar nuevas reservas.
+      this.nav.navigateRoot('/app/home');
+    }
   }
 
-  filtroFastcheckin(event){
-    console.log(event);
+  filtroFastcheckin(event) {
+    this.cookies.filtros.fastcheckin = this.fastcheckin;
+    this.globalService.guardarCookies(this.cookies);
+  }
+
+  compruebaCambios() {
+    let res = false;
+    if (this.cookies.filtros.fastcheckin != this.copiaCookies.filtros.fastcheckin ||
+      this.cookies.filtros.fechaInicial != this.copiaCookies.filtros.fechaInicial ||
+      this.cookies.filtros.fechaFinal != this.copiaCookies.filtros.fechaFinal) {
+      res = true;
+    }
+    return res;
   }
 }

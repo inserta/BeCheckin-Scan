@@ -77,7 +77,7 @@ export class LoginPage implements OnInit {
         cookies.idCliente = recepcionista.hotel.idCliente;
         cookies.filtros = new Filtro();
         cookies.filtros.buscador = "";
-        cookies.filtros.fastcheckin = "todo";
+        cookies.filtros.fastcheckin = "todos";
         cookies.filtros.fechaFinal = new Date().toISOString();
         cookies.filtros.fechaInicial = new Date().toISOString();
         this.globalService.guardarCookies(cookies);

@@ -44,7 +44,7 @@ export class GlobalService {
    * @param sinLoader Opcional, para que no aparezca el icono de carga.
    * @param forzarCarga Opcional, "true" para forzar la carga de datos en la lectura.
    */
-  leerCookies(sinLoader?:boolean, forzarCarga?: boolean) {
+  leerCookies(sinLoader?: boolean, forzarCarga?: boolean) {
     return new Promise<boolean>((resolve, reject) => {
       //Comprobamos si existen las cookies, se comprueba cadena "null" ya que en algunos navegadores no funciona bien el borrado.
       //Para solucionarlo lo que hacemos es setear la variable a null (pero por defecto en las cookies todo son strings)
@@ -62,7 +62,7 @@ export class GlobalService {
           cargarDatos = true;
         } else if (!this.recepcionista._id) {
           cargarDatos = true;
-        } else if(forzarCarga){
+        } else if (forzarCarga) {
           cargarDatos = true;
         }
         //En caso de no tener un recepcionista, cargaremos todos los datos de la aplicación en base a las cookies obtenidas
@@ -75,7 +75,7 @@ export class GlobalService {
             //Cargamos todos los datos.
             this.cargarDatos(this.cookies).then(res => {
               //Paramos el icono de carga
-              if(!sinLoader){
+              if (!sinLoader) {
                 this.loader.dismiss();
               }
               //Comprobamos que los datos se han cargado correctamente.
@@ -142,9 +142,7 @@ export class GlobalService {
               datosReserva.reserva = reserva;
               datosReserva.huespedes = this.huespedesDeReserva(reserva.id);
               datosReserva.tieneFastCheckin = datosReserva.huespedes.length > 0;
-              if(new Date(this.cookies.filtros.fechaInicial) <= roomReservation.checkin && new Date(this.cookies.filtros.fechaFinal) >= roomReservation.checkin){
-                this.datosReservas.push(datosReserva);
-              }
+              this.incluirReserva(datosReserva);
             }
           }
         }
@@ -164,6 +162,42 @@ export class GlobalService {
         resolve(false);
       });
     });
+  }
+
+  /**
+   * El método comprobará si la reserva introducida cumple los filtros. En caso positivo la reserva se añadirá a la lista.
+   * @param datosReserva Datos de la reserva que se incluirá
+   */
+  incluirReserva(datosReserva: DatosReserva){
+
+    let fechaInicial = new Date(this.cookies.filtros.fechaInicial);
+    let fechaFinal = new Date(this.cookies.filtros.fechaFinal);
+    let checkin = new Date(datosReserva.reserva.roomReservations[0].checkin);
+    fechaInicial.setHours(0, 0, 0, 0);
+    fechaFinal.setHours(0, 0, 0, 0);
+    checkin.setHours(0, 0, 0, 0);
+    if (fechaInicial <= checkin && fechaFinal >= checkin) {
+      switch (this.cookies.filtros.fastcheckin) {
+        case "todos":
+          this.datosReservas.push(datosReserva);
+          break;
+        case "con_fastcheckin":
+          if(datosReserva.tieneFastCheckin){
+            this.datosReservas.push(datosReserva);
+          }
+          break;
+        case "sin_fastcheckin":
+          if(!datosReserva.tieneFastCheckin){
+            this.datosReservas.push(datosReserva);
+          }
+          break;
+
+        default:
+          this.datosReservas.push(datosReserva);
+          break;
+      }
+      
+    }
   }
 
   compruebaId(fc) {
