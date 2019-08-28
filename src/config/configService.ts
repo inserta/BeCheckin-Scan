@@ -22,4 +22,12 @@ export class ConfigService {
       restUrlPrefixGuest: urlPrefix + urlAPIGuest
     };
   }
+
+  public configBooking() {
+    let urlPrefix = 'https://hub-api.booking.com/';
+    let urlAPI = 'v1.2/';
+    return {
+      restUrlPrefix: urlPrefix + urlAPI,
+    };
+  }
 }
