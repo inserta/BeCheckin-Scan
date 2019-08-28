@@ -73,21 +73,19 @@ export class GlobalService {
             //Inicializamos el icono de carga
             this.loader.present();
           }
-          setTimeout(() => {
-            //Cargamos todos los datos.
-            this.cargarDatos(this.cookies).then(res => {
-              //Paramos el icono de carga
-              if (!sinLoader) {
-                this.loader.dismiss();
-              }
-              //Comprobamos que los datos se han cargado correctamente.
-              if (res) {
-                resolve(true);
-              } else {
-                resolve(false);
-              }
-            });
-          }, 1500);
+          //Cargamos todos los datos.
+          this.cargarDatos(this.cookies).then(res => {
+            //Paramos el icono de carga
+            if (!sinLoader) {
+              this.loader.dismiss();
+            }
+            //Comprobamos que los datos se han cargado correctamente.
+            if (res) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          });
         } else {
           //En caso de tener las cookies y el recepcionista, asumimos que todos los datos están bien cargados y devolvemos true.
           resolve(true);
@@ -116,7 +114,7 @@ export class GlobalService {
       promises.push(this.dm.getCliente(cookies.idCliente));
 
       //Obtenemos todos los datos del recepcionista, hotel e "hijos" del hotel.
-      if(!recepcionista){
+      if (!recepcionista) {
         promises.push(this.dm.getRecepcionista(cookies.idRecepcionista));
       }
 
@@ -125,7 +123,7 @@ export class GlobalService {
         let datosCliente = res[0];
 
         //Recepcionista
-        if(!recepcionista){
+        if (!recepcionista) {
           let datosRecepcionista = res[1];
           this.hijos = datosRecepcionista.hijos;
           this.recepcionista = datosRecepcionista.recepcionista[0];
@@ -158,6 +156,14 @@ export class GlobalService {
         this.datosReservas = this.datosReservas.sort((r1, r2) => {
           return (r1.reserva.roomReservations[0].checkin < r2.reserva.roomReservations[0].checkin) ? 1 : -1;
         });
+        if (this.recepcionista.hotel.idBooking == '-' || this.recepcionista.hotel.idBooking == 'Admin') {
+          console.log("Hotel enlazado a booking detectado");
+          this.datosReservas.forEach(datosReserva => {
+            this.dm.getReservationHotel(this.recepcionista.hotel.idCliente, this.recepcionista.hotel.idBooking).then(res => {
+              console.log(res);
+            })
+          });
+        }
         console.log("this.datosReservas");
         console.log(this.datosReservas);
 
@@ -176,7 +182,7 @@ export class GlobalService {
    * El método comprobará si la reserva introducida cumple los filtros. En caso positivo la reserva se añadirá a la lista.
    * @param datosReserva Datos de la reserva que se incluirá
    */
-  incluirReserva(datosReserva: DatosReserva){
+  incluirReserva(datosReserva: DatosReserva) {
 
     let fechaInicial = new Date(this.cookies.filtros.fechaInicial);
     let fechaFinal = new Date(this.cookies.filtros.fechaFinal);
@@ -190,12 +196,12 @@ export class GlobalService {
           this.datosReservas.push(datosReserva);
           break;
         case "con_fastcheckin":
-          if(datosReserva.tieneFastCheckin){
+          if (datosReserva.tieneFastCheckin) {
             this.datosReservas.push(datosReserva);
           }
           break;
         case "sin_fastcheckin":
-          if(!datosReserva.tieneFastCheckin){
+          if (!datosReserva.tieneFastCheckin) {
             this.datosReservas.push(datosReserva);
           }
           break;
@@ -204,7 +210,7 @@ export class GlobalService {
           this.datosReservas.push(datosReserva);
           break;
       }
-      
+
     }
   }
 

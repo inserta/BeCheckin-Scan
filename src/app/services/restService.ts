@@ -10,6 +10,7 @@ export class RestWS extends AbstractWS {
   path = '';
   pathInsinno = '';
   pathInsinnoGuest = '';
+  pathBooking = '';
 
   constructor(
     private config: ConfigService,
@@ -20,6 +21,7 @@ export class RestWS extends AbstractWS {
     this.path = this.config.config().restUrlPrefix;
     this.pathInsinno = this.config.configInsinno().restUrlPrefix;
     this.pathInsinnoGuest = this.config.configInsinno().restUrlPrefixGuest;
+    this.pathBooking = this.config.configBooking().restUrlPrefix;
   }
 
   public login(credenciales: Credenciales) {
@@ -132,6 +134,20 @@ export class RestWS extends AbstractWS {
     }
 
     return this.makePostRequest(this.path+'gmail', fd)
+      .then(res => {
+        return Promise.resolve(res);
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+        return Promise.reject(error);
+      });
+  }
+  
+  public getReservationHotel(idHotel, idBooking) {
+    
+    let fd = new HttpParams();
+
+    return this.makeGetRequest(this.pathBooking+'/hotels/'+idHotel+"/reservations/"+idBooking, fd)
       .then(res => {
         return Promise.resolve(res);
       })

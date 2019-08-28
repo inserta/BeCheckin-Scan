@@ -17,13 +17,19 @@ export class HomePage implements OnInit {
   ready: boolean;
   iniciado: boolean;
   sinPermisos: boolean;
+
+  //Reservas que se muestran.
   datosReservasMostrados: DatosReserva[];
+  //Reservas totales encontradas en el hotel que han pasado los filtros básicos.
   datosReservasCompletos: DatosReserva[];
+  //Reservas filtradas por el parámetro "buscarReserva".
   datosReservasFiltrados: DatosReserva[];
 
   @ViewChild(IonInfiniteScroll, { static: false }) infiniteScroll: IonInfiniteScroll;
 
-  buscarReserva: any;
+  //Activa el filtro por nombre, email, telefono y documentos de cada reserva.
+  //El documento se busca directamente desde el fastcheckin de la reserva.
+  buscarReserva: string;
 
   //El siguiente índice definirá el máximo número de reservas que se mostrarán en la carga inicial.
   //Este índice se irá modificando para indicar el número de reservas que se están mostrando.
@@ -51,6 +57,7 @@ export class HomePage implements OnInit {
     this.datosReservasMostrados = [];
     this.datosReservasFiltrados = [];
     this.datosReservasCompletos = [];
+    this.buscarReserva = "";
     this.index = 10;
     this.numReservasCargadas = 10;
     this.sinPermisos = false;
@@ -59,13 +66,12 @@ export class HomePage implements OnInit {
   ionViewWillEnter() {
     this.ready = false;
     let cargarDatos = false;
-
     //Escribimos la fecha del filtro seleccionada.
     this.escribeFechaFiltro();
 
     //Comprobamos si llega el parámetro cargarDatos por url para forzar la carga de datos tras haber realizado cambios en los filtros.
-    if(this.route.snapshot.queryParamMap.get('cargarDatos')){
-      cargarDatos = this.route.snapshot.queryParamMap.get('cargarDatos')=='true';
+    if (this.route.snapshot.queryParamMap.get('cargarDatos')) {
+      cargarDatos = this.route.snapshot.queryParamMap.get('cargarDatos') == 'true';
     }
     //Llamamos al método leer cookies
     //Le pedimos que no muestre el icono de carga, ya que esta pantalla posee otro icono distinto.
@@ -79,8 +85,8 @@ export class HomePage implements OnInit {
         this.sinPermisos = false;
         // Los datos de las reservas ya están filtrados y ordenados.
         // Comprobamos si la página ya ha sido inicializada anteriormente antes de cargar todos los datos en las variables.
-        if(!this.iniciado){
-          this.globalService.datosReservas.forEach(datosRes=>{
+        if (!this.iniciado) {
+          this.globalService.datosReservas.forEach(datosRes => {
             this.datosReservasFiltrados.push(datosRes);
             this.datosReservasCompletos.push(datosRes);
           });
@@ -103,13 +109,13 @@ export class HomePage implements OnInit {
 
   doRefresh(event) {
     this.ready = false;
-    //TODO: Refrescar todos los datos de las reservas
-    this.globalService.cargarDatos(this.globalService.cookies).then(res =>{
+    // Refrescar todos los datos de las reservas
+    this.globalService.cargarDatos(this.globalService.cookies).then(res => {
       event.target.complete();
       this.datosReservasMostrados = [];
       this.datosReservasFiltrados = [];
       this.datosReservasCompletos = [];
-      this.globalService.datosReservas.forEach(datosRes=>{
+      this.globalService.datosReservas.forEach(datosRes => {
         this.datosReservasFiltrados.push(datosRes);
         this.datosReservasCompletos.push(datosRes);
       });
@@ -122,6 +128,7 @@ export class HomePage implements OnInit {
           this.datosReservasMostrados.push(this.datosReservasFiltrados[i]);
         }
       }
+      this.filtrarReservas();
       this.ready = true;
     });
   }
@@ -147,24 +154,26 @@ export class HomePage implements OnInit {
     }
   }
 
-  escribeFechaFiltro(){
-    
-    this.fechaFiltro = "";
-    let cookies = JSON.parse(this.cookieService.get('directScanData'));
-    let fechaIni = new Date(cookies.filtros.fechaInicial);
-    let fechaFin = new Date(cookies.filtros.fechaFinal);
-    let hoy = new Date();
-    hoy.setHours(0,0,0,0);
-    fechaIni.setHours(0,0,0,0);
-    fechaFin.setHours(0,0,0,0);
+  escribeFechaFiltro() {
 
-    if(fechaIni>fechaFin || fechaFin>fechaIni){
-      this.fechaFiltro = "Del " + this.dateFormatPipe.transform(fechaIni) + " al " + this.dateFormatPipe.transform(fechaFin);
-    } else {
-      if(fechaIni<hoy || fechaIni>hoy){
-        this.fechaFiltro = this.dateFormatPipe.transform(fechaIni);
+    this.fechaFiltro = "";
+    if (this.cookieService.get('directScanData') && this.cookieService.get('directScanData') != "null") {
+      let cookies = JSON.parse(this.cookieService.get('directScanData'));
+      let fechaIni = new Date(cookies.filtros.fechaInicial);
+      let fechaFin = new Date(cookies.filtros.fechaFinal);
+      let hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
+      fechaIni.setHours(0, 0, 0, 0);
+      fechaFin.setHours(0, 0, 0, 0);
+
+      if (fechaIni > fechaFin || fechaFin > fechaIni) {
+        this.fechaFiltro = "Del " + this.dateFormatPipe.transform(fechaIni) + " al " + this.dateFormatPipe.transform(fechaFin);
       } else {
-        this.fechaFiltro = "HOY";
+        if (fechaIni < hoy || fechaIni > hoy) {
+          this.fechaFiltro = this.dateFormatPipe.transform(fechaIni);
+        } else {
+          this.fechaFiltro = "HOY";
+        }
       }
     }
   }
@@ -182,14 +191,27 @@ export class HomePage implements OnInit {
     this.nav.navigateRoot('/filtros');
   }
 
-  abrirReserva() {
+  abrirReserva(idReserva) {
     this.loader.present();
     setTimeout(() => {
-      this.nav.navigateForward('/reserva');
+      this.nav.navigateForward('/reserva/' + idReserva);
     }, 100);
   }
 
-  filtrarReservas(){
-    
+  filtrarReservas() {
+    this.datosReservasFiltrados = this.datosReservasCompletos.filter(reserva => {
+      let res = false;
+      res = reserva.reserva.id.toString().toLowerCase().includes(this.buscarReserva.toLowerCase());
+      return res;
+    });
+    this.datosReservasMostrados = [];
+    for (let i = 0; i < this.index; i++) {
+      if (this.datosReservasFiltrados.length == this.datosReservasMostrados.length) {
+        break;
+      } else {
+        //Cargamos en otra variable una copia de los datos de las reservas obtenidos, únicamente para mostrar.
+        this.datosReservasMostrados.push(this.datosReservasFiltrados[i]);
+      }
+    }
   }
 }

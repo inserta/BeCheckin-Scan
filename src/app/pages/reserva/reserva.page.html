@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header *ngIf="!sinPermisos">
   <ion-toolbar color="tertiary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="app/home"></ion-back-button>
@@ -11,53 +11,88 @@
         <ion-card-title class="ion-text-center">Datos reserva</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <p>Nombre: Juan Ramos</p>
-        <p>Id reserva: 111222333</p>
-        <p>Email: email@email.com</p>
+        <p>Id reserva: {{ idReserva }}</p>
+        <p>Nombre: {{ nombre}}</p>
+        <p>Email: {{ email }}</p>
+        <p>Teléfono: {{ telefono }}</p>
       </ion-card-content>
     </ion-card>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <!-- <ion-card>
-      <ion-toolbar class="ion-text-center">
-          <ion-text>HUÉSPEDES</ion-text>
-        </ion-toolbar>
-    <ion-list>
-      
-      <ion-item>
-        huesped 1
-      </ion-item>
-      <ion-item>
-
-      </ion-item>
-      <ion-item>
-        huesped 2
-      </ion-item>
-      <ion-item>
-        huesped 3
-      </ion-item>
-      <ion-item>
-        huesped 4
-      </ion-item>
-      <ion-item>
-        huesped 5
-      </ion-item>
-      <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
-        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{ 'HOME.CARGANDO_RESERVAS' | translate}}">
-        </ion-infinite-scroll-content>
-      </ion-infinite-scroll>
-    </ion-list>
-  </ion-card> -->
-  <ion-scroll style="height: 200px">
-    <ion-item *ngFor="let item of items">
-      {{ item.name }}
+<ion-content class="noselect" *ngIf="!sinPermisos">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Arrastra para refrescar"
+      refreshingSpinner="crescent" refreshingText="Actualizando datos...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-list *ngIf="!ready">
+    <ion-item>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
     </ion-item>
-  </ion-scroll>
-
+    <ion-item>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-list *ngIf="ready">
+    <ion-item *ngFor="let huesped of datosReserva.huespedes">
+      <ion-label class="cursor-boton" (click)="abrirReserva(datosReserva.reserva.id)">
+        <div class="huesped">
+          <div class="imagen_huesped">
+            <img src="../../../assets/img/true.png" width="25" height="25" />
+          </div>
+          <div class="nombre_huesped">
+            {{ huesped.name }} {{ huesped.surnameOne }}
+          </div>
+        </div>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="!datosReserva.tieneFastCheckin">
+      <div class="huesped">
+        <div class="imagen_huesped">
+          <img src="../../../assets/img/false.png" width="25" height="25" />
+        </div>
+        <div class="nombre_huesped">
+          Esta reserva todavía no tiene huéspedes registrados.
+        </div>
+      </div>
+    </ion-item>
+  </ion-list>
 </ion-content>
-<ion-footer>
+<ion-footer *ngIf="!sinPermisos">
   <ion-toolbar color="tertiary">
     <ion-button color="tertiary" size="large" expand="full" (click)="nuevoHuesped()">
       <ion-icon slot="start" name="add-circle-outline"></ion-icon> Nuevo huesped

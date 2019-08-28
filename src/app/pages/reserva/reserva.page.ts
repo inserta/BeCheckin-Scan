@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { LoadingService } from 'src/app/services/loading.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { DatosReserva } from 'src/app/models/data.model';
+import { GlobalService } from 'src/app/services/globalService';
 
 @Component({
   selector: 'app-reserva',
@@ -10,85 +12,133 @@ import { NavController } from '@ionic/angular';
 })
 export class ReservaPage implements OnInit {
 
-  items: any[] = [];
+  idReserva: string;
+  sinPermisos: boolean;
+
+  datosReserva: DatosReserva;
+
+  nombre: string;
+  email: string;
+  telefono: string;
+
+  ready: boolean;
+
   constructor(
     private loader: LoadingService,
     private nav: NavController,
-  ) { 
-    for (let i = 0; i < 10; i++) {
-      this.items.push({
-        name: i + ' - ' + images[rotateImg],
-        imgSrc: getImgSrc(),
-        avatarSrc: getImgSrc(),
-        imgHeight: Math.floor(Math.random() * 50 + 150),
-        content: lorem.substring(0, Math.random() * (lorem.length - 100) + 100)
-      });
-
-      rotateImg++;
-      if (rotateImg === images.length) {
-        rotateImg = 0;
-      }
-    }
-    if(this.loader.isLoading){
-      this.loader.dismiss();
-    }
+    private globalService: GlobalService,
+    private route: ActivatedRoute,
+  ) {
   }
 
   ngOnInit() {
-    // this.cargaReservas();
+    this.inicializaReserva();
+    this.globalService.leerCookies(true).then(res => {
+      if (!res) {
+        this.sinPermisos = true;
+        this.nav.navigateForward("/login");
+      } else {
+        //Filtramos las reservas por su id para obtener la reserva seleccionada
+        let datosReservas = this.globalService.datosReservas.filter(datosReserva =>
+          datosReserva.reserva.id.toString() == this.idReserva
+        )
+        //Puesto que nos devuelve una lista de un único elemento, lo sacamos de la lista y lo guardamos en una variable.
+        this.datosReserva = datosReservas[0];
+        this.rellenaDatosReserva();
+        this.ready = true;
+        console.log("resultado", res);
+        console.log("idReserva", this.idReserva);
+      }
+    });
     console.log("ngOnInit reserva");
   }
 
-  ionViewWillEnter(){
-    console.log("ionViewWillEnter reserva");
-  }
-
-  cargaReservas() {
-    for (let i = 0; i < 10; i++) {
-      this.items.push({
-        name: i + ' - ',
-        content: "prueba"
-      });
+  rellenaDatosReserva() {
+    if (this.datosReserva.reserva) {
+      if (this.datosReserva.reserva.primaryGuest) {
+        if (this.datosReserva.reserva.primaryGuest.firstname) {
+          this.nombre = this.datosReserva.reserva.primaryGuest.firstname;
+        } else {
+          //En caso de no encontrar el nombre en primaryGuest buscamos los datos en booker.
+          this.rellenaDatosReservaAux("nombre");
+        }
+        if (this.datosReserva.reserva.primaryGuest.email) {
+          this.email = this.datosReserva.reserva.primaryGuest.email;
+        } else {
+          //En caso de no encontrar el email en primaryGuest buscamos los datos en booker.
+          this.rellenaDatosReservaAux("email");
+        }
+      } else {
+        //En caso de no encontrar primaryGuest buscamos los datos en booker.
+        this.rellenaDatosReservaAux("nombre");
+        this.rellenaDatosReservaAux("email");
+      }
+      //Los datos del teléfono solo se encuentran en booker.
+      this.rellenaDatosReservaAux("telefono");
     }
   }
 
-  loadData(event) {
-    setTimeout(() => {
-      console.log('Done');
-      event.target.complete();
+  rellenaDatosReservaAux(atributo: string) {
+    if (this.datosReserva.reserva.booker) {
+      switch (atributo) {
+        case "nombre":
+          if (this.datosReserva.reserva.booker.firstname) {
+            this.nombre = this.datosReserva.reserva.booker.firstname;
+            if (this.datosReserva.reserva.booker.lastname) {
+              this.nombre = this.nombre + ' ' + this.datosReserva.reserva.booker.lastname;
+            }
+          }
+          break;
+        case "telefono":
+          if (this.datosReserva.reserva.booker.phone) {
+            this.telefono = this.datosReserva.reserva.booker.phone;
+          }
+          break;
+        case "email":
+          if (this.datosReserva.reserva.booker.email) {
+            this.email = this.datosReserva.reserva.booker.email;
+          }
+          break;
 
-      // App logic to determine if all data is loaded
-
-      event.target.disabled = true;
-    }, 500);
+        default:
+          break;
+      }
+    }
   }
 
-  nuevoHuesped (){
+  ionViewWillEnter() {
+    console.log("ionViewWillEnter reserva");
+  }
+
+  nuevoHuesped() {
     this.nav.navigateForward("/nuevo-huesped");
   }
-}
-const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, seddo eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
-const images = [
-  'bandit',
-  'batmobile',
-  'blues-brothers',
-  'bueller',
-  'delorean',
-  'eleanor',
-  'general-lee',
-  'ghostbusters',
-  'knight-rider',
-  'mirth-mobile'
-];
-
-function getImgSrc() {
-  const src = 'https://dummyimage.com/600x400/${Math.round( Math.random() * 99999)}/fff.png';
-  rotateImg++;
-  if (rotateImg === images.length) {
-    rotateImg = 0;
+  inicializaReserva() {
+    if (this.loader.isLoading) {
+      this.loader.dismiss();
+    }
+    this.ready = false;
+    this.sinPermisos = false;
+    this.nombre = "-";
+    this.email = "-";
+    this.telefono = "-";
+    this.idReserva = this.route.snapshot.paramMap.get('idReserva');
   }
-  return src;
-}
 
-let rotateImg = 0;
+  doRefresh(event) {
+    this.ready = false;
+    //Refrescar todos los datos de la reserva
+    this.globalService.cargarDatos(this.globalService.cookies).then(() => {
+      event.target.complete();
+
+      //Filtramos las reservas por su id para obtener la reserva seleccionada
+      let datosReservas = this.globalService.datosReservas.filter(datosReserva =>
+        datosReserva.reserva.id.toString() == this.idReserva
+      )
+      //Puesto que nos devuelve una lista de un único elemento, lo sacamos de la lista y lo guardamos en una variable.
+      this.datosReserva = datosReservas[0];
+      this.ready = true;
+    });
+  }
+}

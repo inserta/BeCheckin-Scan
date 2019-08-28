@@ -113,4 +113,20 @@ export class DataManagement {
         return Promise.reject('error');
       });
   }
+
+  /**
+   * Enviar correo electrónico desde servidor
+   * @param idHotel 
+   * @param idBooking 
+   */
+  public getReservationHotel(idHotel, idBooking): Promise<any> {
+    return this.restService
+      .getReservationHotel(idHotel, idBooking)
+      .then(data => {
+        return Promise.resolve(data);
+      })
+      .catch(error => {
+        return Promise.reject('error');
+      });
+  }
 }
