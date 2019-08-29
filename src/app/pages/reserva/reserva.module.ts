@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ReservaPage } from './reserva.page';
 import { TranslateModule } from '@ngx-translate/core';
+import { DateFormatPipe } from '../../pipes/dateFormat/dateFormatPipe';
 
 const routes: Routes = [
   {
@@ -24,7 +25,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ReservaPage],
+  declarations: [ReservaPage, DateFormatPipe],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ReservaPageModule {}

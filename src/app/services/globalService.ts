@@ -156,22 +156,23 @@ export class GlobalService {
         this.datosReservas = this.datosReservas.sort((r1, r2) => {
           return (r1.reserva.roomReservations[0].checkin < r2.reserva.roomReservations[0].checkin) ? 1 : -1;
         });
-        if (this.recepcionista.hotel.idBooking == '-' || this.recepcionista.hotel.idBooking == 'Admin') {
+        console.log("this.datosReservas",this.datosReservas);
+        if (this.recepcionista.hotel.idBooking != '-' && this.recepcionista.hotel.idBooking != 'Admin') {
           console.log("Hotel enlazado a booking detectado");
+          let promesas = [];
           this.datosReservas.forEach(datosReserva => {
-            this.dm.getReservationHotel(this.recepcionista.hotel.idCliente, this.recepcionista.hotel.idBooking).then(res => {
-              console.log(res);
-            })
+            promesas.push(this.dm.getReservationHotel(this.recepcionista.hotel.idCliente, this.recepcionista.hotel.idBooking));
           });
+          Promise.all(promesas).then(res => {
+            console.log(res);
+            resolve(true);
+          }).catch(error => {
+            console.log(error);
+            resolve(false);
+          });
+        } else {
+          resolve(true);
         }
-        console.log("this.datosReservas");
-        console.log(this.datosReservas);
-
-        // this.todosDatosReservas = this.datosReservas;
-        // this.filtrarTodo();
-        // this.reservasReady = true;
-
-        resolve(true);
       }).catch(res => {
         resolve(false);
       });
