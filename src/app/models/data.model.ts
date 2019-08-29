@@ -134,7 +134,7 @@ export class FastCheckin {
     hasDni: boolean;
     hasPassport: boolean;
     tipoDoc: string;
-    imagenes: any = [];
+    imagenes: Imagen[] = [];
     province: string;
 }
 

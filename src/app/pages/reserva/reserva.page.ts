@@ -141,4 +141,8 @@ export class ReservaPage implements OnInit {
       this.ready = true;
     });
   }
+
+  abrirHuesped(idHuesped){
+    this.nav.navigateForward("/reserva/"+this.idReserva+"/huesped/"+idHuesped);
+  }
 }

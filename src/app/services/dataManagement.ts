@@ -119,9 +119,9 @@ export class DataManagement {
    * @param idHotel 
    * @param idBooking 
    */
-  public getReservationHotel(idHotel, idBooking): Promise<any> {
+  public getReservaBooking(idHotel, idBooking): Promise<any> {
     return this.restService
-      .getReservationHotel(idHotel, idBooking)
+      .getReservaBooking(idHotel, idBooking)
       .then(data => {
         return Promise.resolve(data);
       })

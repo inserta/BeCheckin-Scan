@@ -69,7 +69,7 @@
   </ion-list>
   <ion-list *ngIf="ready">
     <ion-item *ngFor="let huesped of datosReserva.huespedes">
-      <ion-label class="cursor-boton" (click)="abrirReserva(datosReserva.reserva.id)">
+      <ion-label class="cursor-boton" (click)="abrirHuesped(huesped._id)">
         <div class="huesped">
           <div class="imagen_huesped">
             <img src="../../../assets/img/true.png" width="25" height="25" />

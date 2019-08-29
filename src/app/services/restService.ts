@@ -143,11 +143,13 @@ export class RestWS extends AbstractWS {
       });
   }
   
-  public getReservationHotel(idHotel, idBooking) {
+  public getReservaBooking(idHotel, idReserva) {
     
-    let fd = new HttpParams();
+    let fd = new HttpParams()
+    .set('idHotel',idHotel)
+    .set('idReserva',idReserva);
 
-    return this.makeGetRequest(this.pathBooking+'/hotels/'+idHotel+"/reservations/"+idBooking, fd)
+    return this.makePostRequest(this.path+'/booking/reserva/', fd)
       .then(res => {
         return Promise.resolve(res);
       })

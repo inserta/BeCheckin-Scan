@@ -161,7 +161,8 @@ export class GlobalService {
           console.log("Hotel enlazado a booking detectado");
           let promesas = [];
           this.datosReservas.forEach(datosReserva => {
-            promesas.push(this.dm.getReservationHotel(this.recepcionista.hotel.idCliente, this.recepcionista.hotel.idBooking));
+            //TODO: Descomentar la siguiente linea cuando esté implementado el método en el backend.
+            // promesas.push(this.dm.getReservaBooking(this.recepcionista.hotel.idCliente, this.recepcionista.hotel.idBooking));
           });
           Promise.all(promesas).then(res => {
             console.log(res);
