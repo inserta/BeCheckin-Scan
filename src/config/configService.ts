@@ -6,14 +6,28 @@ export class ConfigService {
   constructor() {}
 
   public config() {
-    let urlPrefix = 'http://booking.becheckin.com/';
+    let urlPrefix = 'https://booking.becheckin.com/';
     let urlAPI = '';
-    if (environment.production) {
-      urlPrefix = '';
-      urlAPI = '';
-    }
     return {
       restUrlPrefix: urlPrefix + urlAPI
+    };
+  }
+
+  public configInsinno() {
+    let urlPrefix = 'https://insinno.api.becheckin.es/';
+    let urlAPI = 'api/v1/utils/';
+    let urlAPIGuest = 'api/guest/v1';
+    return {
+      restUrlPrefix: urlPrefix + urlAPI,
+      restUrlPrefixGuest: urlPrefix + urlAPIGuest
+    };
+  }
+
+  public configBooking() {
+    let urlPrefix = 'https://hub-api.booking.com/';
+    let urlAPI = 'v1.2/';
+    return {
+      restUrlPrefix: urlPrefix + urlAPI,
     };
   }
 }

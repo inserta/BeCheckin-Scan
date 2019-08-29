@@ -10,6 +10,7 @@ import { LoadingService } from './services/loading.service';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Http } from '@angular/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,6 +21,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { GlobalService } from './services/globalService';
 import { DataManagement } from './services/dataManagement';
+import { CryptProvider } from './providers/crypt/crypt';
+import { DateFormatPipe } from './pipes/dateFormat/dateFormatPipe';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, '../assets/i18n/', '.json');
@@ -51,7 +54,9 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     DataManagement,
     GlobalService,
     ConfigService,
+    CryptProvider,
     CookieService,
+    DateFormatPipe,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

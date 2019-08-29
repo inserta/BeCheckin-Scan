@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar color="tertiary" class="ion-text-center">
+    <ion-button color="tertiary" size="large" expand="full" (click)="cerrarFiltros()">
+      <ion-icon slot="start" name="list"></ion-icon> Ocultar Filtros
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <br />
+    <br />
+  <ion-item lines="none" class="ion-text-center">
+    <ion-label>
+      FASTCHECKIN
+    </ion-label>
+  </ion-item>
+  <ion-item lines="full" class="ion-text-center">
+    <ion-segment [(ngModel)]="fastcheckin" (ionChange)="filtroFastcheckin($event)" color="secondary">
+      <ion-segment-button value="todos" checked="true">
+        <ion-label>TODOS</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="con_fastcheckin">
+        <ion-label>CON</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="sin_fastcheckin">
+        <ion-label>SIN</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-item>
+
+  <br />
+  <br />
+  <ion-item lines="full" class="ion-text-center">
+      <ion-label>
+        FILTRO POR FECHAS
+      </ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label>Fecha límite Inicial</ion-label>
+    <ion-datetime [(ngModel)]="fechaLimiteInicial" (ionChange)="cambiaFecha($event)" cancel-text="cancelar" done-text="guardar" displayFormat="DD MMMM YYYY">
+    </ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label>Fecha límite final</ion-label>
+    <ion-datetime [(ngModel)]="fechaLimiteFinal" (ionChange)="cambiaFecha($event)" cancel-text="cancelar" done-text="guardar" displayFormat="DD MMMM YYYY">
+    </ion-datetime>
+  </ion-item>
+</ion-content>

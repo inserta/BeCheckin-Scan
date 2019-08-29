@@ -1,0 +1,42 @@
+// Custom toolbar (overriding Shadow DOM)
+ion-toolbar {
+  &.ion-color-primary {
+    --ion-color-base: #ac9797;
+  }
+
+  ion-button {
+    margin: 0;
+  }
+}
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+.cursor-boton{
+  margin: 0px;
+  cursor: pointer;
+
+  &:hover{
+    background: #ac979710;
+  }
+}
+.huesped {
+  display: flex;
+  height: 80px;
+
+  .imagen_huesped {
+    display: flex;
+    margin-right: 10px;
+    min-width: 25px;
+    align-items: center;
+  }
+  .nombre_huesped {
+    display: flex;
+    align-items: center;
+  }
+}

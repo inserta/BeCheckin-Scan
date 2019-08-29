@@ -5,9 +5,10 @@ import { DataManagement } from 'src/app/services/dataManagement';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { GlobalService } from 'src/app/services/globalService';
 import { LoadingService } from 'src/app/services/loading.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Credenciales } from 'src/app/models/form.model';
+import { Cookies, Filtro, Recepcionista } from 'src/app/models/data.model';
 
 @Component({
   selector: 'app-login',
@@ -27,26 +28,31 @@ export class LoginPage implements OnInit {
     private globalService: GlobalService,
     public loading: LoadingService,
     public alertCtrl: AlertController,
+    private nav: NavController,
     private router: Router,
   ) { }
 
   ngOnInit() {
-    this.credenciales = new Credenciales();
-    this.onLoginForm = this.formBuilder.group({
-      usuario: [null, Validators.compose([Validators.required])],
-      clave: [null, Validators.compose([Validators.required])]
-    });
     this.inicializaCredenciales();
+    this.globalService.leerCookies().then(res => {
+      if (res) {
+        this.router.navigateByUrl("/app/home");
+      }
+    });
   }
 
   ionViewLoaded() {
+    console.log("ionViewLoaded");
     // this.credenciales.usuario = 'javier@becheckin.com';
     // this.credenciales.clave = 'javier';
   }
 
   inicializaCredenciales() {
-    // this.credenciales.usuario = 'javier@becheckin.com';
-    // this.credenciales.clave = 'javier';
+    this.credenciales = new Credenciales();
+    this.onLoginForm = this.formBuilder.group({
+      usuario: [null, Validators.compose([Validators.required])],
+      clave: [null, Validators.compose([Validators.required])]
+    });
   }
 
   eventHandler(event) {
@@ -60,38 +66,81 @@ export class LoginPage implements OnInit {
     this.loading.present();
     this.dm.login(this.credenciales).then(data => {
       setTimeout(() => {
-        this.cookieService.set('tokenCliente', data.cliente[0]._id);
+
+        let hijos = data.hijos;
+        let recepcionista = data.recepcionista[0];
+        console.log(data);
+        console.log(hijos);
+        console.log(recepcionista);
+        let cookies: Cookies = new Cookies();
+        cookies.idRecepcionista = recepcionista._id;
+        cookies.idHotel = recepcionista.hotel._id;
+        cookies.idCliente = recepcionista.hotel.idCliente;
+        cookies.filtros = new Filtro();
+        cookies.filtros.buscador = "";
+        cookies.filtros.fastcheckin = "todos";
+        cookies.filtros.fechaFinal = new Date().toISOString();
+        cookies.filtros.fechaInicial = new Date().toISOString();
+        this.globalService.guardarCookies(cookies);
         console.log("Iniciando sesión con:");
         console.log("Usuario:" + this.credenciales.usuario);
         console.log("Clave:" + this.credenciales.clave);
-        console.log(data.recepcionista[0]);
-        this.globalService.recepcionista = data.recepcionista[0];
+        console.log("Data: ", data);
+        this.loading.dismiss();
+        if(recepcionista.bienvenida){
+          this.nav.navigateRoot("/bienvenida");
+        } else {
+          this.nav.navigateRoot("/app/home");
+        }
+        // this.globalService.cargarDatos(cookies).then(res => {
+        //   if (res) {
+        //     this.inicializaCredenciales();
+        //     this.loading.dismiss();
+        //     if (this.globalService.recepcionista.bienvenida) {
+        //     } else {
+        //       this.router.navigateByUrl("/app/home");
+        //     }
+        //   } else {
+        //     this.alertCtrl
+        //       .create({
+        //         header: 'Error',
+        //         message: translation,
+        //         buttons: [
+        //           {
+        //             text: 'Ok',
+        //             role: 'ok'
+        //           }
+        //         ]
+        //       })
+        //       .then(alertEl => {
+        //         alertEl.present();
+        //       });
+        //     this.loading.dismiss();
+        //   }
+        // });
+
+      }, 200);
+    }).catch(error => {
+      setTimeout(() => {
+        this.alertCtrl
+          .create({
+            header: 'Error',
+            message: translation,
+            buttons: [
+              {
+                text: 'Ok',
+                role: 'ok'
+              }
+            ]
+          })
+          .then(alertEl => {
+            alertEl.present();
+          });
         this.credenciales.clave = '';
         this.credenciales.usuario = '';
         this.loading.dismiss();
-        this.router.navigateByUrl("dashboard");
-      }, 200);
-    }).catch(error => {
-        setTimeout(() => {
-          this.alertCtrl
-            .create({
-              header: 'Error',
-              message: translation,
-              buttons: [
-                {
-                  text: 'Ok',
-                  role: 'ok'
-                }
-              ]
-            })
-            .then(alertEl => {
-              alertEl.present();
-            });
-          this.credenciales.clave = '';
-          this.credenciales.usuario = '';
-          this.loading.dismiss();
-        }, 500);
-      });
+      }, 500);
+    });
   }
 
 }

@@ -25,40 +25,41 @@
 </ion-content> -->
 
 <ion-content>
+  <div class="login_centrado">
 
-  <!-- Logo -->
-  <div padding-horizontal text-center class="animated fadeInDown">
-    <div class="logoCircle"></div>
+    <!-- Logo -->
+    <div padding-horizontal text-center class="animated fadeInDown" [routerLink]="['/bienvenida']">
+      <div class="logo"></div>
+    </div>
+    <!-- Login form -->
+    <form [formGroup]="onLoginForm" class="list-form">
+      <ion-item no-padding class="animated fadeInUp">
+        <ion-label position="floating">
+          <ion-icon name="person" item-start></ion-icon>
+          {{ 'LOGINADMIN.EMAIL' | translate}}
+        </ion-label>
+        <ion-input [(ngModel)]="credenciales.usuario" maxlength="30" color="secondary" type="text"
+          formControlName="usuario" (keypress)="eventHandler($event)">
+        </ion-input>
+      </ion-item>
+      <ion-item no-padding class="animated fadeInUp">
+        <ion-label position="floating">
+          <ion-icon name="lock" item-start></ion-icon>
+          {{ 'LOGIN.CLAVE' | translate}}
+        </ion-label>
+        <ion-input [(ngModel)]="credenciales.clave" maxlength="30" color="secondary" type="password"
+          formControlName="clave" (keypress)="eventHandler($event)"></ion-input>
+      </ion-item>
+    </form>
+
+    <br><br>
+
+    <div class="centrado">
+      <ion-button class="boton_centrado" icon-left size="medium" expand="full" shape="round" color="dark"
+        (click)="login()" [disabled]="!onLoginForm.valid" tappable>
+        <ion-icon name="log-in"></ion-icon>
+        {{ 'LOGINADMIN.ENTRAR' | translate}}
+      </ion-button>
+    </div>
   </div>
-
-  <!-- Login form -->
-  <form [formGroup]="onLoginForm" class="list-form">
-    <ion-item no-padding class="animated fadeInUp">
-      <ion-label position="floating">
-        <ion-icon name="person" item-start></ion-icon>
-        {{ 'LOGINADMIN.EMAIL' | translate}}
-      </ion-label>
-      <ion-input [(ngModel)]="credenciales.usuario" maxlength="30" color="secondary" type="text"
-        formControlName="usuario" (keypress)="eventHandler($event)">
-      </ion-input>
-    </ion-item>
-    <ion-item no-padding class="animated fadeInUp">
-      <ion-label position="floating">
-        <ion-icon name="lock" item-start></ion-icon>
-        {{ 'LOGIN.CLAVE' | translate}}
-      </ion-label>
-      <ion-input [(ngModel)]="credenciales.clave" maxlength="30" color="secondary" type="password"
-        formControlName="clave" (keypress)="eventHandler($event)"></ion-input>
-    </ion-item>
-  </form>
-
-  <br><br>
-
-<div class="centrado">
-  <ion-button icon-left size="medium" expand="full" shape="round" color="dark" (click)="login()"
-    [disabled]="!onLoginForm.valid" tappable>
-    <ion-icon name="log-in"></ion-icon>
-    {{ 'LOGINADMIN.ENTRAR' | translate}}
-  </ion-button>
-</div>
 </ion-content>

@@ -1,0 +1,40 @@
+<style>
+    :root {
+      --ion-safe-area-top: 20px;
+      --ion-safe-area-bottom: 22px;
+    }
+    .swiper-slide {
+      display: block;
+    }
+    ion-slide > h2 {
+      margin-top: 2.8rem;
+    }
+    ion-slide > img {
+      max-height: 50%;
+      max-width: 60%;
+      margin: 36px 0;
+    }
+  </style>
+<ion-content>
+    <ion-slides style="height: 100%;" pager="true" [options]="slideOpts">
+        <ion-slide>
+          <img src="../../../assets/img/logocheckin.png"/>
+          <h1>Te damos la bienvenida a nuestra aplicación</h1>
+          <p>A continuación le explicaremos las funcionalidades que encontrará en nuestra aplicación.</p>
+          <p>Si desea leerlo más adelante puede pulsar el aspa de arriba a la derecha.</p>
+          <p>Si desea no volver a mostrar este mensaje marque la opción de abajo antes de terminar esta introducción.</p>
+        
+        </ion-slide>
+        <ion-slide>
+          <h1>Consulte reservas</h1>
+          <p>Puede consultar todas las reservas del día.</p>
+        
+        </ion-slide>
+        <ion-slide>
+          <h1>Añada huéspedes</h1>
+          <p>Podrá añadir huéspedes accediendo a cada una de las reservas de una manera rápida y sencilla.</p>
+        
+          <ion-button fill="clear" [routerLink]="['/app/home']">Continue <ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button>
+        </ion-slide>
+      </ion-slides>
+</ion-content>
