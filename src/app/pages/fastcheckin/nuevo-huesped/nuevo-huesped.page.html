@@ -1,3 +1,13 @@
+<ion-header *ngIf="!sinPermisos">
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="app/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>NUEVO HUESPED</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
 <!-- El paso 0 muestra formulario para meter los datos del fastcheckin de forma manual cuando falla la detección de imágenes -->
 <div class="huesped-box">
   <div class="container_fastcheckin">
@@ -6,40 +16,38 @@
       <div class="atras">
         <span *ngIf="paso > 1 && paso < 5 || paso == 0" (click)="atras()">{{ 'HUESPED.ATRAS' | translate }}</span>
       </div>
-      <div *ngIf="paso < 5" class="omitir" (click)="close()">
-        {{ 'HUESPED.OMITIR' | translate }}
-      </div>
     </div>
 
     <!-- TITULO -->
-    <div class="titulo" *ngIf="paso < 5">
+    <!-- <div class="titulo" *ngIf="paso < 5">
       {{ 'HUESPED.TITULO' | translate }}
-    </div>
+    </div> -->
 
     <!-- INTRODUCCION -->
     <div class="introduccion" *ngIf="paso > 0 && paso < 4">
-      <p>{{ 'HUESPED.CUERPO_1' | translate }}<span class="nombre_hotel">{{hotel_name}}</span></p>
       <p>{{ 'HUESPED.CUERPO_2' | translate }}</p>
       <p>{{ 'HUESPED.CUERPO_3' | translate }}</p>
     </div>
 
     <!-- ELEJIR TIPO DOCUMENTO -->
     <div class="opciones" *ngIf="paso==1">
-      <ion-list radio-group [(ngModel)]="tipoDoc" ngDefaultControl class="radio-group">
-        <ion-list-header>
-          {{ 'HUESPED.ELEGIR_TIPO_DOC' | translate }}
-        </ion-list-header>
-        <div class="en_linea">
-          <ion-item class="item item-block item-ios item-radio {{tipoDoc=='dni'? 'selected' : 'not_selected'}}">
-            <ion-label>{{ 'HUESPED.DNI' | translate }}</ion-label>
-            <ion-radio checked class="radio" value="dni"></ion-radio>
-          </ion-item>
+      <ion-list class="radio-group">
+        <ion-radio-group [(ngModel)]="tipoDoc" ngDefaultControl>
+          <ion-list-header class="centrado">
+            {{ 'HUESPED.ELEGIR_TIPO_DOC' | translate }}
+          </ion-list-header>
+          <div class="en_linea">
+            <ion-item class="item item-block item-ios item-radio item-radio-personalizado">
+              <ion-label>{{ 'HUESPED.DNI' | translate }} </ion-label>
+              <ion-radio checked class="radio" value="dni"></ion-radio>
+            </ion-item>
 
-          <ion-item class="item item-block item-ios item-radio {{tipoDoc=='pasaporte'? 'selected' : 'not_selected'}}">
-            <ion-label>{{ 'HUESPED.PASAPORTE' | translate }}</ion-label>
-            <ion-radio class="radio" value="pasaporte" radio-inline></ion-radio>
-          </ion-item>
-        </div>
+            <ion-item class="item item-block item-ios item-radio item-radio-personalizado">
+              <ion-label>{{ 'HUESPED.PASAPORTE' | translate }} </ion-label>
+              <ion-radio class="radio" value="pasaporte" radio-inline></ion-radio>
+            </ion-item>
+          </div>
+        </ion-radio-group>
       </ion-list>
     </div>
 
@@ -55,7 +63,8 @@
       </div>
       <div class="img {{paso==3?'extendida':''}}" *ngIf="tipoDoc=='dni'">
         <div class="imagen_temporal" *ngIf="paso == 2">
-          <input id="trasera2" title="" type="file" accept="image/*" (click)="resetFile('trasera2')"  (change)="getFiles($event,1)">
+          <input id="trasera2" title="" type="file" accept="image/*" (click)="resetFile('trasera2')"
+            (change)="getFiles($event,1)">
         </div>
         <img (click)="visualizaFoto(myImage2)" #myImage2 [src]="photosNif[0]" width="150" height="105"
           *ngIf="paso>2 && photosNif[0]" />
@@ -84,8 +93,9 @@
           <strong>1.&nbsp;</strong> {{ 'HUESPED.ESCANER_FRONTAL' | translate }}
         </div>
         <div class="boton">
-          <input id="frontal1" title="" type="file" accept="image/*" (click)="resetFile('frontal1')" (change)="getFiles($event,2)">
-          <img src="../../assets/imgs/registro/scan.png" width="80" height="80" />
+          <input id="frontal1" title="" type="file" accept="image/*" (click)="resetFile('frontal1')"
+            (change)="getFiles($event,2)">
+          <img src="../../../../assets/img/registro/scan.png" width="80" height="80" />
         </div>
       </div>
       <div class="escaneo" *ngIf="paso==2 && tipoDoc=='dni'">
@@ -93,8 +103,9 @@
           <strong>2.&nbsp;</strong> {{ 'HUESPED.ESCANER_TRASERO' | translate }}
         </div>
         <div class="boton">
-          <input id="trasero1" title="" type="file" accept="image/*" (click)="resetFile('trasero1')"  (change)="getFiles($event,1)">
-          <img src="../../assets/imgs/registro/scan.png" width="80" height="80" />
+          <input id="trasero1" title="" type="file" accept="image/*" (click)="resetFile('trasero1')"
+            (change)="getFiles($event,1)">
+          <img src="../../../../assets/img/registro/scan.png" width="80" height="80" />
         </div>
       </div>
       <div class="escaneo" *ngIf="paso==1 && tipoDoc=='pasaporte'">
@@ -102,8 +113,9 @@
           {{ 'HUESPED.ESCANER_PASAPORTE' | translate }}
         </div>
         <div class="boton">
-          <input id="pasaporte1" title="" type="file" accept="image/*" (click)="resetFile('pasaporte1')"  (change)="getFiles($event,3)">
-          <img src="../../assets/imgs/registro/scan.png" width="80" height="80" />
+          <input id="pasaporte1" title="" type="file" accept="image/*" (click)="resetFile('pasaporte1')"
+            (change)="getFiles($event,3)">
+          <img src="../../../../assets/img/registro/scan.png" width="80" height="80" />
         </div>
       </div>
 
@@ -194,46 +206,59 @@
         <!-- <p *ngIf="!fastcheckinSuccess">{{ 'HUESPED.REGISTRO_MANUAL.UPS' | translate }}</p>
         <p *ngIf="!fastcheckinSuccess">{{ 'HUESPED.REGISTRO_MANUAL.EXPLICACION' | translate }}</p> -->
         <p>{{ 'HUESPED.REGISTRO_MANUAL.EXPLICACIONSUCCESS' | translate }}</p>
-        
+
       </div>
-      
+
       <div class="item typeOfDocument">
-        <label for="typeOfDocument"><span>{{ 'HUESPED.REGISTRO_MANUAL.TIPO_DOCUMENTO' | translate }}</span> <span class="label_error" *ngIf="erroresRegistroManual.tipoDocumento=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <select id="typeOfDocument" [(ngModel)]="fastcheckin.typeOfDocument" ngDefaultControl (ngModelChange)="cambiarTipoDocumento($event)">
+        <label for="typeOfDocument"><span>{{ 'HUESPED.REGISTRO_MANUAL.TIPO_DOCUMENTO' | translate }}</span> <span
+            class="label_error"
+            *ngIf="erroresRegistroManual.tipoDocumento=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
+        <select id="typeOfDocument" [(ngModel)]="fastcheckin.typeOfDocument" ngDefaultControl
+          (ngModelChange)="cambiarTipoDocumento($event)">
           <option *ngFor="let option of tiposDocumentos.opciones" [ngValue]="option.id">
             {{option.name}} </option>
         </select>
       </div>
       <div class="item identifier" *ngIf="fastcheckin.typeOfDocument=='D'">
-        <label for="identifier"><span>{{ 'HUESPED.REGISTRO_MANUAL.NUM_IDENTIFICACION' | translate }}</span> <span class="label_error"
+        <label for="identifier"><span>{{ 'HUESPED.REGISTRO_MANUAL.NUM_IDENTIFICACION' | translate }}</span> <span
+            class="label_error"
             *ngIf="erroresRegistroManual.numIdentificacion=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <input id="identifier" type="text" class="{{erroresRegistroManual.numIdentificacion || fastcheckin.dni.identifier=='' ? 'error' : ''}}"
-          [(ngModel)]="fastcheckin.dni.identifier" ngDefaultControl (ngModelChange)="modificaCampoRegistroManual('numIdentificacion')" />
+        <input id="identifier" type="text"
+          class="{{erroresRegistroManual.numIdentificacion || fastcheckin.dni.identifier=='' ? 'error' : ''}}"
+          [(ngModel)]="fastcheckin.dni.identifier" ngDefaultControl
+          (ngModelChange)="modificaCampoRegistroManual('numIdentificacion')" />
       </div>
       <div class="item identifier" *ngIf="fastcheckin.typeOfDocument=='P'">
-        <label for="identifier"><span>{{ 'HUESPED.REGISTRO_MANUAL.NUM_IDENTIFICACION' | translate }}</span> <span class="label_error"
+        <label for="identifier"><span>{{ 'HUESPED.REGISTRO_MANUAL.NUM_IDENTIFICACION' | translate }}</span> <span
+            class="label_error"
             *ngIf="erroresRegistroManual.numIdentificacion=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <input id="identifier" type="text" class="{{erroresRegistroManual.numIdentificacion || fastcheckin.passport.identifier=='' ? 'error' : ''}}"
+        <input id="identifier" type="text"
+          class="{{erroresRegistroManual.numIdentificacion || fastcheckin.passport.identifier=='' ? 'error' : ''}}"
           [(ngModel)]="fastcheckin.passport.identifier" ngDefaultControl
           (ngModelChange)="modificaCampoRegistroManual('numIdentificacion')" />
       </div>
       <div class="item date_exp">
-        <label for="date_exp"><span>{{ 'HUESPED.REGISTRO_MANUAL.EXPEDICION' | translate }}</span> <span class="label_error"
+        <label for="date_exp"><span>{{ 'HUESPED.REGISTRO_MANUAL.EXPEDICION' | translate }}</span> <span
+            class="label_error"
             *ngIf="erroresRegistroManual.fechaExpedicion=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <input id="date_exp" type="date" class="{{erroresRegistroManual.fechaExpedicion || fastcheckin.date_exp == '' ? 'error' : ''}}"
-          [(ngModel)]="fastcheckin.date_exp" ngDefaultControl (ngModelChange)="modificaCampoRegistroManual('fechaExpedicion')" />
+        <input id="date_exp" type="date"
+          class="{{erroresRegistroManual.fechaExpedicion || fastcheckin.date_exp == '' ? 'error' : ''}}"
+          [(ngModel)]="fastcheckin.date_exp" ngDefaultControl
+          (ngModelChange)="modificaCampoRegistroManual('fechaExpedicion')" />
       </div>
-      <div class="item name"> 
+      <div class="item name">
         <label for="name"><span>{{ 'HUESPED.REGISTRO_MANUAL.NOMBRE' | translate }}</span> <span class="label_error"
             *ngIf="erroresRegistroManual.nombre=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
         <input id="name" type="text" class="{{erroresRegistroManual.nombre || fastcheckin.name=='' ? 'error' : ''}}"
           [(ngModel)]="fastcheckin.name" ngDefaultControl (ngModelChange)="modificaCampoRegistroManual('nombre')" />
       </div>
       <div class="item surnameOne">
-        <label for="surnameOne"><span>{{ 'HUESPED.REGISTRO_MANUAL.APELLIDOS' | translate }}</span> <span class="label_error"
+        <label for="surnameOne"><span>{{ 'HUESPED.REGISTRO_MANUAL.APELLIDOS' | translate }}</span> <span
+            class="label_error"
             *ngIf="erroresRegistroManual.apellido1=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <input id="surnameOne" class="{{erroresRegistroManual.apellido1 || fastcheckin.surnameOne=='' ? 'error' : ''}}" type="text"
-          [(ngModel)]="fastcheckin.surnameOne" ngDefaultControl (ngModelChange)="modificaCampoRegistroManual('apellido1')" />
+        <input id="surnameOne" class="{{erroresRegistroManual.apellido1 || fastcheckin.surnameOne=='' ? 'error' : ''}}"
+          type="text" [(ngModel)]="fastcheckin.surnameOne" ngDefaultControl
+          (ngModelChange)="modificaCampoRegistroManual('apellido1')" />
       </div>
       <!-- VAMOS A QUITAR EL SEGUNDO APELLIDO DE LA EDICION 
       <div class="item surnameTwo">
@@ -242,16 +267,20 @@
         <input id="surnameTwo" class="{{erroresRegistroManual.apellido2 ? 'error' : ''}}" type="text"
           [(ngModel)]="fastcheckin.surnameTwo" (ngModelChange)="modificaCampoRegistroManual('apellido2')" />
       </div> -->
-      
+
       <div class="item birthday">
-        <label for="birthday"><span>{{ 'HUESPED.REGISTRO_MANUAL.NACIMIENTO' | translate }}</span> <span class="label_error"
+        <label for="birthday"><span>{{ 'HUESPED.REGISTRO_MANUAL.NACIMIENTO' | translate }}</span> <span
+            class="label_error"
             *ngIf="erroresRegistroManual.fechaNacimiento=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <input id="birthday" type="date" class="{{erroresRegistroManual.fechaNacimiento || fastcheckin.birthday=='' ? 'error' : ''}}"
-          [(ngModel)]="fastcheckin.birthday" ngDefaultControl (ngModelChange)="modificaCampoRegistroManual('fechaNacimiento')" />
+        <input id="birthday" type="date"
+          class="{{erroresRegistroManual.fechaNacimiento || fastcheckin.birthday=='' ? 'error' : ''}}"
+          [(ngModel)]="fastcheckin.birthday" ngDefaultControl
+          (ngModelChange)="modificaCampoRegistroManual('fechaNacimiento')" />
       </div>
       <div class="item sex">
-        
-        <label for="sex"><span>{{ 'HUESPED.REGISTRO_MANUAL.SEXO' | translate }}</span> <span class="label_error" *ngIf="erroresRegistroManual.sexo=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
+
+        <label for="sex"><span>{{ 'HUESPED.REGISTRO_MANUAL.SEXO' | translate }}</span> <span class="label_error"
+            *ngIf="erroresRegistroManual.sexo=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
         <select id="sex" [(ngModel)]="fastcheckin.sex" ngDefaultControl (ngModelChange)="cambiarSexo($event)">
           <option *ngFor="let option of tiposSexo.opciones" [ngValue]="option.id">
             {{option.name}} </option>
@@ -259,10 +288,13 @@
 
       </div>
       <div class="item nationality">
-        <label for="nationality"><span>{{ 'HUESPED.REGISTRO_MANUAL.NACIONALIDAD' | translate }}</span> <span class="label_error"
+        <label for="nationality"><span>{{ 'HUESPED.REGISTRO_MANUAL.NACIONALIDAD' | translate }}</span> <span
+            class="label_error"
             *ngIf="erroresRegistroManual.nacionalidad=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <input id="nationality" type="text" class="{{erroresRegistroManual.nacionalidad || fastcheckin.nationality=='' ? 'error' : ''}}"
-          [(ngModel)]="fastcheckin.nationality" ngDefaultControl (ngModelChange)="modificaCampoRegistroManual('nacionalidad')" />
+        <input id="nationality" type="text"
+          class="{{erroresRegistroManual.nacionalidad || fastcheckin.nationality=='' ? 'error' : ''}}"
+          [(ngModel)]="fastcheckin.nationality" ngDefaultControl
+          (ngModelChange)="modificaCampoRegistroManual('nacionalidad')" />
       </div>
       <div class="item province">
         <label for="province"><span>{{ 'HUESPED.REGISTRO_MANUAL.PROVINCIA' | translate }}</span></label>

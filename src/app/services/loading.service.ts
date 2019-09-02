@@ -14,11 +14,16 @@ export class LoadingService {
         private translate: TranslateService
     ) { }
 
-    async present() {
-        let translation2: string = this.translate.instant('CARGANDO.ESPERE');
+    async present(message?) {
+        let translation: string = "";
+        if(message){
+            translation = message;
+        } else {
+            translation = this.translate.instant('CARGANDO.ESPERE');
+        }
         this.isLoading = true;
         return await this.loadingController.create({
-            message: translation2,
+            message: translation,
             showBackdrop: true,
             duration: 10000,
         }).then(a => {

@@ -14,6 +14,7 @@ import { Http } from '@angular/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { GoogleCloudVisionServiceProvider } from './providers/vision/google-cloud-vision-service'
 
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -56,6 +57,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     ConfigService,
     CryptProvider,
     CookieService,
+    GoogleCloudVisionServiceProvider,
     DateFormatPipe,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

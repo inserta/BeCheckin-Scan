@@ -11,7 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // import { StorageService } from '../../app/services/service.storage';
 import { AlertController, NavController } from '@ionic/angular';
 // import { AuthProvider } from '../../providers/auth/auth';
-// import { GoogleCloudVisionServiceProvider } from '../../../providers/vision/google-cloud-vision-service';
+import { GoogleCloudVisionServiceProvider } from '../../../providers/vision/google-cloud-vision-service';
 // import { DNIValidator } from '../../validators/dni';
 // import { ImageViewerController } from "ionic-img-viewer";
 
@@ -132,7 +132,7 @@ export class NuevoHuespedPage implements OnInit {
       // private events: Events,
       // private service: ServiceAPI,
       // private modalCtrl: ModalController,
-      // private vision: GoogleCloudVisionServiceProvider,
+      private vision: GoogleCloudVisionServiceProvider,
       private cryptProvider: CryptProvider,
       // public imageViewerCtrl: ImageViewerController,
       private router: Router,
@@ -154,7 +154,6 @@ export class NuevoHuespedPage implements OnInit {
       this.photosNifSubida = [];
       this.photosPassportSubida = [];
     }
-  
   
     filtro() {
       return this.users.filter((user) => {
@@ -271,6 +270,7 @@ export class NuevoHuespedPage implements OnInit {
     comprobardatos() {
       this.existFastcheckin = false;
       this.fastcheckinSuccess = false;
+      //TODO: Seguir fastcheckin por aquí. Guest undefined...
       this.user.guest.fastcheckin.caducate = this.user.keysRooms[0].start;
       this.user.guest.fastcheckin.typeOfDocument = this.typeDocument;
       this.user.guest.fastcheckin._id = this.user.guest._id;
@@ -487,41 +487,41 @@ export class NuevoHuespedPage implements OnInit {
           });*/
   
           try {
-            // this.vision.getLabels(image).subscribe((result: any) => {
-            //   //console.log(result._body);
-            //   let res = JSON.parse(result._body);
-            //   if (res.responses[0].fullTextAnnotation) {
-            //     //this.typeDocument = res.responses[0].fullTextAnnotation.text.indexOf('passport') >= 0 || res.responses[0].fullTextAnnotation.text.indexOf('PASSPORT') >= 0 ? 'P' : 'D';
+            this.vision.getLabels(image).subscribe((result: any) => {
+              console.log(result);
+              let res = result.responses[0].fullTextAnnotation;
+              if (res) {
+                //this.typeDocument = res.responses[0].fullTextAnnotation.text.indexOf('passport') >= 0 || res.responses[0].fullTextAnnotation.text.indexOf('PASSPORT') >= 0 ? 'P' : 'D';
   
-            //     if (this.tipoDoc == 'dni') {
-            //       console.log('dni')
-            //       this.typeDocument = 'D';
-            //       this.recognizeDNIText(res.responses[0].fullTextAnnotation.text);
-            //     } else {
-            //       this.typeDocument = 'P';
-            //       this.loader.dismiss();
-            //       //this.activarFormularioManual();
-            //       this.recognizePassportText(res.responses[0].fullTextAnnotation.text);
-            //     }
-            //   } else {
-            //     this.loader.dismiss()
-            //     this.errorScan = this.errorScan + 1;
-            //     if (this.errorScan >= 2) {
-            //       this.activarFormularioManual();
-            //     } else {
-            //       this.alerta(this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TITULO"), this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TEXTO"));
-            //     }
-            //   }
-            // }, err => {
-            //   this.loader.dismiss();
-            //   console.log(err);
-            //   this.errorScan = this.errorScan + 1;
-            //   if (this.errorScan >= 2) {
-            //     this.activarFormularioManual();
-            //   } else {
-            //     this.alerta(this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TITULO"), this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TEXTO"));
-            //   }
-            // });
+                if (this.tipoDoc == 'dni') {
+                  console.log('dni')
+                  this.typeDocument = 'D';
+                  this.recognizeDNIText(res.text);
+                } else {
+                  this.typeDocument = 'P';
+                  this.loader.dismiss();
+                  //this.activarFormularioManual();
+                  this.recognizePassportText(res.text);
+                }
+              } else {
+                this.loader.dismiss()
+                this.errorScan = this.errorScan + 1;
+                if (this.errorScan >= 2) {
+                  this.activarFormularioManual();
+                } else {
+                  this.alerta(this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TITULO"), this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TEXTO"));
+                }
+              }
+            }, err => {
+              this.loader.dismiss();
+              console.log(err);
+              this.errorScan = this.errorScan + 1;
+              if (this.errorScan >= 2) {
+                this.activarFormularioManual();
+              } else {
+                this.alerta(this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TITULO"), this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TEXTO"));
+              }
+            });
           } catch (error) {
             console.log(error);
             //this.showToast("FASTCHECKIN.NO_SCANNER");

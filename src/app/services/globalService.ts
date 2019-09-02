@@ -313,7 +313,7 @@ export class GlobalService {
   }
 
   cerrarSesion() {
-    this.loader.present();
+    this.loader.present("¡Hasta pronto!");
     // Seteamos a null, ya que el borrado no funciona en todos los navegadores.
     // this.cookieService.delete("directScanData");
     // Ojo, la cookie será el string "null", y no el valor nulo.
@@ -322,6 +322,6 @@ export class GlobalService {
     setTimeout(() => {
       this.loader.dismiss();
       this.nav.navigateRoot("/login");
-    }, 1000);
+    }, 500);
   }
 }

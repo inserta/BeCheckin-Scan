@@ -465,8 +465,8 @@ page-change-user {
 .huesped-box {
   width: 100%;
   height: 100%;
-  // background: #0779a7 !important;
-  color: #fff;
+  background: linear-gradient(130deg,#757575, #f9f9f9,#f9f9f9,#f9f9f9,#f9f9f9,#f9f9f9, #757575);
+  color: rgb(29, 29, 29);
   display: flex;
   text-align: justify;
 
@@ -533,15 +533,17 @@ page-change-user {
     .introduccion {
       display: flex;
       flex-direction: column;
-      min-height: 66px;
+      min-height: 111px;
       padding-left: 10%;
       padding-right: 10%;
-      justify-content: flex-start;
+      justify-content: center;
+      align-items: center;
 
       p {
         padding: 0;
         margin: 0;
-        font-size: 16px;
+        margin-bottom: 10px;
+        font-size: 18px;
 
         .nombre_hotel {
           color: #d3d2a7;
@@ -554,14 +556,25 @@ page-change-user {
       justify-content: center;
       padding-top: 10px;
       min-height: 135px;
+      color: #141414;
 
       .radio-group {
         display: flex;
         flex-direction: column;
+        justify-content: center;
         width: 100%;
         padding-left: 20px;
         padding-right: 20px;
         text-align: center;
+        color: #141414;
+        background: transparent !important;
+
+        .centrado{
+          justify-content: center;
+          color: #141414;
+          font-size: 20px;
+          font-weight: bold;
+        }
 
         .en_linea {
           display: flex;
@@ -570,6 +583,12 @@ page-change-user {
           padding-left: 20px;
           padding-right: 20px;
           padding-top: 5px;
+          margin-bottom: 20px;
+
+          .item-radio-personalizado{
+            color: #141414;
+            margin-left: 20px;
+          }
 
           .selected {
             background: #bcc5e22c;
