@@ -62,7 +62,8 @@
       "CONTROL_FECHA_EXPEDICION_INFERIOR":"No puede introducir una fecha inferior a 30 años",
       "CONTROL_FECHA_NACIMIENTO_TITULO":"Error en fecha de nacimiento",
       "CONTROL_FECHA_NACIMIENTO_INFERIOR":"No puede introducir una fecha inferior a 100 años",
-      "CONTROL_FECHAS_SUPERIOR":"No puede introducir una fecha superior a la fecha de checkin: ",
+	  "CONTROL_FECHAS_SUPERIOR":"No puede introducir una fecha superior a la fecha de checkin: ",
+	  "ERASE_SIGNATURE": "Borrar firma",
       "REGISTRO_MANUAL": {
           "DNI": "DNI",
           "PASAPORTE": "PASAPORTE/NIE",

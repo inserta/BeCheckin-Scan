@@ -1035,10 +1035,10 @@ export class NuevoHuespedPage implements OnInit {
   }
 
   confirmaImagenes() {
-    let pasoAnterior = new PasoAnterior();
-    pasoAnterior.paso = this.paso;
-    pasoAnterior.progreso = this.progreso;
-    this.pasosAnteriores.push(pasoAnterior);
+    // let pasoAnterior = new PasoAnterior();
+    // pasoAnterior.paso = this.paso;
+    // pasoAnterior.progreso = this.progreso;
+    // this.pasosAnteriores.push(pasoAnterior);
     //this.paso = 4;
     // Volcamos los datos obtenidos en el fastcheckin en caso de éxito:
     this.activarFormularioManual();
