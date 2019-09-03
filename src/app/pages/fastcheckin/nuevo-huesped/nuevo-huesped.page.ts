@@ -1,4 +1,4 @@
-import { FastCheckin, Guest } from '../../../models/data.model';
+import { FastCheckin, Guest, DatosReserva } from '../../../models/data.model';
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 // import { IonicPage, Content, Loading, NavController, NavParams, Toast, Events, ModalController, ViewController, Platform } from 'ionic-angular';
 import { User } from '../../../models/data.model';
@@ -19,7 +19,7 @@ import { GoogleCloudVisionServiceProvider } from '../../../providers/vision/goog
 // import moment from 'moment';
 import { GlobalService } from '../../../services/globalService';
 import { ErroresFormularioRegistro, PasoAnterior } from '../../../models/others.model';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingService } from 'src/app/services/loading.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { DataManagement } from 'src/app/services/dataManagement';
@@ -117,6 +117,10 @@ export class NuevoHuespedPage implements OnInit {
     ]
   };
 
+  datosReserva: DatosReserva;
+  ready: boolean;
+  _idKeyRoom: string;
+
   constructor(
     public navCtrl: NavController,
     // public navParams: NavParams,
@@ -139,6 +143,7 @@ export class NuevoHuespedPage implements OnInit {
     // public imageViewerCtrl: ImageViewerController,
     private router: Router,
     private loader: LoadingService,
+    private route: ActivatedRoute,
     private dm: DataManagement
   ) {
 
@@ -163,6 +168,35 @@ export class NuevoHuespedPage implements OnInit {
     // Inicializamos los arrays que contendrán las imagenes tal y como vienen para enviar:
     this.photosNifSubida = [];
     this.photosPassportSubida = [];
+
+    this.inicializaReserva();
+    
+    this.globalService.leerCookies(true).then(res => {
+      if (!res) {
+        this.sinPermisos = true;
+        this.navCtrl.navigateForward("/login");
+      } else {
+        //Filtramos las reservas por su id para obtener la reserva seleccionada
+        let datosReservas = this.globalService.datosReservas.filter(datosReserva =>
+          datosReserva.reserva.id.toString() == this.idReserva
+        )
+        //Puesto que nos devuelve una lista de un único elemento, lo sacamos de la lista y lo guardamos en una variable.
+        this.datosReserva = datosReservas[0];
+        this._idKeyRoom = this.datosReserva.reserva._id;
+        this.ready = true;
+        console.log("resultado", res);
+        console.log("idReserva", this.idReserva);
+      }
+    });
+  }
+  
+  inicializaReserva() {
+    if (this.loader.isLoading) {
+      this.loader.dismiss();
+    }
+    this.ready = false;
+    this.sinPermisos = false;
+    this.idReserva = this.route.snapshot.paramMap.get('idReserva');
   }
 
   filtro() {
@@ -225,51 +259,65 @@ export class NuevoHuespedPage implements OnInit {
     let contador_subida_dni = 0;
     this.linksSubidos = [];
 
-    // PARA SELECCIÓN DE DNI:
-    if (this.typeDocument == 'D') {
+    this.crearHuespedSinFastcheckin().then(res => {
 
-      // SUBIDA PARTE TRASERA DNI:
+      // PARA SELECCIÓN DE DNI:
+      if (this.typeDocument == 'D') {
 
-      this.globalService.subirArchivo(this.photosNifSubida[0], 'huespedes/' + this.user.guest._id, 'dni_trasero')
-        .then(ok => {
-          console.log('Subido trasero con éxito DNI');
-          this.linksSubidos.push({ enlace: 'huespedes/' + this.user.guest._id, nombre: 'dni_trasero' + this.getExtension(this.photosNifSubida[0]) });
+        // SUBIDA PARTE TRASERA DNI:
+
+        this.globalService.subirArchivo(this.photosNifSubida[0], 'huespedes/' + this.user.guest._id, 'dni_trasero')
+          .then(ok => {
+            console.log('Subido trasero con éxito DNI');
+            this.linksSubidos.push({ enlace: 'huespedes/' + this.user.guest._id, nombre: 'dni_trasero' + this.getExtension(this.photosNifSubida[0]) });
 
 
-          // SUBIDA PARTE FRONTAL DNI:
-          this.globalService.subirArchivo(this.photosNifSubida[1], 'huespedes/' + this.user.guest._id, 'dni_frontal')
-            .then(ok => {
-              console.log('Subido trasera con éxito DNI');
-              this.linksSubidos.push({ enlace: 'huespedes/' + this.user.guest._id, nombre: 'dni_frontal' + this.getExtension(this.photosNifSubida[1]) });
-              this.sendProfile();
-            }).catch((error) => {
-              this.loader.dismiss();
-              console.log('Error subida trasera DNI');
-            });
-        }).catch((error) => {
-          this.loader.dismiss();
-          console.log('Error Subida frontal DNI');
-          contador_subida_dni++;
-        });
+            // SUBIDA PARTE FRONTAL DNI:
+            this.globalService.subirArchivo(this.photosNifSubida[1], 'huespedes/' + this.user.guest._id, 'dni_frontal')
+              .then(ok => {
+                console.log('Subido trasera con éxito DNI');
+                this.linksSubidos.push({ enlace: 'huespedes/' + this.user.guest._id, nombre: 'dni_frontal' + this.getExtension(this.photosNifSubida[1]) });
+                this.sendProfile();
+              }).catch((error) => {
+                this.loader.dismiss();
+                console.log('Error subida trasera DNI');
+              });
+          }).catch((error) => {
+            this.loader.dismiss();
+            console.log('Error Subida frontal DNI');
+            contador_subida_dni++;
+          });
 
-    } else {
+      } else {
 
-      // SUBIDA PASAPORTE:
-      this.globalService.subirArchivo(this.photosPassportSubida[0], 'huespedes/' + this.user.guest._id, 'pasaporte')
-        .then(ok => {
-          console.log('Subido Pasaporte con éxito');
-          this.linksSubidos.push({ enlace: 'huespedes/' + this.user.guest._id, nombre: 'pasaporte' + this.getExtension(this.photosPassportSubida[0]) });
-          this.sendProfile();
-        }).catch((error) => {
-          this.loader.dismiss();
-          console.log('Error subida pasaporte');
-          //this.sendProfile();
-        });
-    }
-
+        // SUBIDA PASAPORTE:
+        this.globalService.subirArchivo(this.photosPassportSubida[0], 'huespedes/' + this.user.guest._id, 'pasaporte')
+          .then(ok => {
+            console.log('Subido Pasaporte con éxito');
+            this.linksSubidos.push({ enlace: 'huespedes/' + this.user.guest._id, nombre: 'pasaporte' + this.getExtension(this.photosPassportSubida[0]) });
+            this.sendProfile();
+          }).catch((error) => {
+            this.loader.dismiss();
+            console.log('Error subida pasaporte');
+            //this.sendProfile();
+          });
+      }
+    });
 
   }
 
+  crearHuespedSinFastcheckin() {
+    return new Promise<any>((resolve, reject) => {
+      console.log(this.hotel);
+      this.dm.crearHuesped("pruebaJavi","pruebaJavi@email.com", this.globalService.generarCadenaAleatoria(200),null,this._idKeyRoom).then(res => {
+        console.log("Respuesta crear huesped: ", res);
+        resolve();
+      }).catch(error=>{
+        console.log("Error al crear huesped: ", error);
+        resolve();
+      })
+    });
+  }
 
   // Devuelve la extensión del fichero binario de una imagen:
   getExtension(fichero) {
@@ -386,50 +434,52 @@ export class NuevoHuespedPage implements OnInit {
 
   saveProfile() {
     this.loader.present();
-    if (this.existFastcheckin) {
-      // No tiene condiciones hotel:
-      if (this.condiciones_hotel.length == 0) {
-        if (this.policysecurity) {
-          this.savePad();
-          this.user.guest.fastcheckin.email = this.email;
-          this.user.guest.email = this.email;
-          //this.user.email = this.email;
-          console.log("User: ", this.user.guest)
-          if (!this.existSignature) {
-            this.loader.dismiss();
-            this.alerta("FASTCHECKIN", this.translate.instant("FASTCHECKIN.NOSIGNATURE"));
-          } else {
-            this.saveProfilemio();
-          }
+    setTimeout(() => {
+      if (this.existFastcheckin) {
+        // No tiene condiciones hotel:
+        if (this.condiciones_hotel.length == 0) {
+          if (this.policysecurity) {
+            this.savePad();
+            // this.user.guest.fastcheckin.email = this.email;
+            // this.user.guest.email = this.email;
+            //this.user.email = this.email;
+            console.log("User: ", this.user.guest)
+            if (!this.existSignature) {
+              this.loader.dismiss();
+              this.alerta("FASTCHECKIN", this.translate.instant("FASTCHECKIN.NOSIGNATURE"));
+            } else {
+              this.saveProfilemio();
+            }
 
+          }
+          else {
+            this.loader.dismiss();
+            this.alerta(this.translate.instant("POLICY.TITLECONDITIONS"), this.translate.instant("POLICY.CONDITIONSP"));
+          }
         }
         else {
-          this.loader.dismiss();
-          this.alerta(this.translate.instant("POLICY.TITLECONDITIONS"), this.translate.instant("POLICY.CONDITIONSP"));
+          if (this.conditions && this.policysecurity) {
+            this.savePad();
+            console.log("User: ", this.user.guest)
+            if (!this.existSignature) {
+              this.loader.dismiss();
+              this.alerta('FASTCHECKIN', this.translate.instant("FASTCHECKIN.NOSIGNATURE"));
+            } else {
+              this.saveProfilemio();
+            }
+
+          }
+          else {
+            this.loader.dismiss();
+            this.alerta(this.translate.instant("POLICY.TITLECONDITIONS"), this.translate.instant("POLICY.CONDITIONS"));
+          }
         }
       }
       else {
-        if (this.conditions && this.policysecurity) {
-          this.savePad();
-          console.log("User: ", this.user.guest)
-          if (!this.existSignature) {
-            this.loader.dismiss();
-            this.alerta('FASTCHECKIN', this.translate.instant("FASTCHECKIN.NOSIGNATURE"));
-          } else {
-            this.saveProfilemio();
-          }
-
-        }
-        else {
-          this.loader.dismiss();
-          this.alerta(this.translate.instant("POLICY.TITLECONDITIONS"), this.translate.instant("POLICY.CONDITIONS"));
-        }
+        this.loader.dismiss();
+        this.alerta('FASTCHECKIN', this.translate.instant("FASTCHECKIN.NOFOTO"));
       }
-    }
-    else {
-      this.loader.dismiss();
-      this.alerta('FASTCHECKIN', this.translate.instant("FASTCHECKIN.NOFOTO"));
-    }
+    }, 1);
   }
 
   private checkKeyPermisions() {

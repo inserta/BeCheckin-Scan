@@ -119,7 +119,7 @@ export class GlobalService {
       }
 
       Promise.all(promises).then(res => {
-        console.log(res);
+        console.log("cargando datos",res);
         let datosCliente = res[0];
 
         //Recepcionista
@@ -139,6 +139,7 @@ export class GlobalService {
             if (fc.downloadCode) {
               let datosReserva: DatosReserva = new DatosReserva();
               let reserva = new Reservation;
+              reserva._id = fc._id;
               reserva.id = fc.downloadCode;
               let roomReservations = [];
               let roomReservation = new RoomReservation();
