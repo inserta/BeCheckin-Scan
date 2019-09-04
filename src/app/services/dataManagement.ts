@@ -131,16 +131,31 @@ export class DataManagement {
   }
 
   /**
-   * Creación de huesped más fastcheckin en un sólo paso.
+   * Creación de huesped previo al fastcheckin.
    * @param name Nombre del huesped.
    * @param email Email del huesped, debe ser único.
    * @param tokenFirebase Token generado aleatoriamente.
-   * @param fastcheckin Datos de fastcheckin encriptados.
    * @param keyRoom "_id" de la llave.
    */
-  public crearHuesped(name, email, tokenFirebase, fastcheckin, keyRoom): Promise<any> {
+  public crearHuespedSinFastcheckin(name, email, tokenFirebase, keyRoom): Promise<any> {
     return this.restService
-      .crearHuesped(name, email, tokenFirebase, fastcheckin, keyRoom)
+      .crearHuesped(name, email, tokenFirebase, keyRoom)
+      .then(data => {
+        return Promise.resolve(data);
+      })
+      .catch(error => {
+        return Promise.reject('error');
+      });
+  }
+
+  /**
+   * Método que incluye o modifica el fastcheckin de un huésped.
+   * @param idGuest _id del huésped.
+   * @param fastcheckin Debe ir encriptado.
+   */
+  public setFastcheckin(idGuest, fastcheckin): Promise<any> {
+    return this.restService
+      .setFastcheckin(idGuest, fastcheckin)
       .then(data => {
         return Promise.resolve(data);
       })

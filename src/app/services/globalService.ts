@@ -247,7 +247,7 @@ export class GlobalService {
                 huespedes.filter(res =>
                   res._id == huesped._id))
             ) {
-              let decrypted: any = CryptProvider.decryptData(huesped.fastcheckin.toString(), huesped._id);
+              let decrypted: any = CryptProvider.decryptData(decodeURIComponent(huesped.fastcheckin.toString()), huesped._id);
               //huespedes.push(decrypted);
               const documento = (decrypted.typeOfDocument.toLowerCase() === 'dni' || decrypted.typeOfDocument.toLowerCase() === 'd') ? decrypted.dni.identifier : decrypted.passport.identifier;
               if (!checkDuplicados.includes(documento)) {

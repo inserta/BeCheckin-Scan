@@ -170,7 +170,7 @@ export class NuevoHuespedPage implements OnInit {
     this.photosPassportSubida = [];
 
     this.inicializaReserva();
-    
+
     this.globalService.leerCookies(true).then(res => {
       if (!res) {
         this.sinPermisos = true;
@@ -189,7 +189,7 @@ export class NuevoHuespedPage implements OnInit {
       }
     });
   }
-  
+
   inicializaReserva() {
     if (this.loader.isLoading) {
       this.loader.dismiss();
@@ -297,11 +297,15 @@ export class NuevoHuespedPage implements OnInit {
             this.linksSubidos.push({ enlace: 'huespedes/' + this.user.guest._id, nombre: 'pasaporte' + this.getExtension(this.photosPassportSubida[0]) });
             this.sendProfile();
           }).catch((error) => {
-            this.loader.dismiss();
+            if(this.loader.isLoading){
+              this.loader.dismiss();
+            }
             console.log('Error subida pasaporte');
             //this.sendProfile();
           });
       }
+    }).catch(error => {
+      this.alerta("Error", "El huésped no se ha podido crear correctamente, inténtelo de nuevo por favor.");
     });
 
   }
@@ -309,12 +313,17 @@ export class NuevoHuespedPage implements OnInit {
   crearHuespedSinFastcheckin() {
     return new Promise<any>((resolve, reject) => {
       console.log(this.hotel);
-      this.dm.crearHuesped("pruebaJavi","pruebaJavi@email.com", this.globalService.generarCadenaAleatoria(200),null,this._idKeyRoom).then(res => {
+      this.dm.crearHuespedSinFastcheckin("pruebaJavi5", "pruebaJavi5@email.com", this.globalService.generarCadenaAleatoria(50), this._idKeyRoom).then(res => {
         console.log("Respuesta crear huesped: ", res);
-        resolve();
-      }).catch(error=>{
+        this.user.guest._id = res.guest._id;
+        this.user.guest.name = res.guest.name;
+        this.user.guest.email = res.guest.email;
+        this.user.guest.tokenFirebase = res.guest.tokenFirebase;
+        this.user.guest.versionAPI = res.guest.versionAPI;
+        resolve(res);
+      }).catch(error => {
         console.log("Error al crear huesped: ", error);
-        resolve();
+        reject(error);
       })
     });
   }
@@ -609,54 +618,74 @@ export class NuevoHuespedPage implements OnInit {
 
     // Introducimos las imagenes en la estructura de FastCheckin:
     this.user.guest.fastcheckin.imagenes = this.linksSubidos;
+    this.fastcheckin.imagenes = this.linksSubidos;
+
+    // Introducimos el _id del huesped en el fastcheckin
+    this.user.guest.fastcheckin._id = this.user.guest._id;
+    this.fastcheckin._id = this.user.guest._id;
+
 
     let fastcheckin = this.cryptProvider.encryptData(this.user);
-    // this.serviceAPI.setFastcheckin(this.user, fastcheckin.toString())
-    //   .then((response) => {
-    //     this.serviceAPI.actualGuests.push(this.user.guest);
-    //     this.user.guest.fastcheckin = CryptProvider.decryptData(fastcheckin.toString(), this.user.guest._id);
-    //     console.log('Fast: ', this.user.guest.fastcheckin);
-    //     var fechaInicio = new Date(this.user.guest.fastcheckin.birthday).getTime();
-    //     var fechaFin = new Date().getTime();
+    console.log(fastcheckin.toString());
 
-    //     var diff = fechaFin - fechaInicio;
+    this.dm.setFastcheckin(this.user.guest._id, fastcheckin.toString())
+      .then((response) => {
+        // this.serviceAPI.actualGuests.push(this.user.guest);
+        // this.user.guest.fastcheckin = CryptProvider.decryptData(fastcheckin.toString(), this.user.guest._id);
+        // console.log('Fast: ', this.user.guest.fastcheckin);
+        // var fechaInicio = new Date(this.user.guest.fastcheckin.birthday).getTime();
+        // var fechaFin = new Date().getTime();
 
-    //     var edad = diff / (1000 * 60 * 60 * 24 * 365)
+        // var diff = fechaFin - fechaInicio;
 
-    //     console.log(diff / (1000 * 60 * 60 * 24 * 365));
-    //     this.serviceAPI.actualUser.edad = edad
-    //     this.storageService.setUserData(this.user);
-    //     this.events.publish('setUser', this.user);
-    //     this.dataUpdate = true;
-    //     this.serviceAPI.getHotel(this.user.keysRooms[0].client._id).then(hotel => {
-    //       console.log('h: ', hotel)
-    //       let mail = this.user.keysRooms[0].client.email;
+        // var edad = diff / (1000 * 60 * 60 * 24 * 365)
 
-    //       if ((hotel[0].email) && (hotel[0].email != hotel[0].user) && (hotel[0].email != '')) {
-    //         mail = mail + ', ' + hotel[0].email;
-    //         if (hotel[0].activo == '0')
-    //           mail = hotel[0].email;
-    //       }
+        // console.log(diff / (1000 * 60 * 60 * 24 * 365));
+        // this.serviceAPI.actualUser.edad = edad
+        // this.storageService.setUserData(this.user);
+        // this.events.publish('setUser', this.user);
+        this.dataUpdate = true;
+        // this.serviceAPI.getHotel(this.user.keysRooms[0].client._id).then(hotel => {
+        //   console.log('h: ', hotel)
+        //   let mail = this.user.keysRooms[0].client.email;
 
-    //       console.log('email to: ', mail)
+        //   if ((hotel[0].email) && (hotel[0].email != hotel[0].user) && (hotel[0].email != '')) {
+        //     mail = mail + ', ' + hotel[0].email;
+        //     if (hotel[0].activo == '0')
+        //       mail = hotel[0].email;
+        //   }
 
-    //       let asunto = "Nuevo Fastcheckin";
-    //       let mailTo = mail;
-    //       let cco = "amalia@becheckin.com, lidia@becheckin.com";
-    //       let nombreHuesped=this.user.keysRooms[0].client.name;
-    //       let nombreReserva=this.user.keysRooms[0].downloadCode;
-    //       let fechaInicio=this.user.keysRooms[0].start.substring(0, 10);
-    //       let fechaFin=this.user.keysRooms[0].finish.substring(0, 10);
-    //       let fastcheckin: FastCheckin = this.user.guest.fastcheckin;
-    //       let mensaje = "<!doctype html><html><head><title>Becheckin<\/title><style>.cuerpo{margin: 2%;background: #003581;border-radius: 10px;border: 2px solid #444;box-shadow: 0px 0px 10px 4px #888888;color:#E5E5E5;padding: 1%;}.imagen{margin-top: 10px;margin-bottom: 5px;display: flex;justify-content: center;align-items: center;}img{margin: 0 auto; border-radius: 5px;overflow: hidden;}.bienvenida{margin-left: 3%;margin-right: 3%;font-size: 20px;font-weight: bold;}.nombre{color: #f9ffac;}.reserva{font-weight: bold;color: #ecffbf;}.texto{margin-top: 20px;margin-left: 6%;margin-right: 6%;font-size: 18px;}.fecha1{color: #c4ffb5;}.fecha2{color: #ffb5b5;}.info{margin-bottom: 10px;}.fechas{margin-bottom: 10px;}.datos{margin-bottom: 10px;}.dato{font-size: 14px;margin: 5px 2%;}.texto_final{margin-bottom: 30px;font-size: 14px;font-style: italic;}a{color: #feffce;}.pie{text-align: center;font-style: italic;color: #7e7e7e;}<\/style><\/head><body><div class='cuerpo'><div class='imagen'><img src='https:\/\/dashboard.becheckin.com\/imgs\/logo\/inserta.png' width='50' height='50' \/><\/div><div class='bienvenida'>Hola <span class='nombre'>"+(nombreHuesped?nombreHuesped : "")+"<\/span><\/div><div class='texto'><div class='info'>Tu reserva <span class='reserva'>"+(nombreReserva?nombreReserva : "")+"<\/span> tiene un nuevo FastCheckin.<\/div><div class='fechas'>Entrada <span class='fecha1'>"+(fechaInicio?fechaInicio : "")+"<\/span> | Salida <span class='fecha2'>"+(fechaFin?fechaFin : "")+"<\/span><\/div><div class='datos'>Datos huésped:<div class='dato'>Nombre: "+(fastcheckin.name?fastcheckin.name : "")+"<\/div><div class='dato'>Apellidos: "+(fastcheckin.surnameOne?fastcheckin.surnameOne : "")+"<\/div><div class='dato'>Fecha Nacimiento: "+(fastcheckin.birthday?fastcheckin.birthday : "")+"<\/div><div class='dato'>Fecha Expedicion: "+(fastcheckin.date_exp?fastcheckin.date_exp : "")+"<\/div><div class='dato'>Dni: "+(fastcheckin.dni.identifier?fastcheckin.dni.identifier : "")+"<\/div><div class='dato'>Pasaporte: "+(fastcheckin.passport.identifier?fastcheckin.passport.identifier : "")+"<\/div><div class='dato'>Nacionalidad: "+(fastcheckin.nationality?fastcheckin.nationality : "" )+"<\/div><div class='dato'>Sexo: "+(fastcheckin.sex?fastcheckin.sex : "" )+"<\/div><div class='dato'>Email: "+(fastcheckin.email?fastcheckin.email : "" )+"<\/div><\/div><div class='texto_final'>Puedes consultar los datos FastCheckin en tu dashboard: <a href='https:\/\/dashboard.becheckin.com'target='_blank' style='color:#feffce;'>https:\/\/dashboard.becheckin.com <\/a><br \/>Nos tienes siempre a tu disposición en Booking@becheckin.com y en el teléfono +34 627 07 41 73.<\/div><\/div><\/div><\/body><footer><hr \/><div class='pie'>Atentamente, BeCheckin Team.<\/div><\/footer><\/html>";
-    //       this.dm.sendGenericMail(asunto, mensaje, mailTo, "", cco).then(res => {
-    //         console.log(res);
-    //         this.loader.dismiss();
-    //         this.checkKeyPermisions();
-    //       });
-    //     })
+        //   console.log('email to: ', mail)
+        console.log("enviando email a: " + this.globalService.recepcionista.hotel.email)
+        let asunto = "Nuevo Fastcheckin";
+        let mailTo = this.globalService.recepcionista.hotel.email;
+        let cco = "javier@becheckin.com";
+        // let cco = "amalia@becheckin.com, lidia@becheckin.com";
+        let nombreHuesped = this.fastcheckin.name;
+        let nombreReserva = this.datosReserva.reserva.id;
+        let fechaInicio = this.muestraFechaString(this.datosReserva.reserva.roomReservations[0].checkin);
+        let fechaFin = this.muestraFechaString(this.datosReserva.reserva.roomReservations[0].checkout);
+        let fastcheckin: FastCheckin = this.fastcheckin;
+        let mensaje = "<!doctype html><html><head><title>Becheckin<\/title><style>.cuerpo{margin: 2%;background: #003581;border-radius: 10px;border: 2px solid #444;box-shadow: 0px 0px 10px 4px #888888;color:#E5E5E5;padding: 1%;}.imagen{margin-top: 10px;margin-bottom: 5px;display: flex;justify-content: center;align-items: center;}img{margin: 0 auto; border-radius: 5px;overflow: hidden;}.bienvenida{margin-left: 3%;margin-right: 3%;font-size: 20px;font-weight: bold;}.nombre{color: #f9ffac;}.reserva{font-weight: bold;color: #ecffbf;}.texto{margin-top: 20px;margin-left: 6%;margin-right: 6%;font-size: 18px;}.fecha1{color: #c4ffb5;}.fecha2{color: #ffb5b5;}.info{margin-bottom: 10px;}.fechas{margin-bottom: 10px;}.datos{margin-bottom: 10px;}.dato{font-size: 14px;margin: 5px 2%;}.texto_final{margin-bottom: 30px;font-size: 14px;font-style: italic;}a{color: #feffce;}.pie{text-align: center;font-style: italic;color: #7e7e7e;}<\/style><\/head><body><div class='cuerpo'><div class='imagen'><img src='https:\/\/dashboard.becheckin.com\/imgs\/logo\/inserta.png' width='50' height='50' \/><\/div><div class='bienvenida'>Hola <span class='nombre'>" + (nombreHuesped ? nombreHuesped : "") + "<\/span><\/div><div class='texto'><div class='info'>Tu reserva <span class='reserva'>" + (nombreReserva ? nombreReserva : "") + "<\/span> tiene un nuevo FastCheckin.<\/div><div class='fechas'>Entrada <span class='fecha1'>" + (fechaInicio ? fechaInicio : "") + "<\/span> | Salida <span class='fecha2'>" + (fechaFin ? fechaFin : "") + "<\/span><\/div><div class='datos'>Datos huésped:<div class='dato'>Nombre: " + (fastcheckin.name ? fastcheckin.name : "") + "<\/div><div class='dato'>Apellidos: " + (fastcheckin.surnameOne ? fastcheckin.surnameOne : "") + "<\/div><div class='dato'>Fecha Nacimiento: " + (fastcheckin.birthday ? fastcheckin.birthday : "") + "<\/div><div class='dato'>Fecha Expedicion: " + (fastcheckin.date_exp ? fastcheckin.date_exp : "") + "<\/div><div class='dato'>Dni: " + (fastcheckin.dni.identifier ? fastcheckin.dni.identifier : "") + "<\/div><div class='dato'>Pasaporte: " + (fastcheckin.passport.identifier ? fastcheckin.passport.identifier : "") + "<\/div><div class='dato'>Nacionalidad: " + (fastcheckin.nationality ? fastcheckin.nationality : "") + "<\/div><div class='dato'>Sexo: " + (fastcheckin.sex ? fastcheckin.sex : "") + "<\/div><div class='dato'>Email: " + (fastcheckin.email ? fastcheckin.email : "") + "<\/div><\/div><div class='texto_final'>Puedes consultar los datos FastCheckin en tu dashboard: <a href='https:\/\/dashboard.becheckin.com'target='_blank' style='color:#feffce;'>https:\/\/dashboard.becheckin.com <\/a><br \/>Nos tienes siempre a tu disposición en Booking@becheckin.com y en el teléfono +34 627 07 41 73.<\/div><\/div><\/div><\/body><footer><hr \/><div class='pie'>Atentamente, BeCheckin Team.<\/div><\/footer><\/html>";
+        this.dm.sendGenericMail(asunto, mensaje, mailTo, "", cco).then(res => {
+          console.log(res);
+          if(this.loader.isLoading){
+            this.loader.dismiss();
+          }
+          this.checkKeyPermisions();
+        });
+        // })
 
-    //   });
+      });
+  }
+
+  private muestraFechaString(fecha: Date): string {
+    return this.leftpad(fecha.getDate(), 2) + "-" + this.leftpad(fecha.getMonth() + 1, 2) + '-' + fecha.getFullYear();
+  }
+  //Método utilizado para formatear la fecha en string
+  private leftpad(val, resultLength = 2, leftpadChar = '0'): string {
+    return (String(leftpadChar).repeat(resultLength)
+      + String(val)).slice(String(val).length);
   }
 
   private recognizePassportText(text: any) {

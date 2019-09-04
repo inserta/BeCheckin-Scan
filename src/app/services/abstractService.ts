@@ -19,6 +19,21 @@ export class AbstractWS {
     });
   }
 
+  private getHeadersJson(token: string): Promise<HttpHeaders> {
+    return new Promise(resolve => {
+      let headers = new HttpHeaders();
+      if (token) {
+        headers.append('Authorization', 'Token ' + token);
+      }
+      headers.append('Accept', 'application/json');
+      headers.append('Access-Control-Allow-Origin', '*');
+      headers.append('Access-Control-Allow-Headers', 'Content-Type');
+      headers.delete("Content-Type")
+      headers.append("Content-Type", "application/json");
+      resolve(headers);
+    });
+  }
+
   protected makeGetRequest(path: string, paramsRequest: any, token?: string): Promise<any> {
     if (!paramsRequest) {
       paramsRequest = {};
@@ -50,6 +65,16 @@ export class AbstractWS {
 
   protected makePostRequest(path: string, data: any, token?: string): Promise<any> {
     return this.getHeaders(token).then(headers => {
+      return this.http.post(path, data, { headers: headers }).toPromise().then((response: HttpResponse<any>) => {
+          return Promise.resolve(response);
+        }).catch(function (error) {
+          return Promise.reject(null);
+        });
+    });
+  }
+
+  protected makePostRequestJson(path: string, data: any, token?: string): Promise<any> {
+    return this.getHeadersJson(token).then(headers => {
       return this.http.post(path, data, { headers: headers }).toPromise().then((response: HttpResponse<any>) => {
           return Promise.resolve(response);
         }).catch(function (error) {

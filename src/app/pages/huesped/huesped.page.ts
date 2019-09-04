@@ -41,11 +41,12 @@ export class HuespedPage implements OnInit {
         )
         //Puesto que nos devuelve una lista de un único elemento, lo sacamos de la lista y lo guardamos en una variable.
         this.datosReserva = datosReservas[0];
-        if(this.datosReserva){
+        if (this.datosReserva) {
           this.rellenaDatosHuesped();
           this.ready = true;
           console.log("resultado", res);
           console.log("idReserva", this.idReserva);
+          console.log("idReserva", this.datosReserva);
         } else {
           this.nav.navigateRoot("/app/home");
         }
@@ -69,8 +70,8 @@ export class HuespedPage implements OnInit {
     this.huesped.province = "-";
     this.huesped.sex = "-";
     this.huesped.typeOfDocument = "-";
-    this.huesped.dni = {identifier: "-"};
-    this.huesped.passport = {identifier: "-"};
+    this.huesped.dni = { identifier: "-" };
+    this.huesped.passport = { identifier: "-" };
     this.huesped.date_exp = null;
     this.huesped.imagenes = [];
     this.huesped.email = "-";
@@ -79,7 +80,7 @@ export class HuespedPage implements OnInit {
   }
 
   rellenaDatosHuesped() {
-    this.huesped = this.datosReserva.huespedes.filter(huesped =>huesped._id == this.idHuesped)[0];
+    this.huesped = this.datosReserva.huespedes.filter(huesped => huesped._id == this.idHuesped)[0];
     console.log(this.huesped);
   }
 
