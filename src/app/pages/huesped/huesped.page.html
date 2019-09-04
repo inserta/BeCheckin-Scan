@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="!sinPermisos">
   <ion-toolbar>
     <ion-card>
       <ion-card-header>
@@ -17,43 +17,43 @@
         <p style="display: flex;">Nombre:
           <ion-skeleton-text *ngIf="!ready" animated style="margin-left:10px; width: 25%"></ion-skeleton-text>
           <ion-text color="tertiary" *ngIf="ready" style="margin-left: 10px;">
-            {{ huesped.name ? huesped.name : '-'}}
+            {{ huesped && huesped.name ? huesped.name : '-'}}
           </ion-text>
         </p>
         <p style="display: flex;">Apellidos:
           <ion-skeleton-text *ngIf="!ready" animated style="margin-left:10px; width: 25%"></ion-skeleton-text>
           <ion-text color="tertiary" *ngIf="ready" style="margin-left: 10px;">
-            {{ huesped.surnameOne ? huesped.surnameOne : '-' }}
+            {{ huesped && huesped.surnameOne ? huesped.surnameOne : '-' }}
           </ion-text>
         </p>
         <p style="display: flex;">Email:
           <ion-skeleton-text *ngIf="!ready" animated style="margin-left:10px; width: 25%"></ion-skeleton-text>
           <ion-text color="tertiary" *ngIf="ready" style="margin-left: 10px;">
-            {{ huesped.email ? huesped.email : '-' }}
+            {{ huesped && huesped.email ? huesped.email : '-' }}
           </ion-text>
         </p>
         <p style="display: flex;">Fecha de nacimiento:
           <ion-skeleton-text *ngIf="!ready" animated style="margin-left:10px; width: 25%"></ion-skeleton-text>
           <ion-text color="tertiary" *ngIf="ready" style="margin-left: 10px;">
-            {{ huesped.birthday ? huesped.birthday : '-' }}
+            {{ huesped && huesped.birthday ? huesped.birthday : '-' }}
           </ion-text>
         </p>
         <p style="display: flex;">Nacionalidad:
           <ion-skeleton-text *ngIf="!ready" animated style="margin-left:10px; width: 25%"></ion-skeleton-text>
           <ion-text color="tertiary" *ngIf="ready" style="margin-left: 10px;">
-            {{ huesped.nationality ? huesped.nationality : '-' }}
+            {{ huesped && huesped.nationality ? huesped.nationality : '-' }}
           </ion-text>
         </p>
         <p style="display: flex;">Provincia:
           <ion-skeleton-text *ngIf="!ready" animated style="margin-left:10px; width: 25%"></ion-skeleton-text>
           <ion-text color="tertiary" *ngIf="ready" style="margin-left: 10px;">
-            {{ huesped.province ? huesped.province : '-' }}
+            {{ huesped && huesped.province ? huesped.province : '-' }}
           </ion-text>
         </p>
         <p style="display: flex;">Género:
           <ion-skeleton-text *ngIf="!ready" animated style="margin-left:10px; width: 25%"></ion-skeleton-text>
           <ion-text color="tertiary" *ngIf="ready" style="margin-left: 10px;">
-            {{ huesped.sex ? huesped.sex : '-' }}
+            {{ huesped && huesped.sex ? huesped.sex : '-' }}
           </ion-text>
         </p>
       </ion-card-content>
@@ -66,25 +66,25 @@
         <p style="display: flex;">Tipo de documento:
           <ion-skeleton-text *ngIf="!ready" animated style="margin-left:10px; width: 25%"></ion-skeleton-text>
           <ion-text color="tertiary" *ngIf="ready" style="margin-left: 10px;">
-            {{ huesped.typeOfDocument }}
+            {{ huesped ? huesped.typeOfDocument : '-' }}
           </ion-text>
         </p>
         <p style="display: flex;">Número de documento:
           <ion-skeleton-text *ngIf="!ready" animated style="margin-left:10px; width: 25%"></ion-skeleton-text>
           <ion-text color="tertiary" *ngIf="ready" style="margin-left: 10px;">
-            {{ huesped.typeOfDocument.toLowerCase() == 'd' ? huesped.dni.identifier : huesped.passport.identifier }}
+            {{ huesped && huesped.typeOfDocument.toLowerCase() == 'd' ? huesped.dni.identifier : (huesped ? huesped.passport.identifier : '-') }}
           </ion-text>
         </p>
         <p style="display: flex;">Fecha de expedición:
           <ion-skeleton-text *ngIf="!ready" animated style="margin-left:10px; width: 25%"></ion-skeleton-text>
           <ion-text color="tertiary" *ngIf="ready" style="margin-left: 10px;">
-            {{ huesped.date_exp ? huesped.date_exp : '-' }}
+            {{ huesped && huesped.date_exp ? huesped.date_exp : '-' }}
           </ion-text>
         </p>
-        <p style="display: flex;">Imagenes:
+        <p style="display: flex;" *ngIf="huesped && huesped.imagenes">Imagenes:
           <ion-skeleton-text *ngIf="!ready" animated style="margin-left:10px; width: 25%"></ion-skeleton-text>
         </p>
-        <div *ngIf="ready">
+        <div *ngIf="ready && huesped && huesped.imagenes">
           <div *ngIf="huesped.imagenes.length>1">
             <p style="text-align: center;">
               DNI FRONTAL
@@ -104,7 +104,7 @@
         </div>
       </ion-card-content>
     </ion-card>
-    <ion-card>
+    <ion-card *ngIf="huesped && huesped.signature">
       <ion-card-header>
         <ion-card-title class="ion-text-center">Firma</ion-card-title>
       </ion-card-header>

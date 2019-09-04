@@ -119,7 +119,7 @@ export class GlobalService {
       }
 
       Promise.all(promises).then(res => {
-        console.log(res);
+        console.log("cargando datos",res);
         let datosCliente = res[0];
 
         //Recepcionista
@@ -139,6 +139,7 @@ export class GlobalService {
             if (fc.downloadCode) {
               let datosReserva: DatosReserva = new DatosReserva();
               let reserva = new Reservation;
+              reserva._id = fc._id;
               reserva.id = fc.downloadCode;
               let roomReservations = [];
               let roomReservation = new RoomReservation();
@@ -246,7 +247,7 @@ export class GlobalService {
                 huespedes.filter(res =>
                   res._id == huesped._id))
             ) {
-              let decrypted: any = CryptProvider.decryptData(huesped.fastcheckin.toString(), huesped._id);
+              let decrypted: any = CryptProvider.decryptData(decodeURIComponent(huesped.fastcheckin.toString()), huesped._id);
               //huespedes.push(decrypted);
               const documento = (decrypted.typeOfDocument.toLowerCase() === 'dni' || decrypted.typeOfDocument.toLowerCase() === 'd') ? decrypted.dni.identifier : decrypted.passport.identifier;
               if (!checkDuplicados.includes(documento)) {
@@ -313,7 +314,7 @@ export class GlobalService {
   }
 
   cerrarSesion() {
-    this.loader.present();
+    this.loader.present("¡Hasta pronto!");
     // Seteamos a null, ya que el borrado no funciona en todos los navegadores.
     // this.cookieService.delete("directScanData");
     // Ojo, la cookie será el string "null", y no el valor nulo.
@@ -322,6 +323,6 @@ export class GlobalService {
     setTimeout(() => {
       this.loader.dismiss();
       this.nav.navigateRoot("/login");
-    }, 1000);
+    }, 500);
   }
 }

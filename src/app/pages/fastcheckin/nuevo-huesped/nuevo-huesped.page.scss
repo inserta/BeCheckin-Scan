@@ -1,5 +1,5 @@
-$fondo: #003580;
-
+$fondo: #b1b1b1;
+$border: #505050;
 
 // Con el siguiente código modificamos la barra de scroll
 ::-webkit-scrollbar {
@@ -157,7 +157,6 @@ page-change-user {
     margin-right: auto;
     width: 40%;
   }
-
 
   .avatar {
     width: 100px;
@@ -465,48 +464,67 @@ page-change-user {
 .huesped-box {
   width: 100%;
   height: 100%;
-  // background: #0779a7 !important;
-  color: #fff;
-  display: flex;
+  background: #f9f9f9;
+  // background: linear-gradient(130deg, #757575, #f9f9f9, #f9f9f9, #f9f9f9, #f9f9f9, #f9f9f9, #757575);
+  color: rgb(29, 29, 29);
+  display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+  display: -ms-flexbox; /* TWEENER - IE 10 */
+  display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+  display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
   text-align: justify;
 
   .container_fastcheckin {
-    display: flex;
+    display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+    display: -ms-flexbox; /* TWEENER - IE 10 */
+    display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+    display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
     flex-direction: column;
     font-family: "fontbecheckin";
     width: 100%;
     .top {
-      display: flex;
+      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+      display: -ms-flexbox; /* TWEENER - IE 10 */
+      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
       justify-content: space-between;
       padding: 5px 10px;
 
       min-height: 40px;
 
       .atras {
-        display: flex;
+        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+        display: -ms-flexbox; /* TWEENER - IE 10 */
+        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
         justify-content: center;
         align-items: center;
 
         span {
-          display: flex;
+          display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+          display: -ms-flexbox; /* TWEENER - IE 10 */
+          display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+          display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
           justify-content: center;
           align-items: center;
           cursor: pointer;
           padding: 5px;
           border-radius: 5px;
           font-size: 12px;
-          border: 1px solid #000044;
-          background: #3f3f534d;
+          border: 1px solid #000000;
+          background: #c0c0c04d;
           transition: 0.5s all;
 
           &:hover {
-            border: 1px solid #0000ce5d;
-            background: #c4c4d34d;
+            border: 1px solid #0000005d;
+            background: #9b9b9b4d;
           }
         }
       }
       .omitir {
-        display: flex;
+        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+        display: -ms-flexbox; /* TWEENER - IE 10 */
+        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
         justify-content: center;
         align-items: center;
         cursor: pointer;
@@ -524,24 +542,32 @@ page-change-user {
       }
     }
     .titulo {
-      display: flex;
+      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+      display: -ms-flexbox; /* TWEENER - IE 10 */
+      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
       justify-content: center;
       font-size: 32px;
       min-height: 45px;
       color: #b1ddcb;
     }
     .introduccion {
-      display: flex;
+      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+      display: -ms-flexbox; /* TWEENER - IE 10 */
+      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
       flex-direction: column;
-      min-height: 66px;
+      min-height: 111px;
       padding-left: 10%;
       padding-right: 10%;
-      justify-content: flex-start;
+      justify-content: center;
+      align-items: center;
 
       p {
         padding: 0;
         margin: 0;
-        font-size: 16px;
+        margin-bottom: 10px;
+        font-size: 18px;
 
         .nombre_hotel {
           color: #d3d2a7;
@@ -550,52 +576,95 @@ page-change-user {
       }
     }
     .opciones {
-      display: flex;
+      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+      display: -ms-flexbox; /* TWEENER - IE 10 */
+      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
       justify-content: center;
       padding-top: 10px;
       min-height: 135px;
+      color: #141414;
 
       .radio-group {
-        display: flex;
+        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+        display: -ms-flexbox; /* TWEENER - IE 10 */
+        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
         flex-direction: column;
+        justify-content: center;
         width: 100%;
         padding-left: 20px;
         padding-right: 20px;
         text-align: center;
+        color: #141414;
+        background: transparent !important;
+
+        .centrado {
+          justify-content: center;
+          color: #141414;
+          font-size: 20px;
+          font-weight: bold;
+        }
 
         .en_linea {
-          display: flex;
+          display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+          display: -ms-flexbox; /* TWEENER - IE 10 */
+          display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+          display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
           text-align: center;
           justify-content: center;
           padding-left: 20px;
           padding-right: 20px;
           padding-top: 5px;
+          margin-bottom: 20px;
+          border-bottom: 1px solid black;
+          border-top: 1px solid black;
+
+          .item-radio-personalizado {
+            color: #141414;
+            margin-left: 20px;
+          }
 
           .selected {
             background: #bcc5e22c;
             color: white;
-            display: flex;
+            display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+            display: -ms-flexbox; /* TWEENER - IE 10 */
+            display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+            display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
             border-radius: 5px;
           }
           .not_selected {
-            display: flex;
+            display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+            display: -ms-flexbox; /* TWEENER - IE 10 */
+            display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+            display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
           }
 
           .radio {
-            display: flex;
+            display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+            display: -ms-flexbox; /* TWEENER - IE 10 */
+            display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+            display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
             text-align: center;
           }
         }
       }
     }
     .imagenes {
-      display: flex;
+      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+      display: -ms-flexbox; /* TWEENER - IE 10 */
+      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
       min-height: 135px;
       justify-content: space-evenly;
       align-items: center;
 
       .img {
-        display: flex;
+        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+        display: -ms-flexbox; /* TWEENER - IE 10 */
+        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
         flex-direction: column;
         justify-content: center;
         min-width: 150px;
@@ -605,10 +674,13 @@ page-change-user {
           margin-top: 3px;
           cursor: pointer;
           height: 30px;
-          display: flex;
+          display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+          display: -ms-flexbox; /* TWEENER - IE 10 */
+          display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+          display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
           justify-content: center;
           align-items: center;
-          background: #000044a1;
+          background: #a0a0a0a1;
           border: 1px solid black;
           border-radius: 5px;
           box-shadow: 0px 0px 15px 2px #d8d8d8;
@@ -642,7 +714,7 @@ page-change-user {
           border: 1px solid black;
           border-radius: 5px;
           overflow: hidden;
-          box-shadow: 0px 0px 15px 5px #a9ffc3;
+          box-shadow: 0px 0px 15px 5px #9e9adc;
         }
         .imagen_temporal {
           cursor: pointer;
@@ -650,7 +722,7 @@ page-change-user {
           border: 1px solid black;
           border-radius: 5px;
           overflow: hidden;
-          box-shadow: 0px 0px 15px 5px #ff9c62;
+          box-shadow: 0px 0px 15px 5px #ffc762;
           width: 150px;
           overflow: hidden;
           position: relative;
@@ -681,34 +753,52 @@ page-change-user {
       min-height: 168px !important;
     }
     .formulario {
-      display: flex;
+      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+      display: -ms-flexbox; /* TWEENER - IE 10 */
+      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
       flex-grow: 1;
       justify-content: center;
 
       .escaneo {
-        display: flex;
+        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+        display: -ms-flexbox; /* TWEENER - IE 10 */
+        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
         flex-direction: column;
       }
       .confirmacion {
-        display: flex;
+        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+        display: -ms-flexbox; /* TWEENER - IE 10 */
+        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
         flex-direction: column;
 
         .texto_confirmacion {
-          display: flex;
+          display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+          display: -ms-flexbox; /* TWEENER - IE 10 */
+          display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+          display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
         }
         .boton_confirmacion {
-          display: flex;
+          display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+          display: -ms-flexbox; /* TWEENER - IE 10 */
+          display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+          display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
           justify-content: center;
           align-items: center;
           flex-grow: 1;
 
           .btn_conf {
-            display: flex;
+            display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+            display: -ms-flexbox; /* TWEENER - IE 10 */
+            display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+            display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
             justify-content: center;
             align-items: center;
             cursor: pointer;
             padding: 7px 15px;
-            background: #1e70b3;
+            background: #c4dcc3;
             border-radius: 5px;
             transition: 0.2s all;
             border-radius: 5px;
@@ -724,22 +814,34 @@ page-change-user {
         }
       }
       .completo {
-        display: flex;
+        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+        display: -ms-flexbox; /* TWEENER - IE 10 */
+        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
         flex-direction: column;
         padding-top: 10px;
 
         .firma {
-          display: flex;
+          display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+          display: -ms-flexbox; /* TWEENER - IE 10 */
+          display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+          display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
           flex-direction: column;
 
           .texto_firma {
-            display: flex;
+            display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+            display: -ms-flexbox; /* TWEENER - IE 10 */
+            display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+            display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
             justify-content: space-between;
             align-items: center;
             margin-left: 10px;
 
             .reset_firma {
-              display: flex;
+              display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+              display: -ms-flexbox; /* TWEENER - IE 10 */
+              display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+              display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
               align-self: flex-end;
 
               button {
@@ -747,7 +849,7 @@ page-change-user {
                 color: #dbfeff;
                 font-size: 14px;
                 text-align: center !important;
-                background: #b3b3b3b9;
+                background: #616161b9;
                 border-radius: 5px;
                 border-bottom-left-radius: 0;
                 border-bottom-right-radius: 0;
@@ -761,14 +863,19 @@ page-change-user {
               }
             }
           }
-          .panel_firma {
-            height: 160px;
+          .panel_firma {    
+            border: 5px outset #ab9a9a;
+            border-style: outset;
+            box-sizing: border-box;
             width: 100%;
           }
         }
         .email {
           padding-top: 10px;
-          display: flex;
+          display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+          display: -ms-flexbox; /* TWEENER - IE 10 */
+          display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+          display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
           flex-direction: column;
           justify-content: flex-start;
 
@@ -776,13 +883,19 @@ page-change-user {
             margin-left: 10px;
           }
           .input_email {
-            display: flex;
+            display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+            display: -ms-flexbox; /* TWEENER - IE 10 */
+            display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+            display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
             flex-grow: 1;
             justify-content: center;
             align-items: center;
 
             input {
-              display: flex;
+              display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+              display: -ms-flexbox; /* TWEENER - IE 10 */
+              display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+              display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
               border-radius: 5px;
               width: 100%;
               color: black;
@@ -792,23 +905,32 @@ page-change-user {
           }
         }
         .condiciones {
-          display: flex;
+          display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+          display: -ms-flexbox; /* TWEENER - IE 10 */
+          display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+          display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
           flex-direction: column;
           padding-top: 20px;
           margin-left: 10px;
 
           .condicion {
-            display: flex;
+            display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+            display: -ms-flexbox; /* TWEENER - IE 10 */
+            display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+            display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
             font-size: 14px;
 
             .enlace {
               cursor: pointer;
-              color: #ffeaa7;
+              color: #4048bf;
             }
           }
         }
         .registrar {
-          display: flex;
+          display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+          display: -ms-flexbox; /* TWEENER - IE 10 */
+          display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+          display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
           flex-grow: 1;
           justify-content: center;
           align-items: center;
@@ -818,7 +940,7 @@ page-change-user {
             padding: 10px 25px;
             font-size: 18px;
             min-width: 150px;
-            background: #4889c2;
+            background: #616161b9;
             border-radius: 5px;
             border-width: 2px;
             border-style: outset;
@@ -828,14 +950,17 @@ page-change-user {
             transition: 0.5s all;
 
             &:hover {
-              background: #3a6f9e;
+              background: #868686b9;
             }
           }
         }
       }
       .info {
         padding: 0 10px;
-        display: flex;
+        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+        display: -ms-flexbox; /* TWEENER - IE 10 */
+        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
         height: 30px;
         font-size: 28px;
         font-weight: bold;
@@ -844,7 +969,10 @@ page-change-user {
       .boton {
         cursor: pointer;
         flex-grow: 1;
-        display: flex;
+        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+        display: -ms-flexbox; /* TWEENER - IE 10 */
+        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
         justify-content: center;
         align-items: center;
         transition: 0.5s all;
@@ -869,7 +997,10 @@ page-change-user {
       }
     }
     .form_manual {
-      display: flex;
+      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+      display: -ms-flexbox; /* TWEENER - IE 10 */
+      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
       flex-direction: column;
       flex-grow: 1;
       padding: 10px;
@@ -883,18 +1014,24 @@ page-change-user {
         text-align: center;
       }
       .item {
-        display: flex;
+        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+        display: -ms-flexbox; /* TWEENER - IE 10 */
+        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
         flex-direction: column;
         max-width: 400px;
         margin-bottom: 10px;
         width: 90%;
 
         label {
-          color: #b8b8ff;
-          display: flex;
+          color: #777777;
+          display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+          display: -ms-flexbox; /* TWEENER - IE 10 */
+          display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+          display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
           justify-content: space-between;
 
-          .label_error{
+          .label_error {
             color: #ff3838;
             margin-left: 20px;
             font-size: 15px;
@@ -904,14 +1041,14 @@ page-change-user {
           height: 30px;
           margin: 0px;
           margin-bottom: 5px;
-          border: 1px solid $fondo;
+          border: 1px solid $border;
           text-align: center;
           background-color: transparent;
           background-image: linear-gradient(to bottom, $fondo, #ffffff0c);
           border-bottom: 1px solid #cccccc;
           transition: all ease-out 0.3s;
           box-sizing: border-box;
-          color: #f6f6f6;
+          color: #000000;
 
           &:focus {
             font-size: 20px;
@@ -919,9 +1056,9 @@ page-change-user {
             border: 1px solid #cccccc;
           }
         }
-        .error{
+        .error {
           background-image: linear-gradient(to bottom, $fondo, #ff000041);
-          
+
           &:focus {
             font-size: 20px;
             background-image: none;
@@ -930,52 +1067,58 @@ page-change-user {
           }
         }
       }
-      .typeOfDocument{
-        select{
+      .typeOfDocument {
+        select {
+          padding: 5px;
           background-color: $fondo;
-          border-color: $fondo;
+          border-color: $border;
           border-bottom-color: #cccccc;
           text-align: center;
         }
       }
-      .sex{
-        select{
+      .sex {
+        select {
+          padding: 5px;
           background-color: $fondo;
-          border-color: $fondo;
+          border-color: $border;
           border-bottom-color: #cccccc;
           text-align: center;
         }
       }
       .boton_continuar {
-        display: flex;
+        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+        display: -ms-flexbox; /* TWEENER - IE 10 */
+        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
         flex-grow: 1;
         justify-content: center;
         align-items: center;
         padding-bottom: 20px;
         padding-top: 20px;
+        margin-bottom: 20px;
 
         button {
           padding: 5px 55px;
           font-size: 18px;
           min-width: 150px;
-          background: #4889c2;
+          background: #e4e4e4;
           border-radius: 5px;
           border-width: 2px;
           border-style: outset;
           border-image: initial;
-          color: white;
+          color: #545454;
           font-weight: bold;
           transition: 0.5s all;
 
           &:hover {
-            background: #3a6f9e;
+            background: #bbbbbb;
           }
 
           &:active {
             border-style: inset;
           }
         }
-        .boton_error{
+        .boton_error {
           background: #ff000041;
           &:hover {
             background: #c5000041;
@@ -988,7 +1131,10 @@ page-change-user {
       }
     }
     .progreso {
-      display: flex;
+      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+      display: -ms-flexbox; /* TWEENER - IE 10 */
+      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
       height: 20px; /* Can be anything */
       position: relative;
       background: #a1a1a15d;
@@ -1008,24 +1154,33 @@ page-change-user {
     }
 
     .fin_titulo {
-      display: flex;
+      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+      display: -ms-flexbox; /* TWEENER - IE 10 */
+      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
       justify-content: center;
       align-items: flex-end;
       height: 30%;
       font-size: 35px;
-      color: #8fff73;
+      color: #4f983d;
     }
 
     .fin_texto {
-      display: flex;
+      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+      display: -ms-flexbox; /* TWEENER - IE 10 */
+      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
       justify-content: center;
       align-items: center;
       height: 20%;
-      color: #8fff73;
+      color: #4f983d;
     }
 
     .fin_botones {
-      display: flex;
+      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+      display: -ms-flexbox; /* TWEENER - IE 10 */
+      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
@@ -1046,7 +1201,10 @@ page-change-user {
         cursor: pointer;
         width: 70%;
         min-width: 140px;
-        display: flex;
+        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+        display: -ms-flexbox; /* TWEENER - IE 10 */
+        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
         justify-content: center;
         align-items: center;
         color: white;
@@ -1063,7 +1221,10 @@ page-change-user {
         width: 70%;
         min-width: 140px;
         max-width: 200px;
-        display: flex;
+        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+        display: -ms-flexbox; /* TWEENER - IE 10 */
+        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
         justify-content: center;
         align-items: center;
         background-color: #00000020;
@@ -1142,7 +1303,7 @@ page-change-user {
   left: 0;
   height: 14px;
   width: 14px;
-  background-color: #eee;
+  background-color: #b3b3b3;
 }
 
 /* On mouse-over, add a grey background color */
@@ -1152,7 +1313,7 @@ page-change-user {
 
 /* When the checkbox is checked, add a blue background */
 .container_box input:checked ~ .checkmark {
-  background-color: #2196f3;
+  background-color: #345d39;
 }
 .checkmark:after {
   content: "";
@@ -1199,7 +1360,9 @@ page-change-user {
               margin-left: 10px;
             }
             .panel_firma {
-              height: 160px;
+              border: 5px outset #ab9a9a;
+              border-style: outset;
+              box-sizing: border-box;
               width: 100%;
             }
           }

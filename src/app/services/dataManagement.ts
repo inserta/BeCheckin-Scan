@@ -42,7 +42,7 @@ export class DataManagement {
   public getCliente(id: string): Promise<any> {
     return this.restService.getAllOfClient(id).then(data => {
       return Promise.resolve(data);
-    }).catch(error=>{
+    }).catch(error => {
       return Promise.reject('error');
     })
   }
@@ -96,7 +96,7 @@ export class DataManagement {
   }
 
   /**
-   * Enviar correo electrónico desde servidor
+   * Enviar correo electrónico desde servidor, se envía desde la dirección "booking@becheckin.com".
    * @param asunto 
    * @param mensaje 
    * @param mailTo 
@@ -115,7 +115,7 @@ export class DataManagement {
   }
 
   /**
-   * Enviar correo electrónico desde servidor
+   * Obtener reserva de booking
    * @param idHotel 
    * @param idBooking 
    */
@@ -129,4 +129,39 @@ export class DataManagement {
         return Promise.reject('error');
       });
   }
+
+  /**
+   * Creación de huesped previo al fastcheckin.
+   * @param name Nombre del huesped.
+   * @param email Email del huesped, debe ser único.
+   * @param tokenFirebase Token generado aleatoriamente.
+   * @param keyRoom "_id" de la llave.
+   */
+  public crearHuespedSinFastcheckin(name, email, tokenFirebase, keyRoom): Promise<any> {
+    return this.restService
+      .crearHuesped(name, email, tokenFirebase, keyRoom)
+      .then(data => {
+        return Promise.resolve(data);
+      })
+      .catch(error => {
+        return Promise.reject('error');
+      });
+  }
+
+  /**
+   * Método que incluye o modifica el fastcheckin de un huésped.
+   * @param idGuest _id del huésped.
+   * @param fastcheckin Debe ir encriptado.
+   */
+  public setFastcheckin(idGuest, fastcheckin): Promise<any> {
+    return this.restService
+      .setFastcheckin(idGuest, fastcheckin)
+      .then(data => {
+        return Promise.resolve(data);
+      })
+      .catch(error => {
+        return Promise.reject('error');
+      });
+  }
+
 }

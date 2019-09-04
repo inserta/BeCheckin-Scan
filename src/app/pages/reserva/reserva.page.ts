@@ -111,7 +111,7 @@ export class ReservaPage implements OnInit {
   }
 
   nuevoHuesped() {
-    this.nav.navigateForward("/nuevo-huesped");
+    this.nav.navigateForward("/nuevo/huesped/"+this.idReserva);
   }
 
   inicializaReserva() {

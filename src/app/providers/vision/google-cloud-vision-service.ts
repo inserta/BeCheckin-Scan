@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
-@Injectable()
+@Injectable({ 
+    providedIn: 'root', 
+})
 export class GoogleCloudVisionServiceProvider {
 
-    constructor(public http: Http) { }
+    constructor(public httpClient: HttpClient) { }
 
     getLabels(base64Image) {
         const body = {
@@ -24,7 +26,7 @@ export class GoogleCloudVisionServiceProvider {
             ]
         }
 
-        return this.http.post('https://vision.googleapis.com/v1/images:annotate?key=' + environment.googleCloudVisionAPIKey, body);
+        return this.httpClient.post('https://vision.googleapis.com/v1/images:annotate?key=' + environment.googleCloudVisionAPIKey, body);
     }
 
 }

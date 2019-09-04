@@ -31,7 +31,8 @@ export class Reservation {
     status: string;
     primaryGuest: PrimaryGuest;
     currencyCode: string;
-    id: number;
+    id: string;
+    _id: string;
     roomReservations: RoomReservation[];
     totalPrice: number;
     hotelId: number;

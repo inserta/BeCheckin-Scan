@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { NuevoHuespedPage } from './nuevo-huesped.page';
 import { TranslateModule } from '@ngx-translate/core';
+import { HttpClientModule } from '@angular/common/http';
 
 const routes: Routes = [
   {
@@ -23,6 +24,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     TranslateModule,
+    HttpClientModule,
     SignaturePadModule,
     RouterModule.forChild(routes)
   ],

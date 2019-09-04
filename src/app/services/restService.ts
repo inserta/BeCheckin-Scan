@@ -159,4 +159,38 @@ export class RestWS extends AbstractWS {
       });
   }
 
+  public crearHuesped(name, email, tokenFirebase, keyRoom) {
+    
+    let fd = new HttpParams()
+    .set('name',name)
+    .set('email',email)
+    .set('tokenFirebase',tokenFirebase)
+    .set('keyRoom',keyRoom);
+
+    return this.makePostRequest(this.pathInsinno+'createGuestWithFast', fd)
+      .then(res => {
+        return Promise.resolve(res);
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+        return Promise.reject(error);
+      });
+  }
+
+  public setFastcheckin(idGuest, fastcheckin) {
+    
+    let fd = new HttpParams()
+    .set('guest',idGuest)
+    .set('fastcheckin', encodeURIComponent(fastcheckin));
+
+    return this.makePostRequestJson(this.pathInsinno+'setFastcheckin', fd)
+      .then(res => {
+        return Promise.resolve(res);
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+        return Promise.reject(error);
+      });
+  }
+
 }
