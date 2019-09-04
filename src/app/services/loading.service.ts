@@ -25,7 +25,7 @@ export class LoadingService {
         return await this.loadingController.create({
             message: translation,
             showBackdrop: true,
-            duration: 10000,
+            duration: 20000,
         }).then(a => {
             a.present().then(() => {
                 if (!this.isLoading) {
