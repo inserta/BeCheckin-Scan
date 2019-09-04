@@ -33,7 +33,14 @@ export class ReservaPage implements OnInit {
 
   ngOnInit() {
     this.inicializaReserva();
-    this.globalService.leerCookies(true).then(res => {
+
+    let cargarDatos = false;
+    //Comprobamos si llega el parámetro cargarDatos por url para forzar la carga de datos tras haber realizado cambios en los filtros.
+    if (this.route.snapshot.queryParamMap.get('cargarDatos')) {
+      cargarDatos = this.route.snapshot.queryParamMap.get('cargarDatos') == 'true';
+    }
+
+    this.globalService.leerCookies(true, cargarDatos).then(res => {
       if (!res) {
         this.sinPermisos = true;
         this.nav.navigateForward("/login");
@@ -108,10 +115,38 @@ export class ReservaPage implements OnInit {
 
   ionViewWillEnter() {
     console.log("ionViewWillEnter reserva");
+
+    let cargarDatos = false;
+    //Comprobamos si llega el parámetro cargarDatos por url para forzar la carga de datos tras haber realizado cambios en los filtros.
+    if (this.route.snapshot.queryParamMap.get('cargarDatos')) {
+      cargarDatos = this.route.snapshot.queryParamMap.get('cargarDatos') == 'true';
+    }
+
+    if (cargarDatos) {
+
+      this.inicializaReserva();
+      this.globalService.leerCookies(true, cargarDatos).then(res => {
+        if (!res) {
+          this.sinPermisos = true;
+          this.nav.navigateForward("/login");
+        } else {
+          //Filtramos las reservas por su id para obtener la reserva seleccionada
+          let datosReservas = this.globalService.datosReservas.filter(datosReserva =>
+            datosReserva.reserva.id.toString() == this.idReserva
+          )
+          //Puesto que nos devuelve una lista de un único elemento, lo sacamos de la lista y lo guardamos en una variable.
+          this.datosReserva = datosReservas[0];
+          this.rellenaDatosReserva();
+          this.ready = true;
+          console.log("resultado", res);
+          console.log("idReserva", this.idReserva);
+        }
+      });
+    }
   }
 
   nuevoHuesped() {
-    this.nav.navigateForward("/nuevo/huesped/"+this.idReserva);
+    this.nav.navigateForward("/nuevo/huesped/" + this.idReserva);
   }
 
   inicializaReserva() {
@@ -142,7 +177,7 @@ export class ReservaPage implements OnInit {
     });
   }
 
-  abrirHuesped(idHuesped){
-    this.nav.navigateForward("/reserva/"+this.idReserva+"/huesped/"+idHuesped);
+  abrirHuesped(idHuesped) {
+    this.nav.navigateForward("/reserva/" + this.idReserva + "/huesped/" + idHuesped);
   }
 }

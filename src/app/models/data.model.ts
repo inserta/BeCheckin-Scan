@@ -125,7 +125,7 @@ export class FastCheckin {
     birthday: string;
     nationality: string;
     sex: string;
-    date_exp: Date;
+    date_exp: string;
     caducate: Date;
     _id: string;
     email: string;
