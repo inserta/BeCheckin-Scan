@@ -23,7 +23,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingService } from 'src/app/services/loading.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { DataManagement } from 'src/app/services/dataManagement';
-var moment = require('moment');
+// var moment = require('moment');
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-nuevo-huesped',
