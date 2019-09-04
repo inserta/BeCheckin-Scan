@@ -661,8 +661,7 @@ export class NuevoHuespedPage implements OnInit {
         console.log("enviando email a: " + this.globalService.recepcionista.hotel.email)
         let asunto = "Nuevo Fastcheckin";
         let mailTo = this.globalService.recepcionista.hotel.email;
-        let cco = "javier@becheckin.com";
-        // let cco = "amalia@becheckin.com, lidia@becheckin.com";
+        let cco = "amalia@becheckin.com, lidia@becheckin.com";
         let nombreHuesped = this.fastcheckin.name;
         let nombreReserva = this.datosReserva.reserva.id;
         let fechaInicio = this.muestraFechaString(this.datosReserva.reserva.roomReservations[0].checkin);
