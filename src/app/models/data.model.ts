@@ -24,6 +24,7 @@ export class DatosReserva {
     reserva: Reservation;
     huespedes: any[];
     tieneFastCheckin: boolean;
+    pms: string;
 }
 
 export class Reservation {
@@ -74,6 +75,7 @@ export class Booker {
     language: string;
     email: string;
     firstname: string;
+    document: string;
 }
 //Fin datos genéricos
 
@@ -251,4 +253,21 @@ export class Guest {
         this.tokenFirebase = '';
         this.fastcheckin = new FastCheckin();
     }
+}
+
+export class DatosReservaServidor {
+    numero_reserva: string;
+    pms: string;
+    nombre: string;
+    apellidos: string;
+    telefono: string;
+    email: string;
+    documento: string;
+    estado: string;
+    precio: string;
+    huespedes: string;
+    checkin: string;
+    checkout: string;
+    _idLlave: string;
+    _id: string;
 }

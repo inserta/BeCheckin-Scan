@@ -167,7 +167,7 @@ export class RestWS extends AbstractWS {
     .set('tokenFirebase',tokenFirebase)
     .set('keyRoom',keyRoom);
 
-    return this.makePostRequest(this.pathInsinno+'createGuestWithFast', fd)
+    return this.makePostRequest(this.pathInsinno+'createGuest', fd)
       .then(res => {
         return Promise.resolve(res);
       })
@@ -193,4 +193,17 @@ export class RestWS extends AbstractWS {
       });
   }
 
+  public getDatosReserva(idReserva) {
+    
+    let fd = new HttpParams();
+
+    return this.makeGetRequest(this.path+'datosReserva/'+idReserva, fd)
+      .then(res => {
+        return Promise.resolve(res);
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+        return Promise.reject(error);
+      });
+  }
 }

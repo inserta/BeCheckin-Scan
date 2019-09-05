@@ -201,7 +201,26 @@ export class HomePage implements OnInit {
   filtrarReservas() {
     this.datosReservasFiltrados = this.datosReservasCompletos.filter(reserva => {
       let res = false;
-      res = reserva.reserva.id.toString().toLowerCase().includes(this.buscarReserva.toLowerCase());
+      let coincideId, coincideNombre, coincideEmail, coincideTelefono, coincideDocumento = false;
+      if(reserva.reserva.id){
+        coincideId = reserva.reserva.id.toString().toLowerCase().includes(this.buscarReserva.toLowerCase());
+      }
+      if(reserva.reserva.booker.phone){
+        coincideTelefono = reserva.reserva.booker.phone.toString().toLowerCase().includes(this.buscarReserva.toLowerCase());
+      }
+      if(reserva.reserva.booker.firstname && reserva.reserva.booker.lastname){
+        coincideNombre = reserva.reserva.booker.firstname.toString().toLowerCase().includes(this.buscarReserva.toLowerCase()) ||
+                         reserva.reserva.booker.lastname.toString().toLowerCase().includes(this.buscarReserva.toLowerCase());
+      }
+      if(reserva.reserva.booker.email){
+        coincideEmail = reserva.reserva.booker.email.toString().toLowerCase().includes(this.buscarReserva.toLowerCase());
+      }
+      if(reserva.reserva.booker.document){
+        coincideDocumento = reserva.reserva.booker.document.toString().toLowerCase().includes(this.buscarReserva.toLowerCase());
+      }
+
+      res = coincideId || coincideNombre || coincideEmail || coincideTelefono || coincideDocumento;
+      
       return res;
     });
     this.datosReservasMostrados = [];

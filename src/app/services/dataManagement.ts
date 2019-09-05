@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { RestWS } from './restService';
 import { Credenciales } from '../models/form.model';
+import { DatosReservaServidor } from '../models/data.model';
 
 @Injectable()
 export class DataManagement {
@@ -158,6 +159,39 @@ export class DataManagement {
       .setFastcheckin(idGuest, fastcheckin)
       .then(data => {
         return Promise.resolve(data);
+      })
+      .catch(error => {
+        return Promise.reject('error');
+      });
+  }
+
+  /**
+   * Método que nos devuelve los datos de la reserva almacenados en la BD.
+   * @param llave Llave asociada a la reserva.
+   */
+  public getDatosReserva(llave): Promise<any> {
+    return this.restService
+      .getDatosReserva(llave.downloadCode)
+      .then(data => {
+        let datosReservaServidor: DatosReservaServidor = data[0];
+        if(datosReservaServidor){
+          if(!datosReservaServidor.numero_reserva){
+            datosReservaServidor.numero_reserva = llave.downloadCode;
+          }
+          if(!datosReservaServidor.checkin){
+            datosReservaServidor.checkin =  llave.start;
+          }
+          if(!datosReservaServidor.checkout){
+            datosReservaServidor.checkout =  llave.finish;
+          }
+        } else {
+          datosReservaServidor = new DatosReservaServidor();
+          datosReservaServidor.numero_reserva = llave.downloadCode;
+          datosReservaServidor.checkin =  llave.start;
+          datosReservaServidor.checkout =  llave.finish;
+        }
+        return Promise.resolve(datosReservaServidor);
+        
       })
       .catch(error => {
         return Promise.reject('error');

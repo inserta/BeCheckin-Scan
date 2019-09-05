@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { DataManagement } from '../services/dataManagement';
 import { Router } from '@angular/router';
-import { Recepcionista, Cookies, Hotel, DatosReserva, Reservation, RoomReservation } from '../models/data.model';
+import { Recepcionista, Cookies, Hotel, DatosReserva, Reservation, RoomReservation, DatosReservaServidor, Booker } from '../models/data.model';
 import { LoadingService } from './loading.service';
 import { CryptProvider } from '../providers/crypt/crypt';
 import { NavController } from '@ionic/angular';
@@ -110,6 +110,7 @@ export class GlobalService {
   cargarDatos(cookies: Cookies, recepcionista?: Recepcionista) {
     return new Promise<boolean>((resolve, reject) => {
       let promises = [];
+      let promisesDatosReservasServidor = [];
 
       promises.push(this.dm.getCliente(cookies.idCliente));
 
@@ -137,48 +138,65 @@ export class GlobalService {
         for (let fc of this.llaves) {
           if (!this.compruebaId(fc)) {
             if (fc.downloadCode) {
-              let datosReserva: DatosReserva = new DatosReserva();
-              let reserva = new Reservation;
-              reserva._id = fc._id;
-              reserva.id = fc.downloadCode;
-              let roomReservations = [];
-              let roomReservation = new RoomReservation();
-              roomReservation.checkin = new Date(fc.start);
-              roomReservation.checkout = new Date(fc.finish);
-              roomReservations.push(roomReservation);
-              reserva.roomReservations = roomReservations;
-              datosReserva.reserva = reserva;
-              datosReserva.huespedes = this.huespedesDeReserva(reserva.id);
-              datosReserva.tieneFastCheckin = datosReserva.huespedes.length > 0;
-              this.incluirReserva(datosReserva);
+              promisesDatosReservasServidor.push(this.dm.getDatosReserva(fc));
             }
           }
         }
-        this.datosReservas = this.datosReservas.sort((r1, r2) => {
-          return (r1.reserva.roomReservations[0].checkin < r2.reserva.roomReservations[0].checkin) ? 1 : -1;
-        });
-        console.log("this.datosReservas",this.datosReservas);
-        if (this.recepcionista.hotel.idBooking != '-' && this.recepcionista.hotel.idBooking != 'Admin') {
-          console.log("Hotel enlazado a booking detectado");
-          let promesas = [];
-          this.datosReservas.forEach(datosReserva => {
-            //TODO: Descomentar la siguiente linea cuando esté implementado el método en el backend.
-            // promesas.push(this.dm.getReservaBooking(this.recepcionista.hotel.idCliente, this.recepcionista.hotel.idBooking));
+
+        Promise.all(promisesDatosReservasServidor).then(datosReservasServidor => {
+          datosReservasServidor.forEach(res =>{
+            if(res){
+              this.rellenarDatosReserva(res);
+            } else {
+              console.log("datos de la reserva no obtenidos");
+            }
           });
-          Promise.all(promesas).then(res => {
-            console.log(res);
-            resolve(true);
-          }).catch(error => {
-            console.log(error);
-            resolve(false);
+          this.datosReservas = this.datosReservas.sort((r1, r2) => {
+            return (r1.reserva.roomReservations[0].checkin < r2.reserva.roomReservations[0].checkin) ? 1 : -1;
           });
-        } else {
+          console.log("this.datosReservas",this.datosReservas);
           resolve(true);
-        }
+        }).catch(error =>{
+          console.log(error);
+
+          resolve(false);
+        });
+
       }).catch(res => {
         resolve(false);
       });
     });
+  }
+
+  /**
+   * El método rellenará los datos de DatosReserva
+   * @param datosReservaServidor 
+   * @param llave 
+   */
+  rellenarDatosReserva(datosReservaServidor: DatosReservaServidor){
+    let datosReserva: DatosReserva = new DatosReserva();
+    datosReserva.pms = datosReservaServidor.pms;
+    let reserva = new Reservation;
+    // reserva._id = datosReservaServidor._id;
+    reserva.id = datosReservaServidor.numero_reserva;
+    reserva.totalGuests = Number(datosReservaServidor.huespedes);
+    let booker = new Booker();
+    booker.email = datosReservaServidor.email;
+    booker.firstname = datosReservaServidor.nombre;
+    booker.lastname = datosReservaServidor.apellidos;
+    booker.phone = datosReservaServidor.telefono;
+    booker.document = datosReservaServidor.documento;
+    reserva.booker = booker;
+    let roomReservations = [];
+    let roomReservation = new RoomReservation();
+    roomReservation.checkin = new Date(datosReservaServidor.checkin);
+    roomReservation.checkout = new Date(datosReservaServidor.checkout);
+    roomReservations.push(roomReservation);
+    reserva.roomReservations = roomReservations;
+    datosReserva.reserva = reserva;
+    datosReserva.huespedes = this.huespedesDeReserva(reserva.id);
+    datosReserva.tieneFastCheckin = datosReserva.huespedes.length > 0;
+    this.incluirReserva(datosReserva);
   }
 
   /**
