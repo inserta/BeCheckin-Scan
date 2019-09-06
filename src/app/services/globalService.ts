@@ -120,7 +120,7 @@ export class GlobalService {
       }
 
       Promise.all(promises).then(res => {
-        console.log("cargando datos",res);
+        console.log("cargando datos", res);
         let datosCliente = res[0];
 
         //Recepcionista
@@ -144,8 +144,8 @@ export class GlobalService {
         }
 
         Promise.all(promisesDatosReservasServidor).then(datosReservasServidor => {
-          datosReservasServidor.forEach(res =>{
-            if(res){
+          datosReservasServidor.forEach(res => {
+            if (res) {
               this.rellenarDatosReserva(res);
             } else {
               console.log("datos de la reserva no obtenidos");
@@ -154,9 +154,9 @@ export class GlobalService {
           this.datosReservas = this.datosReservas.sort((r1, r2) => {
             return (r1.reserva.roomReservations[0].checkin < r2.reserva.roomReservations[0].checkin) ? 1 : -1;
           });
-          console.log("this.datosReservas",this.datosReservas);
+          console.log("this.datosReservas", this.datosReservas);
           resolve(true);
-        }).catch(error =>{
+        }).catch(error => {
           console.log(error);
 
           resolve(false);
@@ -173,7 +173,7 @@ export class GlobalService {
    * @param datosReservaServidor 
    * @param llave 
    */
-  rellenarDatosReserva(datosReservaServidor: DatosReservaServidor){
+  rellenarDatosReserva(datosReservaServidor: DatosReservaServidor) {
     let datosReserva: DatosReserva = new DatosReserva();
     datosReserva.pms = datosReservaServidor.pms;
     let reserva = new Reservation;
@@ -216,12 +216,25 @@ export class GlobalService {
         case "todos":
           this.datosReservas.push(datosReserva);
           break;
-        case "con_fastcheckin":
+        case "completo":
           if (datosReserva.tieneFastCheckin) {
-            this.datosReservas.push(datosReserva);
+            if(datosReserva.reserva.totalGuests){
+              if(datosReserva.huespedes.length>=datosReserva.reserva.totalGuests){
+                this.datosReservas.push(datosReserva);
+              }
+            } else {
+              this.datosReservas.push(datosReserva);
+            }
           }
           break;
-        case "sin_fastcheckin":
+        case "incompleto":
+          if (datosReserva.tieneFastCheckin) {
+            if(datosReserva.huespedes.length < datosReserva.reserva.totalGuests){
+              this.datosReservas.push(datosReserva);
+            }
+          }
+          break;
+        case "vacio":
           if (!datosReserva.tieneFastCheckin) {
             this.datosReservas.push(datosReserva);
           }

@@ -21,10 +21,13 @@
         <ion-segment-button value="todos" checked="true">
           <ion-label>TODOS</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="con_fastcheckin">
+        <ion-segment-button value="completo">
           <ion-label><img src="../../../assets/img/true.png" width="25" height="25" /></ion-label>
         </ion-segment-button>
-        <ion-segment-button value="sin_fastcheckin">
+        <ion-segment-button value="incompleto">
+          <ion-label><img src="../../../assets/img/minus.png" width="25" height="25" /></ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="vacio">
           <ion-label><img src="../../../assets/img/false.png" width="25" height="25" /></ion-label>
         </ion-segment-button>
       </ion-segment>
@@ -99,7 +102,8 @@
     <ion-item *ngFor="let datosReserva of datosReservasMostrados">
       <ion-label class="cursor-boton" (click)="abrirReserva(datosReserva.reserva.id)">
         <h1>
-          <img src="../../../assets/img/true.png" *ngIf="datosReserva.tieneFastCheckin" width="25" height="25" />
+            <img src="../../../assets/img/true.png" *ngIf="datosReserva.tieneFastCheckin && (datosReserva.reserva.totalGuests ? (datosReserva.huespedes.length >= datosReserva.reserva.totalGuests) : true)" width="25" height="25" />
+            <img src="../../../assets/img/minus.png" *ngIf="datosReserva.tieneFastCheckin && (datosReserva.reserva.totalGuests ? (datosReserva.huespedes.length < datosReserva.reserva.totalGuests) : false)" width="25" height="25" />
           <img src="../../../assets/img/false.png" *ngIf="!datosReserva.tieneFastCheckin" width="25" height="25" />
           {{ datosReserva.reserva.id }}
         </h1>
