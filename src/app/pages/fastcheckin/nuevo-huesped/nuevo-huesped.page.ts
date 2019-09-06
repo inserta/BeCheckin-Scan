@@ -316,7 +316,7 @@ export class NuevoHuespedPage implements OnInit {
   crearHuespedSinFastcheckin() {
     return new Promise<any>((resolve, reject) => {
       console.log(this.hotel);
-      this.dm.crearHuespedSinFastcheckin(this.datosReserva.reserva.id+"_nombre_"+this.datosReserva.huespedes.length, this.datosReserva.reserva.id+"_email_"+this.datosReserva.huespedes.length+"@email.com", this.globalService.generarCadenaAleatoria(50), this._idKeyRoom).then(res => {
+      this.dm.crearHuespedSinFastcheckin(this.datosReserva.reserva.id+"_nombre_"+this.datosReserva.huespedes.length+"_"+this.globalService.generarCadenaAleatoria(4), this.datosReserva.reserva.id+"_email_"+this.datosReserva.huespedes.length+"_"+this.globalService.generarCadenaAleatoria(4)+"@email.com", this.globalService.generarCadenaAleatoria(50), this._idKeyRoom).then(res => {
         console.log("Respuesta crear huesped: ", res);
         this.user.guest._id = res.guest._id;
         this.user.guest.name = res.guest.name;

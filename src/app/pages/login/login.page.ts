@@ -79,8 +79,12 @@ export class LoginPage implements OnInit {
         cookies.filtros = new Filtro();
         cookies.filtros.buscador = "";
         cookies.filtros.fastcheckin = "todos";
-        cookies.filtros.fechaFinal = new Date().toISOString();
-        cookies.filtros.fechaInicial = new Date().toISOString();
+        let fechaInicio = new Date();
+        fechaInicio.setHours(0, 0, 0, 0);
+        let fechaFinal = new Date();
+        fechaFinal.setHours(0, 0, 0, 0);
+        cookies.filtros.fechaFinal = fechaFinal.toISOString();
+        cookies.filtros.fechaInicial = fechaInicio.toISOString();
         this.globalService.guardarCookies(cookies);
         console.log("Iniciando sesión con:");
         console.log("Usuario:" + this.credenciales.usuario);

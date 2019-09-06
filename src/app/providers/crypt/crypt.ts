@@ -15,7 +15,7 @@ export class CryptProvider {
     }
 
     public static decryptData(fastcheckin: string, userId: string): FastCheckin {
-        var bytes = AES.decrypt(fastcheckin, userId)
+        var bytes = AES.decrypt(decodeURIComponent(fastcheckin), userId)
         let res = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
         return res;
     }

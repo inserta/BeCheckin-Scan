@@ -268,6 +268,6 @@ export class DatosReservaServidor {
     huespedes: string;
     checkin: string;
     checkout: string;
-    _idLlave: string;
+    idReserva: string; //Corresponde al _id de la llave
     _id: string;
 }

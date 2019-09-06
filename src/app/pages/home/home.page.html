@@ -1,14 +1,50 @@
 <ion-header *ngIf="!sinPermisos">
-  <ion-toolbar color="tertiary">
+  <!-- Comentamos el botón de filtros hasta que tengamos más filtros para mostrar -->
+  <!-- <ion-toolbar color="tertiary">
     <ion-button color="tertiary" size="large" expand="full" (click)="abrirFiltros()">
       <ion-icon slot="start" name="list"></ion-icon> VER FILTROS
+    </ion-button>
+  </ion-toolbar> -->
+  <ion-toolbar>
+    <ion-button color="tertiary" size="large" expand="full">
+      <ion-icon name="home" *ngIf="iniciado" slot="start"></ion-icon>
+      <ion-skeleton-text *ngIf="!iniciado" animated style="width: 100%"></ion-skeleton-text>
+      <ion-text *ngIf="iniciado">{{ recepcionista.hotel.nombre }}</ion-text>
     </ion-button>
   </ion-toolbar>
   <ion-toolbar>
     <ion-searchbar [(ngModel)]="buscarReserva" (ionChange)="filtrarReservas()" placeholder="Buscar"></ion-searchbar>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-item>
+      <ion-segment [(ngModel)]="fastcheckin" (ionChange)="filtroFastcheckin($event)" color="secondary">
+        <ion-segment-button value="todos" checked="true">
+          <ion-label>TODOS</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="con_fastcheckin">
+          <ion-label><img src="../../../assets/img/true.png" width="25" height="25" /></ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="sin_fastcheckin">
+          <ion-label><img src="../../../assets/img/false.png" width="25" height="25" /></ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+  </ion-toolbar>
   <ion-toolbar class="ion-text-center">
-    <ion-text>{{ fechaFiltro }}</ion-text>
+    <!-- <ion-item lines="none" class="filtroFechas">
+      <ion-label class="ion-text-center center">Desde</ion-label>
+      <ion-label class="ion-text-center center">Hasta</ion-label>
+    </ion-item> -->
+    <ion-item lines="none">
+      <ion-datetime style="--padding-start:'0'" class="center" [(ngModel)]="fechaLimiteInicial"
+        (ionChange)="cambiaFecha($event)" cancel-text="cancelar" done-text="guardar" displayFormat="DD/MM/YYYY">
+      </ion-datetime>
+      <ion-icon name="calendar"></ion-icon>
+      <ion-datetime style="--padding-start:'0'" class="center" [(ngModel)]="fechaLimiteFinal"
+        (ionChange)="cambiaFecha($event)" cancel-text="cancelar" done-text="guardar" displayFormat="DD/MM/YYYY">
+      </ion-datetime>
+    </ion-item>
+    <!-- <ion-text>{{ fechaFiltro }}</ion-text> -->
   </ion-toolbar>
 </ion-header>
 
@@ -78,7 +114,8 @@
           <ion-card-content></ion-card-content>
         </ion-card> -->
     </ion-item>
-    <p class="ion-text-center margen-centrado" *ngIf="datosReservasMostrados.length==0">No se encuentra ninguna reserva con los datos especificados</p>
+    <p class="ion-text-center margen-centrado" *ngIf="datosReservasMostrados.length==0">No se encuentra ninguna reserva
+      con los datos especificados</p>
     <ion-infinite-scroll threshold="200px" (ionInfinite)="loadData($event)">
       <ion-infinite-scroll-content loadingSpinner="dots">
       </ion-infinite-scroll-content>

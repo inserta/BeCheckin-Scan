@@ -4,7 +4,7 @@ import { LoadingService } from 'src/app/services/loading.service';
 import { CookieService } from 'ngx-cookie-service';
 import { GlobalService } from 'src/app/services/globalService';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DatosReserva } from 'src/app/models/data.model';
+import { DatosReserva, Cookies, Recepcionista } from 'src/app/models/data.model';
 import { DateFormatPipe } from 'src/app/pipes/dateFormat/dateFormatPipe';
 
 @Component({
@@ -40,6 +40,17 @@ export class HomePage implements OnInit {
   //La variable fechaFiltro se usa para mostrar la fecha (o fechas) que componen el filtro en cada momento.
   fechaFiltro: string = "";
 
+
+  // Variables para los filtros básicos
+  cookies: Cookies;
+  fechaLimiteInicial;
+  fechaLimiteFinal;
+  fastcheckin: string;
+
+  // Datos del recepcionista
+  recepcionista: Recepcionista;
+
+
   constructor(
     public modalController: ModalController,
     private nav: NavController,
@@ -61,9 +72,12 @@ export class HomePage implements OnInit {
     this.index = 10;
     this.numReservasCargadas = 10;
     this.sinPermisos = false;
+    this.recepcionista = new Recepcionista();
   }
 
   ionViewWillEnter() {
+    //Inicializamos los filtros
+    this.inicializaFiltros();
     this.ready = false;
     let cargarDatos = false;
     //Escribimos la fecha del filtro seleccionada.
@@ -83,6 +97,10 @@ export class HomePage implements OnInit {
         this.router.navigateByUrl("/login");
       } else {
         this.sinPermisos = false;
+
+        //Guardamos los datos del recepcionista
+        this.recepcionista = this.globalService.recepcionista;
+
         // Los datos de las reservas ya están filtrados y ordenados.
         // Comprobamos si la página ya ha sido inicializada anteriormente antes de cargar todos los datos en las variables.
         if (!this.iniciado) {
@@ -105,6 +123,17 @@ export class HomePage implements OnInit {
         this.ready = true;
       }
     });
+  }
+
+  inicializaFiltros() {
+    this.cookies = JSON.parse(this.cookieService.get('directScanData'));
+    if (this.cookies) {
+      if (this.cookies.filtros) {
+        this.fechaLimiteInicial = this.cookies.filtros.fechaInicial;
+        this.fechaLimiteFinal = this.cookies.filtros.fechaFinal;
+        this.fastcheckin = this.cookies.filtros.fastcheckin;
+      }
+    }
   }
 
   doRefresh(event) {
@@ -202,25 +231,25 @@ export class HomePage implements OnInit {
     this.datosReservasFiltrados = this.datosReservasCompletos.filter(reserva => {
       let res = false;
       let coincideId, coincideNombre, coincideEmail, coincideTelefono, coincideDocumento = false;
-      if(reserva.reserva.id){
+      if (reserva.reserva.id) {
         coincideId = reserva.reserva.id.toString().toLowerCase().includes(this.buscarReserva.toLowerCase());
       }
-      if(reserva.reserva.booker.phone){
+      if (reserva.reserva.booker.phone) {
         coincideTelefono = reserva.reserva.booker.phone.toString().toLowerCase().includes(this.buscarReserva.toLowerCase());
       }
-      if(reserva.reserva.booker.firstname && reserva.reserva.booker.lastname){
+      if (reserva.reserva.booker.firstname && reserva.reserva.booker.lastname) {
         coincideNombre = reserva.reserva.booker.firstname.toString().toLowerCase().includes(this.buscarReserva.toLowerCase()) ||
-                         reserva.reserva.booker.lastname.toString().toLowerCase().includes(this.buscarReserva.toLowerCase());
+          reserva.reserva.booker.lastname.toString().toLowerCase().includes(this.buscarReserva.toLowerCase());
       }
-      if(reserva.reserva.booker.email){
+      if (reserva.reserva.booker.email) {
         coincideEmail = reserva.reserva.booker.email.toString().toLowerCase().includes(this.buscarReserva.toLowerCase());
       }
-      if(reserva.reserva.booker.document){
+      if (reserva.reserva.booker.document) {
         coincideDocumento = reserva.reserva.booker.document.toString().toLowerCase().includes(this.buscarReserva.toLowerCase());
       }
 
       res = coincideId || coincideNombre || coincideEmail || coincideTelefono || coincideDocumento;
-      
+
       return res;
     });
     this.datosReservasMostrados = [];
@@ -232,5 +261,66 @@ export class HomePage implements OnInit {
         this.datosReservasMostrados.push(this.datosReservasFiltrados[i]);
       }
     }
+  }
+
+  //Funciones para los filtros
+
+  filtroFastcheckin(event) {
+    if (this.compruebaCambios()) {
+      this.cookies.filtros.fastcheckin = this.fastcheckin;
+      this.globalService.guardarCookies(this.cookies);
+      this.buscarReservasPorFiltro();
+    }
+  }
+
+  cambiaFecha(date) {
+    if (this.compruebaCambios()) {
+      let fechaInicio = new Date(this.fechaLimiteInicial);
+      fechaInicio.setHours(0, 0, 0, 0);
+      let fechaFin = new Date(this.fechaLimiteFinal);
+      fechaFin.setHours(0, 0, 0, 0);
+      this.cookies.filtros.fechaInicial = fechaInicio.toISOString();
+      this.cookies.filtros.fechaFinal = fechaFin.toISOString();
+
+      this.globalService.guardarCookies(this.cookies);
+      this.buscarReservasPorFiltro();
+    }
+  }
+
+  compruebaCambios() {
+    let res = false;
+    if (this.cookies.filtros.fastcheckin != this.fastcheckin ||
+      this.cookies.filtros.fechaInicial != this.fechaLimiteInicial ||
+      this.cookies.filtros.fechaFinal != this.fechaLimiteFinal) {
+      res = true;
+    }
+    return res;
+  }
+
+  buscarReservasPorFiltro() {
+
+    this.ready = false;
+
+    // Refrescar todos los datos de las reservas
+    this.globalService.cargarDatos(this.cookies, this.recepcionista).then(res => {
+      this.datosReservasMostrados = [];
+      this.datosReservasFiltrados = [];
+      this.datosReservasCompletos = [];
+      this.globalService.datosReservas.forEach(datosRes => {
+        this.datosReservasFiltrados.push(datosRes);
+        this.datosReservasCompletos.push(datosRes);
+      });
+      // Recorremos tan sólo el número indicado por el index para mostrar las "x" primeras reservas, e ir cargando las demás posteriormente poco a poco.   
+      for (let i = 0; i < this.index; i++) {
+        if (this.datosReservasFiltrados.length == this.datosReservasMostrados.length) {
+          break;
+        } else {
+          //Cargamos en otra variable una copia de los datos de las reservas obtenidos, únicamente para mostrar.
+          this.datosReservasMostrados.push(this.datosReservasFiltrados[i]);
+        }
+      }
+      this.filtrarReservas();
+      this.ready = true;
+    });
   }
 }
