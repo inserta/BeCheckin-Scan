@@ -92,7 +92,9 @@ export class LoginPage implements OnInit {
         console.log("Data: ", data);
         this.loading.dismiss();
         if(recepcionista.bienvenida){
-          this.nav.navigateRoot("/bienvenida");
+          //Cuando esté lista la parte de bienvenida, debemos cambiar la navegación siguiente:
+          // this.nav.navigateRoot("/bienvenida");
+          this.nav.navigateRoot("/app/home");
         } else {
           this.nav.navigateRoot("/app/home");
         }
