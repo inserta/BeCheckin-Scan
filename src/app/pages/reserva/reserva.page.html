@@ -75,7 +75,7 @@
             <img src="../../../assets/img/true.png" width="25" height="25" />
           </div>
           <div class="nombre_huesped">
-            {{ huesped.name }} {{ huesped.surnameOne }}
+            {{ huesped.name }} {{ huesped.surnameOne ? huesped.surnameOne : '' }} {{ huesped.surnameTwo ? huesped.surnameTwo : '' }}
           </div>
         </div>
       </ion-label>

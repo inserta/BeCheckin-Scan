@@ -79,7 +79,7 @@
           "NOMBRE": "Nombre",
           "APELLIDOS": "Apellidos",
           "APELLIDO_1": "Primer apellido",
-          "APELLIDO_2": "Segundo apellido",
+          "APELLIDO_2": "Segundo apellido (Sólo para españoles)",
           "NACIMIENTO": "Fecha de nacimiento",
           "SEXO": "Género",
           "NACIONALIDAD": "Nacionalidad",

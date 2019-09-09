@@ -23,7 +23,7 @@
         <p style="display: flex;">Apellidos:
           <ion-skeleton-text *ngIf="!ready" animated style="margin-left:10px; width: 25%"></ion-skeleton-text>
           <ion-text color="tertiary" *ngIf="ready" style="margin-left: 10px;">
-            {{ huesped && huesped.surnameOne ? huesped.surnameOne : '-' }}
+            {{ huesped && huesped.surnameOne ? (huesped.surnameOne + (huesped.surnameTwo ? ' ' + huesped.surnameTwo : '')) : '-' }}
           </ion-text>
         </p>
         <p style="display: flex;">Email:

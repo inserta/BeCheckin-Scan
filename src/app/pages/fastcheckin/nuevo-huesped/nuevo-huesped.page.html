@@ -253,20 +253,20 @@
           [(ngModel)]="fastcheckin.name" ngDefaultControl (ngModelChange)="modificaCampoRegistroManual('nombre')" />
       </div>
       <div class="item surnameOne">
-        <label for="surnameOne"><span>{{ 'HUESPED.REGISTRO_MANUAL.APELLIDOS' | translate }}</span> <span
+        <label for="surnameOne"><span>{{ 'HUESPED.REGISTRO_MANUAL.APELLIDO_1' | translate }}</span> <span
             class="label_error"
             *ngIf="erroresRegistroManual.apellido1=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
         <input id="surnameOne" class="{{erroresRegistroManual.apellido1 || fastcheckin.surnameOne=='' ? 'error' : ''}}"
           type="text" [(ngModel)]="fastcheckin.surnameOne" ngDefaultControl
           (ngModelChange)="modificaCampoRegistroManual('apellido1')" />
       </div>
-      <!-- VAMOS A QUITAR EL SEGUNDO APELLIDO DE LA EDICION 
+      <!-- EL SEGUNDO APELLIDO SE PONDRÁ COMO OPCIONAL  -->
       <div class="item surnameTwo">
         <label for="surnameTwo"><span>{{ 'HUESPED.REGISTRO_MANUAL.APELLIDO_2' | translate }}</span> <span class="label_error"
             *ngIf="erroresRegistroManual.apellido2=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
         <input id="surnameTwo" class="{{erroresRegistroManual.apellido2 ? 'error' : ''}}" type="text"
           [(ngModel)]="fastcheckin.surnameTwo" (ngModelChange)="modificaCampoRegistroManual('apellido2')" />
-      </div> -->
+      </div>
 
       <div class="item birthday">
         <label for="birthday"><span>{{ 'HUESPED.REGISTRO_MANUAL.NACIMIENTO' | translate }}</span> <span
