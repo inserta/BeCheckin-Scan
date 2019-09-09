@@ -177,7 +177,7 @@ export class GlobalService {
     let datosReserva: DatosReserva = new DatosReserva();
     datosReserva.pms = datosReservaServidor.pms;
     let reserva = new Reservation;
-    // reserva._id = datosReservaServidor._id;
+    reserva._id = datosReservaServidor.idReserva;
     reserva.id = datosReservaServidor.numero_reserva;
     reserva.totalGuests = Number(datosReservaServidor.huespedes);
     let booker = new Booker();

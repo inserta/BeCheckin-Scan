@@ -184,11 +184,15 @@ export class DataManagement {
           if(!datosReservaServidor.checkout){
             datosReservaServidor.checkout =  llave.finish;
           }
+          if(!datosReservaServidor.idReserva){
+            datosReservaServidor.idReserva =  llave._id;
+          }
         } else {
           datosReservaServidor = new DatosReservaServidor();
           datosReservaServidor.numero_reserva = llave.downloadCode;
           datosReservaServidor.checkin =  llave.start;
           datosReservaServidor.checkout =  llave.finish;
+          datosReservaServidor.idReserva =  llave._id;
         }
         return Promise.resolve(datosReservaServidor);
         
