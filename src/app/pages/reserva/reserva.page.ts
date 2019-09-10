@@ -20,6 +20,7 @@ export class ReservaPage implements OnInit {
   nombre: string;
   email: string;
   telefono: string;
+  numHuespedes: string;
 
   ready: boolean;
 
@@ -82,6 +83,8 @@ export class ReservaPage implements OnInit {
       }
       //Los datos del teléfono solo se encuentran en booker.
       this.rellenaDatosReservaAux("telefono");
+      //El número de huéspedes solo se encuentra en la reserva.
+      this.rellenaDatosReservaAux("numHuespedes");
     }
   }
 
@@ -104,6 +107,11 @@ export class ReservaPage implements OnInit {
         case "email":
           if (this.datosReserva.reserva.booker.email) {
             this.email = this.datosReserva.reserva.booker.email;
+          }
+          break;
+        case "numHuespedes":
+          if (this.datosReserva.reserva.totalGuests) {
+            this.numHuespedes = this.datosReserva.reserva.totalGuests.toString();
           }
           break;
 
@@ -158,6 +166,7 @@ export class ReservaPage implements OnInit {
     this.nombre = "-";
     this.email = "-";
     this.telefono = "-";
+    this.numHuespedes = "-";
     this.idReserva = this.route.snapshot.paramMap.get('idReserva');
   }
 

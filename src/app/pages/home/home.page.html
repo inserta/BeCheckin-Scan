@@ -40,11 +40,11 @@
     </ion-item> -->
     <ion-item lines="none">
       <ion-datetime style="--padding-start:'0'" class="center" [(ngModel)]="fechaLimiteInicial"
-        (ionChange)="cambiaFecha($event)" cancel-text="cancelar" done-text="guardar" displayFormat="DD/MM/YYYY">
+        (ionChange)="cambiaFecha($event)" cancel-text="cancelar" done-text="aceptar" displayFormat="DD/MM/YYYY">
       </ion-datetime>
       <ion-icon name="calendar"></ion-icon>
       <ion-datetime style="--padding-start:'0'" class="center" [(ngModel)]="fechaLimiteFinal"
-        (ionChange)="cambiaFecha($event)" cancel-text="cancelar" done-text="guardar" displayFormat="DD/MM/YYYY">
+        (ionChange)="cambiaFecha($event)" cancel-text="cancelar" done-text="aceptar" displayFormat="DD/MM/YYYY">
       </ion-datetime>
     </ion-item>
     <!-- <ion-text>{{ fechaFiltro }}</ion-text> -->
@@ -105,7 +105,7 @@
             <img src="../../../assets/img/true.png" *ngIf="datosReserva.tieneFastCheckin && (datosReserva.reserva.totalGuests ? (datosReserva.huespedes.length >= datosReserva.reserva.totalGuests) : true)" width="25" height="25" />
             <img src="../../../assets/img/minus.png" *ngIf="datosReserva.tieneFastCheckin && (datosReserva.reserva.totalGuests ? (datosReserva.huespedes.length < datosReserva.reserva.totalGuests) : false)" width="25" height="25" />
           <img src="../../../assets/img/false.png" *ngIf="!datosReserva.tieneFastCheckin" width="25" height="25" />
-          {{ datosReserva.reserva.id }}
+          {{ datosReserva.reserva.booker.firstname ? (datosReserva.reserva.booker.lastname ? (datosReserva.reserva.booker.firstname + ' ' + datosReserva.reserva.booker.lastname) : datosReserva.reserva.booker.firstname) : datosReserva.reserva.id }}
         </h1>
         <p>{{ muestraFechaString(datosReserva.reserva.roomReservations[0].checkin) }} -
           {{ muestraFechaString(datosReserva.reserva.roomReservations[0].checkout) }}</p>

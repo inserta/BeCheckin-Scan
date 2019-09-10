@@ -25,6 +25,8 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { DataManagement } from 'src/app/services/dataManagement';
 // var moment = require('moment');
 import * as moment from 'moment';
+// import * as i18nIsoCountries from 'i18n-iso-countries';
+// import * as i18nIsoEsp from 'i18n-iso-countries/langs/es.json';
 
 @Component({
   selector: 'app-nuevo-huesped',
@@ -532,32 +534,18 @@ export class NuevoHuespedPage implements OnInit {
     console.log("imagen destino a guardar: " + this.id_img);
 
     // Volcamos la imagen en el campo correcto:
-    // switch (this.id_img) {
-    //   case 1:
-    //     this.photosNif[0] = "data:image/jpeg;base64," + image;
-    //     break;
-    //   case 2:
-    //     this.photosNif[1] = "data:image/jpeg;base64," + image;
-    //     break;
-    //   case 3:
-    //     this.photosPassport[0] = "data:image/jpeg;base64," + image;
-    // }
+    switch (this.id_img) {
+      case 1:
+        console.log("Analizando dni trasero!!");
+        break;
+      case 2:
+        console.log("Analizando dni delantero!!");
+        break;
+      case 3:
+        console.log("Analizando pasaporte!!");
+    }
 
     try {
-      this.loader.present();
-      /*
-      loading.onDidDismiss(() => {
-          let titleAlert = this.translate.instant("FASTCHECKIN.ADVICE_BEFORE_ANALIZE_TITLE");
-          let textAlert = this.translate.instant("FASTCHECKIN.ADVICE_BEFORE_ANALIZE_TEXT");
- 
-          let alert = this.alertCtrl.create({
-              title: titleAlert,
-              subTitle: textAlert,
-              buttons: ['OK']
-          });
-          alert.present();
- 
-      });*/
 
       try {
         this.vision.getLabels(image).subscribe((result: any) => {
@@ -596,6 +584,7 @@ export class NuevoHuespedPage implements OnInit {
           }
         });
       } catch (error) {
+        this.loader.dismiss();
         console.log(error);
         //this.showToast("FASTCHECKIN.NO_SCANNER");
         this.errorScan = this.errorScan + 1;
@@ -606,6 +595,7 @@ export class NuevoHuespedPage implements OnInit {
         }
       }
     } catch (error) {
+      this.loader.dismiss();
       console.log(error);
       this.errorScan = this.errorScan + 1;
       if (this.errorScan >= 2) {
@@ -759,7 +749,7 @@ export class NuevoHuespedPage implements OnInit {
 
       promises.push(this.recognizeDNI(texts[indice].replace(/ /g, "")));
       promises.push(this.recognizeDatesAndSex(texts[indice + 1].replace(/ /g, "")));
-      promises.push(this.recognizeName(texts[indice + 2]));
+      // promises.push(this.recognizeName(texts[indice + 2]));
       promises.push(this.recognizeNationality(texts[indice + 1].replace(/ /g, "")));
 
       Promise.all(promises)
@@ -953,19 +943,12 @@ export class NuevoHuespedPage implements OnInit {
     });
   }
 
-
   private recognizeNationality(lineName) {
     return new Promise<string>((resolve, reject) => {
-      /*console.log(Countries.langs['es.json'])
-      console.log(Countries.langs)
-      Countries.registerLocale(Countries.langs['es.json']);*/
-      // var countries = require("i18n-iso-countries");
-      // var lang = require("i18n-iso-countries/langs/es.json");
-      // countries.registerLocale(lang);
-      var line: string = lineName.split('<')[0];
-      var nationality = line.substring(line.length - 3);
-      //this.loginForm.patchValue({ nationality: countries.getName(nationality, "es") });
-      // this.user.guest.fastcheckin.nationality = countries.getName(nationality, "es");
+      // i18nIsoCountries.registerLocale(i18nIsoEsp);
+      let line: string = lineName.split('<')[0];
+      let nationality = line.substring(line.length - 3);
+      // this.user.guest.fastcheckin.nationality = i18nIsoCountries.getName(nationality, "es");
 
       resolve();
     });
@@ -1004,8 +987,7 @@ export class NuevoHuespedPage implements OnInit {
 
     this.sex = sex;
   }
-
-
+  
   private recognizeNIE(texts) {
     return new Promise<string>((resolve, reject) => {
       texts = texts.replace(/ /g, "");
@@ -1024,22 +1006,15 @@ export class NuevoHuespedPage implements OnInit {
     switch (this.id_img) {
       case 1:
         this.photosNif[0] = "data:image/jpeg;base64," + this.image;
-        this.analyze(this.image)
+        this.analyze(this.image);
         break;
       case 2:
         this.photosNif[1] = "data:image/jpeg;base64," + this.image;
-        if (this.paso != 3) {
-          let pasoAnterior = new PasoAnterior();
-          pasoAnterior.paso = this.paso;
-          pasoAnterior.progreso = this.progreso;
-          this.pasosAnteriores.push(pasoAnterior);
-          this.paso = 2;
-          this.progreso = "25\%";
-        }
+        this.analizaDNIDelantero(this.image);
         break;
       case 3:
         this.photosPassport[0] = "data:image/jpeg;base64," + this.image;
-        this.analyze(this.image)
+        this.analyze(this.image);
     }
 
   }
@@ -1048,6 +1023,7 @@ export class NuevoHuespedPage implements OnInit {
     this.id_img = id;
     this.files = event.target.files;
     var reader = new FileReader();
+    this.loader.present();
     // Guardaos las imagenes tal y como viene para una subida:
     if (id === 1) {
       this.photosNifSubida[0] = this.files[0];
@@ -1363,6 +1339,111 @@ export class NuevoHuespedPage implements OnInit {
   resetFile(id) {
     let input: any = document.getElementById(id);
     input.value = null;
+  }
+
+
+  //Nuevos métodos para OCR
+  
+  analizaDNIDelantero(image) {
+
+    console.log('analizando...');
+    console.log("imagen destino a guardar: " + this.id_img);
+
+    try {
+
+      try {
+        this.vision.getLabels(image).subscribe((result: any) => {
+          console.log(result);
+          let res = result.responses[0].fullTextAnnotation;
+          if (res) {
+              console.log('dni delantero')
+              this.recognizeFrontalDNIText(res.text);
+          } else {
+            this.avanzaDNIDelantero("Error: Fallo al reconocer el texto de la imagen");
+          }
+        }, err => {
+          this.avanzaDNIDelantero(err);
+        });
+      } catch (error) {
+        console.log(error);
+        this.avanzaDNIDelantero(error);
+      }
+    } catch (error) {
+      this.avanzaDNIDelantero(error);
+    }
+  }
+
+  avanzaDNIDelantero(mensaje?){
+    this.loader.dismiss();
+    console.log(mensaje);
+    if (this.paso != 3) {
+      let pasoAnterior = new PasoAnterior();
+      pasoAnterior.paso = this.paso;
+      pasoAnterior.progreso = this.progreso;
+      this.pasosAnteriores.push(pasoAnterior);
+      this.paso = 2;
+      this.progreso = "25\%";
+    }
+  }
+
+  private recognizeFrontalDNIText(text: any) {
+
+    let tipoDocumento = "";
+    let isSpanish: boolean = false;
+    
+    console.log('text DNI: ', text)
+    let texts = text.split('\n');
+    console.log('text ', texts)
+    let promises = [];
+    let linea = '';
+    let indice = 0;
+    let indiceApellidos = 0;
+    let indiceNombre = 0;
+    let apellido1 = "";
+    let apellido2 = "";
+    let nombre = "";
+
+    for (let texto of texts) {
+      linea = texto.replace(/\s/g, "");
+      if (linea.toLowerCase().includes('españa')) {
+        isSpanish = true;
+        break;
+      }
+    }
+
+    //FGV
+    if (isSpanish) {
+
+      for (let texto of texts) {
+        console.log(texto);
+        linea = texto.replace(/\s/g, "");
+        if (linea.toLowerCase().includes('apellidos')) {
+          indiceApellidos = texts.indexOf(texto);
+        }
+        if(linea.toLowerCase().includes('nombre')){
+          indiceNombre = texts.indexOf(texto);
+        }
+      }
+
+      apellido1 = texts[indiceApellidos+1];
+      apellido2 = texts[indiceApellidos+2];
+      nombre = texts[indiceNombre+1];
+      this.user.guest.fastcheckin.surnameOne = apellido1;
+      this.user.guest.fastcheckin.surnameTwo = apellido2;
+      this.user.guest.fastcheckin.name = nombre;
+      console.log(nombre, apellido1, apellido2);
+      // promises.push(this.recognizeName(texts[indice + 2]));
+
+      // Promise.all(promises)
+      //   .then(() => {
+      //     this.avanzaDNIDelantero("Analizado correctamente");
+      //   }).catch((error) => {
+      //     this.avanzaDNIDelantero(error);
+      //   });
+    } else {
+      console.log(nombre, apellido1, apellido2);
+    }
+    this.avanzaDNIDelantero("Analizado correctamente");
   }
 
 }
