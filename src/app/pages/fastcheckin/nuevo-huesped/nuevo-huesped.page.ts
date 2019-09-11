@@ -25,7 +25,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { DataManagement } from 'src/app/services/dataManagement';
 // var moment = require('moment');
 import * as moment from 'moment';
-// import * as i18nIsoCountries from 'i18n-iso-countries';
+import * as i18nIsoCountries from 'i18n-iso-countries';
 // import * as i18nIsoEsp from 'i18n-iso-countries/langs/es.json';
 
 @Component({
@@ -945,7 +945,7 @@ export class NuevoHuespedPage implements OnInit {
 
   private recognizeNationality(lineName) {
     return new Promise<string>((resolve, reject) => {
-      // i18nIsoCountries.registerLocale(i18nIsoEsp);
+      // i18nIsoCountries.registerLocale(require('i18n-iso-countries/langs/es.json'));
       let line: string = lineName.split('<')[0];
       let nationality = line.substring(line.length - 3);
       // this.user.guest.fastcheckin.nationality = i18nIsoCountries.getName(nationality, "es");

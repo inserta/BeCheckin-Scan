@@ -230,7 +230,7 @@ export class HomePage implements OnInit {
   filtrarReservas() {
     this.datosReservasFiltrados = this.datosReservasCompletos.filter(reserva => {
       let res = false;
-      let coincideId, coincideNombre, coincideEmail, coincideTelefono, coincideDocumento = false;
+      let coincideId, coincideNombre, coincideEmail, coincideTelefono, coincideDocumento, coincideFastcheckin = false;
       if (reserva.reserva.id) {
         coincideId = reserva.reserva.id.toString().toLowerCase().includes(this.buscarReserva.toLowerCase());
       }
@@ -247,8 +247,38 @@ export class HomePage implements OnInit {
       if (reserva.reserva.booker.document) {
         coincideDocumento = reserva.reserva.booker.document.toString().toLowerCase().includes(this.buscarReserva.toLowerCase());
       }
-
-      res = coincideId || coincideNombre || coincideEmail || coincideTelefono || coincideDocumento;
+      if(reserva.huespedes){
+        if(reserva.huespedes.length>0){
+          reserva.huespedes.forEach(huesped => {
+            if(huesped.name.toLowerCase().includes(this.buscarReserva.toLowerCase())){
+              coincideFastcheckin = true;
+            }
+            if(huesped.surnameOne.toLowerCase().includes(this.buscarReserva.toLowerCase())){
+              coincideFastcheckin = true;
+            }
+            if(huesped.dni){
+              if(huesped.dni.identifier){ 
+                if(huesped.dni.identifier.toLowerCase().includes(this.buscarReserva.toLowerCase())){
+                  coincideFastcheckin = true;
+                }
+              }
+            }
+            if(huesped.passport) {
+              if(huesped.passport.identifier){
+                if(huesped.passport.identifier.toLowerCase().includes(this.buscarReserva.toLowerCase())){
+                  coincideFastcheckin = true;
+                }
+              }
+            }
+            if(huesped.surnameTwo){
+              if(huesped.surnameTwo.toLowerCase().includes(this.buscarReserva.toLowerCase())){
+                coincideFastcheckin = true;
+              }
+            }
+          });
+        }
+      }
+      res = coincideId || coincideNombre || coincideEmail || coincideTelefono || coincideDocumento ||coincideFastcheckin;
 
       return res;
     });
