@@ -154,24 +154,7 @@ export class NuevoHuespedPage implements OnInit {
   }
 
   ngOnInit() {
-    //Inicializamos todos los campos a vacío del usuario
-    this.user = new User();
-    this.user.guest = new Guest();
-    this.user.guest.fastcheckin = new FastCheckin();
-    this.user.guest.fastcheckin.imagenes = [];
-    this.user.guest.fastcheckin.dni = { identifier: '' };
-    this.user.guest.fastcheckin.passport = { identifier: '' };
-
-
-    this.hotel = this.globalService.hotel;
-
-    // Inicializamos los arrays que contendrán las imagenes en B64 para mostrar:
-    this.photosNif = [];
-    this.photosPassport = [];
-
-    // Inicializamos los arrays que contendrán las imagenes tal y como vienen para enviar:
-    this.photosNifSubida = [];
-    this.photosPassportSubida = [];
+    this.inicializaHuesped();
 
     this.inicializaReserva();
 
@@ -192,6 +175,28 @@ export class NuevoHuespedPage implements OnInit {
         console.log("idReserva", this.idReserva);
       }
     });
+  }
+
+  inicializaHuesped(){
+    
+    //Inicializamos todos los campos a vacío del usuario
+    this.user = new User();
+    this.user.guest = new Guest();
+    this.user.guest.fastcheckin = new FastCheckin();
+    this.user.guest.fastcheckin.imagenes = [];
+    this.user.guest.fastcheckin.dni = { identifier: '' };
+    this.user.guest.fastcheckin.passport = { identifier: '' };
+
+
+    this.hotel = this.globalService.hotel;
+
+    // Inicializamos los arrays que contendrán las imagenes en B64 para mostrar:
+    this.photosNif = [];
+    this.photosPassport = [];
+
+    // Inicializamos los arrays que contendrán las imagenes tal y como vienen para enviar:
+    this.photosNifSubida = [];
+    this.photosPassportSubida = [];
   }
 
   inicializaReserva() {
@@ -1062,7 +1067,6 @@ export class NuevoHuespedPage implements OnInit {
     // this.navCtrl.push('pdf', { "archivo": "policysecurity_pdf", animate: true, direction: 'backward' });
   }
 
-
   // Visualizar foto:
   visualizaFoto(imagen) {
     //TODO: Visualizar foto
@@ -1082,7 +1086,6 @@ export class NuevoHuespedPage implements OnInit {
       case 3:
         this.photosPassport[0] = 'assets/imgs/camera.png';
     }
-
   }
 
   //Volver atrás
@@ -1090,6 +1093,10 @@ export class NuevoHuespedPage implements OnInit {
     let pasoAnterior = this.pasosAnteriores.pop();
     this.paso = pasoAnterior.paso;
     this.progreso = pasoAnterior.progreso;
+    if(this.paso==1){
+      this.inicializaHuesped();
+      this.inicializaReserva();
+    }
   }
 
   confirmaImagenes() {
@@ -1107,7 +1114,6 @@ export class NuevoHuespedPage implements OnInit {
       this.progreso = "75\%";
     }
   }
-
 
   vuelcaDatosFastcheckin() {
     this.fastcheckin.dni = { identifier: this.user.guest.fastcheckin.dni.identifier };

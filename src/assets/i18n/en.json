@@ -38,7 +38,7 @@
       "TEXTO_FIN": "Huesped registrado correctamente",
       "CONTINUAR": "Continuar",
       "NUEVO_REGISTRO": "Añadir huésped",
-      "ATRAS": "ATRÁS",
+      "ATRAS": "PASO ANTERIOR",
       "CONFIRMACION_IMAGENES": "Revise si la imagen es correcta y pulse continuar.",
       "CAMBIAR": "Cambiar",
       "FINALIZAR": "Finalizar",
@@ -82,7 +82,7 @@
           "APELLIDO_2": "Segundo apellido (Sólo para españoles)",
           "NACIMIENTO": "Fecha de nacimiento",
           "SEXO": "Género",
-          "NACIONALIDAD": "Nacionalidad",
+          "NACIONALIDAD": "País de nacionalidad",
           "PROVINCIA": "Provincia",
           "CONTINUAR": "Continuar"
       }

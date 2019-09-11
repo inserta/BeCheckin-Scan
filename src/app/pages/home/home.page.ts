@@ -126,7 +126,9 @@ export class HomePage implements OnInit {
   }
 
   inicializaFiltros() {
-    this.cookies = JSON.parse(this.cookieService.get('directScanData'));
+    if(this.cookieService.get('directScanData')){
+      this.cookies = JSON.parse(this.cookieService.get('directScanData'));
+    }
     if (this.cookies) {
       if (this.cookies.filtros) {
         this.fechaLimiteInicial = this.cookies.filtros.fechaInicial;
