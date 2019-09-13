@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { GlobalService } from 'src/app/services/globalService';
 import { LoadingService } from 'src/app/services/loading.service';
 import { AlertController, NavController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Credenciales } from 'src/app/models/form.model';
 import { Cookies, Filtro, Recepcionista } from 'src/app/models/data.model';
 
@@ -30,6 +30,7 @@ export class LoginPage implements OnInit {
     public alertCtrl: AlertController,
     private nav: NavController,
     private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {

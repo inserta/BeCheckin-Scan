@@ -94,7 +94,7 @@ export class HomePage implements OnInit {
       // Por lo que redirigimos a la pantalla de login.
       if (!res) {
         this.sinPermisos = true;
-        this.router.navigateByUrl("/login");
+        this.nav.navigateRoot("/login");
       } else {
         this.sinPermisos = false;
 
