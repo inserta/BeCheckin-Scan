@@ -31,10 +31,27 @@
 
     <!-- ELEJIR TIPO DOCUMENTO -->
     <div class="opciones" *ngIf="paso==1">
-      <ion-list class="radio-group">
+      <!-- <label for="tipoDoc">
+        <span>
+          
+        </span>
+      </label>
+      <select id="tipoDoc" [(ngModel)]="tipoDoc" ngDefaultControl (ngModelChange)="cambiarTipoDocumento($event)">
+        <option value="dni"></option>
+        <option value="pasaporte"></option>
+      </select> -->
+      <ion-item class="select">
+        <ion-text>{{ 'HUESPED.ELEGIR_TIPO_DOC' | translate }}</ion-text>
+      </ion-item>
+      <ion-item class="select">
+        <ion-select class="centrado" [(ngModel)]="tipoDoc" okText="Aceptar" cancelText="Cancelar">
+          <ion-select-option value="dni">{{ 'HUESPED.DNI' | translate }}</ion-select-option>
+          <ion-select-option value="pasaporte">{{ 'HUESPED.PASAPORTE' | translate }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <!-- <ion-list class="radio-group">
         <ion-radio-group [(ngModel)]="tipoDoc" ngDefaultControl>
           <ion-list-header class="centrado">
-            {{ 'HUESPED.ELEGIR_TIPO_DOC' | translate }}
           </ion-list-header>
           <div class="en_linea">
             <ion-item class="item item-block item-ios item-radio item-radio-personalizado">
@@ -48,7 +65,7 @@
             </ion-item>
           </div>
         </ion-radio-group>
-      </ion-list>
+      </ion-list> -->
     </div>
 
     <!-- MUESTRA IMÁGENES ESCANEADAS -->
@@ -262,7 +279,8 @@
       </div>
       <!-- EL SEGUNDO APELLIDO SE PONDRÁ COMO OPCIONAL  -->
       <div class="item surnameTwo">
-        <label for="surnameTwo"><span>{{ 'HUESPED.REGISTRO_MANUAL.APELLIDO_2' | translate }}</span> <span class="label_error"
+        <label for="surnameTwo"><span>{{ 'HUESPED.REGISTRO_MANUAL.APELLIDO_2' | translate }}</span> <span
+            class="label_error"
             *ngIf="erroresRegistroManual.apellido2=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
         <input id="surnameTwo" class="{{erroresRegistroManual.apellido2 ? 'error' : ''}}" type="text"
           [(ngModel)]="fastcheckin.surnameTwo" (ngModelChange)="modificaCampoRegistroManual('apellido2')" />
