@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { RestWS } from './restService';
 import { Credenciales } from '../models/form.model';
 import { DatosReservaServidor } from '../models/data.model';
+import { DatosDniFrontal } from '../models/others.model';
 
 @Injectable()
 export class DataManagement {
@@ -196,6 +197,51 @@ export class DataManagement {
         }
         return Promise.resolve(datosReservaServidor);
         
+      })
+      .catch(error => {
+        return Promise.reject('error');
+      });
+  }
+
+  /**
+   * Método que analiza la imagen mediante el OCR para el DNI Frontal.
+   * @param text textos encontrados en la imagen por Google.
+   */
+  public crearOcrDniFrontal(text): Promise<any> {
+    return this.restService
+      .crearOcrDniFrontal(text)
+      .then(data => {
+        return Promise.resolve(data);
+      })
+      .catch(error => {
+        return Promise.reject('error');
+      });
+  }
+
+  /**
+   * Método que analiza la imagen mediante el OCR para el DNI Trasero.
+   * @param text textos encontrados en la imagen por Google.
+   */
+  public crearOcrDniTrasero(text, datosDniFrontal: DatosDniFrontal): Promise<any> {
+    return this.restService
+      .crearOcrDniTrasero(text, datosDniFrontal)
+      .then(data => {
+        return Promise.resolve(data);
+      })
+      .catch(error => {
+        return Promise.reject('error');
+      });
+  }
+
+  /**
+   * Método que analiza la imagen mediante el OCR para el pasaporte.
+   * @param text textos encontrados en la imagen por Google.
+   */
+  public crearOcrPasaporte(text): Promise<any> {
+    return this.restService
+      .crearOcrPasaporte(text)
+      .then(data => {
+        return Promise.resolve(data);
       })
       .catch(error => {
         return Promise.reject('error');

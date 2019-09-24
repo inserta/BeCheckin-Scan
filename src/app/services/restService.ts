@@ -4,6 +4,7 @@ import { AbstractWS } from './abstractService';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { Credenciales } from '../models/form.model';
+import { DatosDniFrontal } from '../models/others.model';
 
 @Injectable()
 export class RestWS extends AbstractWS {
@@ -198,6 +199,69 @@ export class RestWS extends AbstractWS {
     let fd = new HttpParams();
 
     return this.makeGetRequest(this.path+'datosReserva/'+idReserva, fd)
+      .then(res => {
+        return Promise.resolve(res);
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+        return Promise.reject(error);
+      });
+  }
+  
+  public crearOcrDniFrontal(text) {
+    
+    let fd = new HttpParams()
+      .set('text',text);
+
+    return this.makePostRequest(this.path+'ocr/dni/frontal', fd)
+      .then(res => {
+        return Promise.resolve(res);
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+        return Promise.reject(error);
+      });
+  }
+  
+  public crearOcrDniTrasero(text, datosDniFrontal: DatosDniFrontal) {
+    
+    let fd = new HttpParams()
+      .set('text',text);
+      
+    if (datosDniFrontal) {
+      if(datosDniFrontal.nombre){
+        fd = fd.append('nombre', datosDniFrontal.nombre);
+      }
+      if(datosDniFrontal.apellido1){
+        fd = fd.append('apellido1', datosDniFrontal.apellido1);
+      }
+      if(datosDniFrontal.apellido2){
+        fd = fd.append('apellido2', datosDniFrontal.apellido2);
+      }
+      if(datosDniFrontal.documento){
+        fd = fd.append('documento', datosDniFrontal.documento);
+      }
+      if(datosDniFrontal.pais){
+        fd = fd.append('pais', datosDniFrontal.pais);
+      }
+    }
+
+    return this.makePostRequest(this.path+'ocr/dni/trasero', fd)
+      .then(res => {
+        return Promise.resolve(res);
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+        return Promise.reject(error);
+      });
+  }
+  
+  public crearOcrPasaporte(text) {
+    
+    let fd = new HttpParams()
+      .set('text',text);
+
+    return this.makePostRequest(this.path+'ocr/pasaporte/', fd)
       .then(res => {
         return Promise.resolve(res);
       })

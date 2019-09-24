@@ -18,7 +18,7 @@ import { GoogleCloudVisionServiceProvider } from '../../../providers/vision/goog
 // let moment = require('moment');
 // import moment from 'moment';
 import { GlobalService } from '../../../services/globalService';
-import { ErroresFormularioRegistro, PasoAnterior } from '../../../models/others.model';
+import { ErroresFormularioRegistro, PasoAnterior, DatosDniFrontal, DatosDniTrasero, DatosPasaporte } from '../../../models/others.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingService } from 'src/app/services/loading.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
@@ -125,6 +125,10 @@ export class NuevoHuespedPage implements OnInit {
   ready: boolean;
   _idKeyRoom: string;
 
+  datosDniFrontal: DatosDniFrontal;
+  datosDniTrasero: DatosDniTrasero;
+  datosPasaporte: DatosPasaporte;
+
   constructor(
     public navCtrl: NavController,
     // public navParams: NavParams,
@@ -177,8 +181,12 @@ export class NuevoHuespedPage implements OnInit {
     });
   }
 
-  inicializaHuesped(){
-    
+  inicializaHuesped() {
+
+    this.datosDniFrontal = new DatosDniFrontal();
+    this.datosDniTrasero = new DatosDniTrasero();
+    this.datosPasaporte = new DatosPasaporte();
+
     //Inicializamos todos los campos a vacío del usuario
     this.user = new User();
     this.user.guest = new Guest();
@@ -216,7 +224,7 @@ export class NuevoHuespedPage implements OnInit {
 
   close() {
     // this.navCtrl.navigateBack("/app/home");
-    this.navCtrl.navigateRoot("/reserva/"+this.idReserva+"?cargarDatos=true");
+    this.navCtrl.navigateRoot("/reserva/" + this.idReserva + "?cargarDatos=true");
     // this.router.navigateByUrl("/reserva/"+this.idReserva);
   }
 
@@ -307,7 +315,7 @@ export class NuevoHuespedPage implements OnInit {
             this.linksSubidos.push({ enlace: 'huespedes/' + this.user.guest._id, nombre: 'pasaporte' + this.getExtension(this.photosPassportSubida[0]) });
             this.sendProfile();
           }).catch((error) => {
-            if(this.loader.isLoading){
+            if (this.loader.isLoading) {
               this.loader.dismiss();
             }
             console.log('Error subida pasaporte');
@@ -323,7 +331,7 @@ export class NuevoHuespedPage implements OnInit {
   crearHuespedSinFastcheckin() {
     return new Promise<any>((resolve, reject) => {
       console.log(this.hotel);
-      this.dm.crearHuespedSinFastcheckin(this.datosReserva.reserva.id+"_nombre_"+this.datosReserva.huespedes.length+"_"+this.globalService.generarCadenaAleatoria(4), this.datosReserva.reserva.id+"_email_"+this.datosReserva.huespedes.length+"_"+this.globalService.generarCadenaAleatoria(4)+"@email.com", this.globalService.generarCadenaAleatoria(50), this._idKeyRoom).then(res => {
+      this.dm.crearHuespedSinFastcheckin(this.datosReserva.reserva.id + "_nombre_" + this.datosReserva.huespedes.length + "_" + this.globalService.generarCadenaAleatoria(4), this.datosReserva.reserva.id + "_email_" + this.datosReserva.huespedes.length + "_" + this.globalService.generarCadenaAleatoria(4) + "@email.com", this.globalService.generarCadenaAleatoria(50), this._idKeyRoom).then(res => {
         console.log("Respuesta crear huesped: ", res);
         this.user.guest._id = res.guest._id;
         this.user.guest.name = res.guest.name;
@@ -561,13 +569,17 @@ export class NuevoHuespedPage implements OnInit {
 
             if (this.tipoDoc == 'dni') {
               console.log('dni')
-              this.typeDocument = 'D';
-              this.recognizeDNIText(res.text);
+              this.dm.crearOcrDniTrasero(res.text, this.datosDniFrontal).then(respuestaDniTrasero => {
+                this.typeDocument = 'D';
+                this.datosDniTrasero = respuestaDniTrasero;
+                this.recognizeDNIText();
+              });
             } else {
-              this.typeDocument = 'P';
-              this.loader.dismiss();
-              //this.activarFormularioManual();
-              this.recognizePassportText(res.text);
+              this.dm.crearOcrPasaporte(res.text).then(respuestaPasaporte => {
+                this.typeDocument = 'P';
+                this.datosPasaporte = respuestaPasaporte;
+                this.recognizePassportText();
+              });
             }
           } else {
             this.loader.dismiss()
@@ -666,7 +678,7 @@ export class NuevoHuespedPage implements OnInit {
         let mensaje = "<!doctype html><html><head><title>Becheckin<\/title><style>.cuerpo{margin: 2%;background: #003581;border-radius: 10px;border: 2px solid #444;box-shadow: 0px 0px 10px 4px #888888;color:#E5E5E5;padding: 1%;}.imagen{margin-top: 10px;margin-bottom: 5px;display: flex;justify-content: center;align-items: center;}img{margin: 0 auto; border-radius: 5px;overflow: hidden;}.bienvenida{margin-left: 3%;margin-right: 3%;font-size: 20px;font-weight: bold;}.nombre{color: #f9ffac;}.reserva{font-weight: bold;color: #ecffbf;}.texto{margin-top: 20px;margin-left: 6%;margin-right: 6%;font-size: 18px;}.fecha1{color: #c4ffb5;}.fecha2{color: #ffb5b5;}.info{margin-bottom: 10px;}.fechas{margin-bottom: 10px;}.datos{margin-bottom: 10px;}.dato{font-size: 14px;margin: 5px 2%;}.texto_final{margin-bottom: 30px;font-size: 14px;font-style: italic;}a{color: #feffce;}.pie{text-align: center;font-style: italic;color: #7e7e7e;}<\/style><\/head><body><div class='cuerpo'><div class='imagen'><img src='https:\/\/dashboard.becheckin.com\/imgs\/logo\/inserta.png' width='50' height='50' \/><\/div><div class='bienvenida'>Hola <span class='nombre'>" + (nombreHuesped ? nombreHuesped : "") + "<\/span><\/div><div class='texto'><div class='info'>Tu reserva <span class='reserva'>" + (nombreReserva ? nombreReserva : "") + "<\/span> tiene un nuevo FastCheckin.<\/div><div class='fechas'>Entrada <span class='fecha1'>" + (fechaInicio ? fechaInicio : "") + "<\/span> | Salida <span class='fecha2'>" + (fechaFin ? fechaFin : "") + "<\/span><\/div><div class='datos'>Datos huésped:<div class='dato'>Nombre: " + (fastcheckin.name ? fastcheckin.name : "") + "<\/div><div class='dato'>Apellidos: " + (fastcheckin.surnameOne ? fastcheckin.surnameOne : "") + "<\/div><div class='dato'>Fecha Nacimiento: " + (fastcheckin.birthday ? fastcheckin.birthday : "") + "<\/div><div class='dato'>Fecha Expedicion: " + (fastcheckin.date_exp ? fastcheckin.date_exp : "") + "<\/div><div class='dato'>Dni: " + (fastcheckin.dni.identifier ? fastcheckin.dni.identifier : "") + "<\/div><div class='dato'>Pasaporte: " + (fastcheckin.passport.identifier ? fastcheckin.passport.identifier : "") + "<\/div><div class='dato'>Nacionalidad: " + (fastcheckin.nationality ? fastcheckin.nationality : "") + "<\/div><div class='dato'>Sexo: " + (fastcheckin.sex ? fastcheckin.sex : "") + "<\/div><div class='dato'>Email: " + (fastcheckin.email ? fastcheckin.email : "") + "<\/div><\/div><div class='texto_final'>Puedes consultar los datos FastCheckin en tu dashboard: <a href='https:\/\/dashboard.becheckin.com'target='_blank' style='color:#feffce;'>https:\/\/dashboard.becheckin.com <\/a><br \/>Nos tienes siempre a tu disposición en Booking@becheckin.com y en el teléfono +34 627 07 41 73.<\/div><\/div><\/div><\/body><footer><hr \/><div class='pie'>Atentamente, BeCheckin Team.<\/div><\/footer><\/html>";
         this.dm.sendGenericMail(asunto, mensaje, mailTo, "", cco).then(res => {
           console.log(res);
-          if(this.loader.isLoading){
+          if (this.loader.isLoading) {
             this.loader.dismiss();
           }
           this.checkKeyPermisions();
@@ -685,314 +697,32 @@ export class NuevoHuespedPage implements OnInit {
       + String(val)).slice(String(val).length);
   }
 
-  private recognizePassportText(text: any) {
-
-
-
-    let texts = text.split('\n');
-    let promises = [];
-    promises.push(this.recognizeOtherData(texts[texts.length - 2]));
-    promises.push(this.recognizeNamePassport(texts[texts.length - 3]));
-
-    Promise.all(promises)
-      .then(() => {
-        this.loader.dismiss();
-        this.comprobardatos();
-      }).catch(() => {
-        this.loader.dismiss();
-        this.comprobardatos();
-        /*
-        this.errorScan = this.errorScan + 1;
-        if (this.errorScan >= 2) {
-          this.activarFormularioManual();
-        } else {
-          let alert = this.alertCtrl.create({
-            title: this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TITULO"),
-            subTitle: this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TEXTO"),
-            buttons: ['OK']
-          });
-          alert.present();
-        }*/
-      });
+  private recognizePassportText() {
+    this.user.guest.fastcheckin.name = this.datosPasaporte.nombre;
+    this.user.guest.fastcheckin.surnameOne = this.datosPasaporte.apellido1;
+    this.user.guest.fastcheckin.surnameTwo = this.datosPasaporte.apellido2;
+    this.user.guest.fastcheckin.dni.identifier = this.datosPasaporte.documento;
+    this.user.guest.fastcheckin.sex = this.datosPasaporte.sexo;
+    this.user.guest.fastcheckin.birthday = this.datosPasaporte.nacimiento;
+    this.user.guest.fastcheckin.date_exp = this.datosPasaporte.expedicion;
+    this.user.guest.fastcheckin.nationality = this.datosPasaporte.pais;
+    this.loader.dismiss();
+    this.comprobardatos();
   }
 
-  private recognizeDNIText(text: any) {
-
-    let tipoDocumento = "";
-
-    console.log('text DNI: ', text)
-    let texts = text.split('\n');
-    console.log('text ', texts)
-    let promises = [];
-    let ID = '';
-    let NIE = '';
-    let indice = 0;
-    let cont = 0;
-    console.log('Id: ', ID)
-
-    for (let texto of texts) {
-      console.log(texto);
-      ID = texto.replace(/\s/g, "").substring(0, 2);
-      NIE = texto.replace(/\s/g, "").substring(0, 3);
-      if (ID == 'ID') {
-        tipoDocumento = "dni";
-        indice = texts.indexOf(texto);
-        console.log(indice);
-        break;
-      } else if (NIE.toLowerCase().includes("nie")) {
-        tipoDocumento = "nie";
-        indice = texts.indexOf(texto);
-        console.log(indice);
-        break;
-      } else {
-        console.log("Nada encontrado por el momento");
-      }
-    }
-
-    //FGV
-    if (tipoDocumento == "dni") {
-
-      promises.push(this.recognizeDNI(texts[indice].replace(/ /g, "")));
-      promises.push(this.recognizeDatesAndSex(texts[indice + 1].replace(/ /g, "")));
-      // promises.push(this.recognizeName(texts[indice + 2]));
-      promises.push(this.recognizeNationality(texts[indice + 1].replace(/ /g, "")));
-
-      Promise.all(promises)
-        .then(() => {
-
-          this.loader.dismiss();
-          this.comprobardatos();
-
-        }).catch((error) => {
-          console.log(error)
-          this.loader.dismiss();
-          this.comprobardatos();
-        });
-    } else {
-      this.loader.dismiss();
-      this.comprobardatos();
-    }
+  private recognizeDNIText() {
+    this.user.guest.fastcheckin.name = this.datosDniTrasero.nombre;
+    this.user.guest.fastcheckin.surnameOne = this.datosDniTrasero.apellido1;
+    this.user.guest.fastcheckin.surnameTwo = this.datosDniTrasero.apellido2;
+    this.user.guest.fastcheckin.dni.identifier = this.datosDniTrasero.documento;
+    this.user.guest.fastcheckin.sex = this.datosDniTrasero.sexo;
+    this.user.guest.fastcheckin.birthday = this.datosDniTrasero.nacimiento;
+    this.user.guest.fastcheckin.date_exp = this.datosDniTrasero.expedicion;
+    this.user.guest.fastcheckin.nationality = this.datosDniTrasero.pais;
+    this.loader.dismiss();
+    this.comprobardatos();
   }
 
-  private recognizeDNI(lineDNI) {
-    return new Promise<string>((resolve, reject) => {
-      lineDNI = lineDNI.replace(/ /g, "");
-      let foundLower: boolean = false;
-      let isNotFirstCharacter: boolean = true;
-      let lengthDNI = 9;
-      let dni = "";
-      for (var index = Number(lineDNI.length) - 1; index > 0; index--) {
-        if (lineDNI[index] == '<') {
-          foundLower = true;
-        } else if (foundLower) {
-          if (lengthDNI != 0) {
-            let character = lineDNI[index];
-            if (!isNotFirstCharacter) {
-              character = character == 'O' || character == 'o' ? 0 : character;
-            }
-            isNotFirstCharacter = false;
-            dni = character + dni;
-            lengthDNI--;
-          }
-        }
-      }
-
-      //this.loginForm.patchValue({ document: dni });
-      this.user.guest.fastcheckin.dni.identifier = dni;
-      //this.typeDocument = 'D';
-
-
-      resolve();
-    });
-  }
-
-  private recognizeName(lineName) {
-    return new Promise<string>((resolve, reject) => {
-      lineName = lineName.replace(/~/g, '');
-      let lineNamesSurname = lineName.split('<<');
-      let surname = lineNamesSurname[0].replace(/</g, " ");
-      let name = lineNamesSurname[1].replace(/</g, " ");
-
-      //this.loginForm.patchValue({ name: name });
-      //this.loginForm.patchValue({ lastname: surname });
-      this.user.guest.fastcheckin.name = name;
-      this.user.guest.fastcheckin.surnameOne = surname;
-
-      resolve();
-    });
-  }
-
-  private recognizeNamePassport(lineName) {
-    return new Promise<string>((resolve, reject) => {
-      lineName = lineName.substring(5, lineName.length);
-      let index = lineName.length - 1;
-      while (index >= 0) {
-        if (lineName[index] != '<') {
-          lineName = lineName.substring(0, index + 1);
-          break;
-        }
-        index--;
-      }
-
-      let lineNamesSurname = lineName.split('<<');
-      let surname = lineNamesSurname[0].replace(/</g, " ");
-      let name = lineNamesSurname[1].replace(/</g, " ");
-
-      //this.typeDocument = 'P';
-      this.user.guest.fastcheckin.name = name;
-      this.user.guest.fastcheckin.surnameOne = surname;
-
-      // this.loginForm.patchValue({ name: name });
-      // this.loginForm.patchValue({ lastname: surname });
-      resolve();
-    });
-  }
-
-  private calculateYear(date, date1) {
-    let birth = new Date(date1);
-    var diff = moment.duration(moment(birth).diff(moment(date)));
-    // let diff = birth.valueOf()-date.valueOf
-    var years = diff.asDays() / 365;
-    years = years * -1;
-    return years;
-  }
-
-  private recognizeDatesAndSex(lineName) {
-    let expeditionYearText = null;
-    let years;
-    let cases = [2, 5, 10];
-    //this.alerta('DateSex', lineName);
-
-    return new Promise<string>((resolve, reject) => {
-
-      let sex = lineName.substring(7, 8);
-      this.sex = sex;
-      this.user.guest.fastcheckin.sex = sex;
-      //this.alerta('Sex', this.sex);
-      let year = '19';
-
-      let birthdateYearText = lineName.substring(0, 2);
-      let birthdateMonthText = lineName.substring(2, 4);
-      let birthdateDayText = lineName.substring(4, 6);
-
-      if (birthdateYearText + 1 < 30) year = '20';
-      let birthdateText = year + birthdateYearText + "-" + birthdateMonthText + "-" + birthdateDayText;
-      //this.loginForm.patchValue({ birthday: birthdateText });
-      this.user.guest.fastcheckin.birthday = birthdateText;
-
-
-      let caducateYearText = lineName.substring(8, 10);
-      let caducateMonthText = lineName.substring(10, 12);
-      let caducateDayText = lineName.substring(12, 14);
-      let caducateText = "20" + caducateYearText + "-" + caducateMonthText + "-" + caducateDayText;
-      //this.alerta('Caducate ',  caducateText);
-      //this.loginForm.patchValue({ caducate: caducateText });
-
-
-      cases.forEach((element) => {
-        let caducateYearText1 = caducateYearText - element;
-        let caducateAux = "20" + caducateYearText1 + "-" + caducateMonthText + "-" + caducateDayText;
-        let dateCaducate = new Date(caducateAux);
-        let year = this.calculateYear(dateCaducate, birthdateText);
-        if (element == 5 && year < 30 && expeditionYearText == null) {
-          expeditionYearText = caducateYearText - 5;
-        } else if (element == 2 && year < 5 && expeditionYearText == null) {
-          expeditionYearText = caducateYearText - 2;
-        } else if (element == 10 && year < 70 && expeditionYearText == null) {
-          expeditionYearText = caducateYearText - 10;
-        }
-      });
-
-      let ok = true;
-
-      let m = parseInt(caducateMonthText, 10)
-      if (m)
-        if (m < 13)
-          console.log('ok: ', m)
-        else {
-          console.log('no ok:', m)
-          ok = false;
-        }
-      else {
-        console.log('bad: ', m)
-        ok = false;
-      }
-
-      let d = parseInt(caducateDayText, 10)
-      if (d)
-        if (d < 31)
-          console.log('ok: ', d)
-        else {
-          console.log('no ok:', d)
-          ok = false;
-        }
-      else {
-        console.log('bad: ', d)
-        ok = false;
-      }
-
-      let expeditionText: any;
-
-      if (!ok)
-        expeditionText = ''
-      else {
-        let expeditionMonthText = caducateMonthText;
-        let expeditionDayText = caducateDayText;
-        expeditionText = "20" + expeditionYearText + "-" + expeditionMonthText + "-" + expeditionDayText;
-      }
-
-
-      //this.loginForm.patchValue({ expedition: expeditionText }); //expeditionText });
-      this.user.guest.fastcheckin.date_exp = expeditionText;
-      resolve();
-    });
-  }
-
-  private recognizeNationality(lineName) {
-    return new Promise<string>((resolve, reject) => {
-      // i18nIsoCountries.registerLocale(require('i18n-iso-countries/langs/es.json'));
-      let line: string = lineName.split('<')[0];
-      let nationality = line.substring(line.length - 3);
-      // this.user.guest.fastcheckin.nationality = i18nIsoCountries.getName(nationality, "es");
-
-      resolve();
-    });
-  }
-
-  private recognizeOtherData(lineName) {
-    lineName = lineName.replace(/ /g, "");
-    console.log(lineName);
-
-    let numberPassport = lineName.substring(0, 9);
-    let nacionalidad = lineName.substring(10, 13);
-    let birthdateYearText = lineName.substring(13, 15);
-    let birthdateMonthText = lineName.substring(15, 17);
-    let birthdateDayText = lineName.substring(17, 19);
-    let birthdateText = '';
-    if (Number(birthdateYearText) > 20) {
-      birthdateText = "19" + birthdateYearText + "-" + birthdateMonthText + "-" + birthdateDayText;
-    } else {
-      birthdateText = "20" + birthdateYearText + "-" + birthdateMonthText + "-" + birthdateDayText;
-    }
-    let sex = lineName.substring(20, 21);
-    let exp_date_year = lineName.substring(21, 23);
-    let exp_date_month = lineName.substring(23, 25);
-    let exp_date_day = lineName.substring(25, 27);
-
-    let year = Number(exp_date_year) - 10;
-    let exp_date: any;
-
-    exp_date = '20' + year.toString() + '-' + exp_date_month + '-' + exp_date_day;
-
-    this.user.guest.fastcheckin.birthday = birthdateText;
-    this.user.guest.fastcheckin.sex = sex;
-    this.user.guest.fastcheckin.passport.identifier = numberPassport;
-    this.user.guest.fastcheckin.date_exp = exp_date;
-    this.user.guest.fastcheckin.nationality = nacionalidad;
-
-    this.sex = sex;
-  }
-  
   private recognizeNIE(texts) {
     return new Promise<string>((resolve, reject) => {
       texts = texts.replace(/ /g, "");
@@ -1093,7 +823,7 @@ export class NuevoHuespedPage implements OnInit {
     let pasoAnterior = this.pasosAnteriores.pop();
     this.paso = pasoAnterior.paso;
     this.progreso = pasoAnterior.progreso;
-    if(this.paso==1){
+    if (this.paso == 1) {
       this.inicializaHuesped();
       this.inicializaReserva();
     }
@@ -1349,7 +1079,7 @@ export class NuevoHuespedPage implements OnInit {
 
 
   //Nuevos métodos para OCR
-  
+
   analizaDNIDelantero(image) {
 
     console.log('analizando...');
@@ -1362,8 +1092,12 @@ export class NuevoHuespedPage implements OnInit {
           console.log(result);
           let res = result.responses[0].fullTextAnnotation;
           if (res) {
-              console.log('dni delantero')
-              this.recognizeFrontalDNIText(res.text);
+
+            this.dm.crearOcrDniFrontal(res.text).then(respuestaDniFrontal => {
+              this.datosDniFrontal = respuestaDniFrontal;
+
+              this.recognizeFrontalDNIText();
+            });
           } else {
             this.avanzaDNIDelantero("Error: Fallo al reconocer el texto de la imagen");
           }
@@ -1379,7 +1113,7 @@ export class NuevoHuespedPage implements OnInit {
     }
   }
 
-  avanzaDNIDelantero(mensaje?){
+  avanzaDNIDelantero(mensaje?) {
     this.loader.dismiss();
     console.log(mensaje);
     if (this.paso != 3) {
@@ -1392,63 +1126,12 @@ export class NuevoHuespedPage implements OnInit {
     }
   }
 
-  private recognizeFrontalDNIText(text: any) {
+  private recognizeFrontalDNIText() {
 
-    let tipoDocumento = "";
-    let isSpanish: boolean = false;
-    
-    console.log('text DNI: ', text)
-    let texts = text.split('\n');
-    console.log('text ', texts)
-    let promises = [];
-    let linea = '';
-    let indice = 0;
-    let indiceApellidos = 0;
-    let indiceNombre = 0;
-    let apellido1 = "";
-    let apellido2 = "";
-    let nombre = "";
+    this.user.guest.fastcheckin.surnameOne = this.datosDniFrontal.apellido1;
+    this.user.guest.fastcheckin.surnameTwo = this.datosDniFrontal.apellido2;
+    this.user.guest.fastcheckin.name = this.datosDniFrontal.nombre;
 
-    for (let texto of texts) {
-      linea = texto.replace(/\s/g, "");
-      if (linea.toLowerCase().includes('españa')) {
-        isSpanish = true;
-        break;
-      }
-    }
-
-    //FGV
-    if (isSpanish) {
-
-      for (let texto of texts) {
-        console.log(texto);
-        linea = texto.replace(/\s/g, "");
-        if (linea.toLowerCase().includes('apellidos')) {
-          indiceApellidos = texts.indexOf(texto);
-        }
-        if(linea.toLowerCase().includes('nombre')){
-          indiceNombre = texts.indexOf(texto);
-        }
-      }
-
-      apellido1 = texts[indiceApellidos+1];
-      apellido2 = texts[indiceApellidos+2];
-      nombre = texts[indiceNombre+1];
-      this.user.guest.fastcheckin.surnameOne = apellido1;
-      this.user.guest.fastcheckin.surnameTwo = apellido2;
-      this.user.guest.fastcheckin.name = nombre;
-      console.log(nombre, apellido1, apellido2);
-      // promises.push(this.recognizeName(texts[indice + 2]));
-
-      // Promise.all(promises)
-      //   .then(() => {
-      //     this.avanzaDNIDelantero("Analizado correctamente");
-      //   }).catch((error) => {
-      //     this.avanzaDNIDelantero(error);
-      //   });
-    } else {
-      console.log(nombre, apellido1, apellido2);
-    }
     this.avanzaDNIDelantero("Analizado correctamente");
   }
 
