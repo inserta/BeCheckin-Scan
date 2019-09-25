@@ -1128,9 +1128,21 @@ export class NuevoHuespedPage implements OnInit {
 
   private recognizeFrontalDNIText() {
 
-    this.user.guest.fastcheckin.surnameOne = this.datosDniFrontal.apellido1;
-    this.user.guest.fastcheckin.surnameTwo = this.datosDniFrontal.apellido2;
-    this.user.guest.fastcheckin.name = this.datosDniFrontal.nombre;
+    if(this.datosDniFrontal.apellido1){
+      this.user.guest.fastcheckin.surnameOne = this.datosDniFrontal.apellido1;
+    }
+    if(this.datosDniFrontal.apellido2){
+      this.user.guest.fastcheckin.surnameTwo = this.datosDniFrontal.apellido2;
+    }
+    if(this.datosDniFrontal.nombre){
+      this.user.guest.fastcheckin.name = this.datosDniFrontal.nombre;
+    }
+    if(this.datosDniFrontal.pais){
+      this.user.guest.fastcheckin.nationality = this.datosDniFrontal.pais;
+    }
+    if(this.datosDniFrontal.documento){
+      this.user.guest.fastcheckin.dni.identifier = this.datosDniFrontal.documento;
+    }
 
     this.avanzaDNIDelantero("Analizado correctamente");
   }
