@@ -701,7 +701,7 @@ export class NuevoHuespedPage implements OnInit {
     this.user.guest.fastcheckin.name = this.datosPasaporte.nombre;
     this.user.guest.fastcheckin.surnameOne = this.datosPasaporte.apellido1;
     this.user.guest.fastcheckin.surnameTwo = this.datosPasaporte.apellido2;
-    this.user.guest.fastcheckin.dni.identifier = this.datosPasaporte.documento;
+    this.user.guest.fastcheckin.passport.identifier = this.datosPasaporte.documento;
     this.user.guest.fastcheckin.sex = this.datosPasaporte.sexo;
     this.user.guest.fastcheckin.birthday = this.datosPasaporte.nacimiento;
     this.user.guest.fastcheckin.date_exp = this.datosPasaporte.expedicion;
