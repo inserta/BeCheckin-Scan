@@ -7,6 +7,7 @@ export class ConfigService {
 
   public config() {
     let urlPrefix = 'https://booking.becheckin.com/';
+    // let urlPrefix = 'http://localhost:8080/';
     let urlAPI = '';
     return {
       restUrlPrefix: urlPrefix + urlAPI

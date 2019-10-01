@@ -5,41 +5,35 @@
     </ion-buttons>
     <ion-title>NUEVO HUESPED</ion-title>
   </ion-toolbar>
+  <ion-toolbar class="atras" *ngIf="paso > 1 && paso < 5 || paso == 0">
+    <!-- BOTON PASO ANTERIOR -->
+    <div>
+      <span (click)="atras()">{{ 'HUESPED.ATRAS' | translate }}</span>
+    </div>
+  </ion-toolbar>
 </ion-header>
 
 
 <!-- El paso 0 muestra formulario para meter los datos del fastcheckin de forma manual cuando falla la detección de imágenes -->
-<div class="huesped-box">
+<ion-content class="huesped-box">
   <div class="container_fastcheckin">
-    <!-- BOTON OMITIR -->
-    <div class="top" *ngIf="paso < 5">
-      <div class="atras">
-        <span *ngIf="paso > 1 && paso < 5 || paso == 0" (click)="atras()">{{ 'HUESPED.ATRAS' | translate }}</span>
-      </div>
+    <div class="atras" *ngIf="paso==1 || paso>=5">
+
     </div>
-
-    <!-- TITULO -->
-    <!-- <div class="titulo" *ngIf="paso < 5">
-      {{ 'HUESPED.TITULO' | translate }}
-    </div> -->
-
     <!-- INTRODUCCION -->
-    <div class="introduccion" *ngIf="paso > 0 && paso < 4">
-      <p>{{ 'HUESPED.CUERPO_2' | translate }}</p>
-      <p>{{ 'HUESPED.CUERPO_3' | translate }}</p>
-    </div>
+    <ion-item lines="none" class="introduccion" *ngIf="paso > 0 && paso < 4">
+      <label>
+        <p>
+          <ion-text>{{ 'HUESPED.CUERPO_2' | translate }}</ion-text>
+        </p>
+        <p>
+          <ion-text>{{ 'HUESPED.CUERPO_3' | translate }}</ion-text>
+        </p>
+      </label>
+    </ion-item>
 
     <!-- ELEJIR TIPO DOCUMENTO -->
-    <div class="opciones" *ngIf="paso==1">
-      <!-- <label for="tipoDoc">
-        <span>
-          
-        </span>
-      </label>
-      <select id="tipoDoc" [(ngModel)]="tipoDoc" ngDefaultControl (ngModelChange)="cambiarTipoDocumento($event)">
-        <option value="dni"></option>
-        <option value="pasaporte"></option>
-      </select> -->
+    <ion-list class="opciones" *ngIf="paso==1">
       <ion-item class="select">
         <ion-text>{{ 'HUESPED.ELEGIR_TIPO_DOC' | translate }}</ion-text>
       </ion-item>
@@ -49,24 +43,7 @@
           <ion-select-option value="pasaporte">{{ 'HUESPED.PASAPORTE' | translate }}</ion-select-option>
         </ion-select>
       </ion-item>
-      <!-- <ion-list class="radio-group">
-        <ion-radio-group [(ngModel)]="tipoDoc" ngDefaultControl>
-          <ion-list-header class="centrado">
-          </ion-list-header>
-          <div class="en_linea">
-            <ion-item class="item item-block item-ios item-radio item-radio-personalizado">
-              <ion-label>{{ 'HUESPED.DNI' | translate }} </ion-label>
-              <ion-radio checked class="radio" value="dni"></ion-radio>
-            </ion-item>
-
-            <ion-item class="item item-block item-ios item-radio item-radio-personalizado">
-              <ion-label>{{ 'HUESPED.PASAPORTE' | translate }} </ion-label>
-              <ion-radio class="radio" value="pasaporte" radio-inline></ion-radio>
-            </ion-item>
-          </div>
-        </ion-radio-group>
-      </ion-list> -->
-    </div>
+    </ion-list>
 
     <!-- MUESTRA IMÁGENES ESCANEADAS -->
     <div class="imagenes {{paso==3?'extendida':''}}" *ngIf="paso > 1 && paso < 4">
@@ -142,7 +119,10 @@
           {{ 'HUESPED.CONFIRMACION_IMAGENES' | translate }}
         </div>
         <div class="boton_confirmacion">
-          <span class="btn_conf" (click)="confirmaImagenes()">{{ 'HUESPED.CONTINUAR' | translate }}</span>
+          <ion-button class="btn_conf" (click)="confirmaImagenes()">
+            {{ 'HUESPED.CONTINUAR' | translate }}
+          </ion-button>
+          <!-- <span class="btn_conf" (click)="confirmaImagenes()"></span> -->
         </div>
       </div>
 
@@ -217,118 +197,177 @@
     </div>
     <!-- FIN PASO 5 -->
 
+
+    <ion-list *ngIf="paso == 0 && !readyForm">
+      <ion-item>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
     <!-- PASO 0 (Especial, para formulario manual de fastcheckin) -->
-    <div class="form_manual" *ngIf="paso == 0">
-      <div class="explicacion">
-        <!-- <p *ngIf="!fastcheckinSuccess">{{ 'HUESPED.REGISTRO_MANUAL.UPS' | translate }}</p>
-        <p *ngIf="!fastcheckinSuccess">{{ 'HUESPED.REGISTRO_MANUAL.EXPLICACION' | translate }}</p> -->
-        <p>{{ 'HUESPED.REGISTRO_MANUAL.EXPLICACIONSUCCESS' | translate }}</p>
+    <form *ngIf="paso == 0 && readyForm" [formGroup]="manualForm" class="form_manual"
+      (ngSubmit)="guardarDatosManuales()">
 
-      </div>
-
-      <div class="item typeOfDocument">
-        <label for="typeOfDocument"><span>{{ 'HUESPED.REGISTRO_MANUAL.TIPO_DOCUMENTO' | translate }}</span> <span
+      <!-- <ion-item> -->
+      <!--<ion-label for="typeOfDocument">
+           <span> 
+          {{ 'HUESPED.REGISTRO_MANUAL.TIPO_DOCUMENTO' | translate }}
+         </span> 
+          <span
             class="label_error"
-            *ngIf="erroresRegistroManual.tipoDocumento=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <select id="typeOfDocument" [(ngModel)]="fastcheckin.typeOfDocument" ngDefaultControl
+            *ngIf="erroresRegistroManual.tipoDocumento=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span>
+          </ion-label> -->
+      <!-- <ion-select id="typeOfDocument" [(ngModel)]="fastcheckin.typeOfDocument" ngDefaultControl
           (ngModelChange)="cambiarTipoDocumento($event)">
           <option *ngFor="let option of tiposDocumentos.opciones" [ngValue]="option.id">
             {{option.name}} </option>
-        </select>
-      </div>
-      <div class="item identifier" *ngIf="fastcheckin.typeOfDocument=='D'">
-        <label for="identifier"><span>{{ 'HUESPED.REGISTRO_MANUAL.NUM_IDENTIFICACION' | translate }}</span> <span
-            class="label_error"
-            *ngIf="erroresRegistroManual.numIdentificacion=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <input id="identifier" type="text"
-          class="{{erroresRegistroManual.numIdentificacion || fastcheckin.dni.identifier=='' ? 'error' : ''}}"
-          [(ngModel)]="fastcheckin.dni.identifier" ngDefaultControl
-          (ngModelChange)="modificaCampoRegistroManual('numIdentificacion')" />
-      </div>
-      <div class="item identifier" *ngIf="fastcheckin.typeOfDocument=='P'">
-        <label for="identifier"><span>{{ 'HUESPED.REGISTRO_MANUAL.NUM_IDENTIFICACION' | translate }}</span> <span
-            class="label_error"
-            *ngIf="erroresRegistroManual.numIdentificacion=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <input id="identifier" type="text"
-          class="{{erroresRegistroManual.numIdentificacion || fastcheckin.passport.identifier=='' ? 'error' : ''}}"
-          [(ngModel)]="fastcheckin.passport.identifier" ngDefaultControl
-          (ngModelChange)="modificaCampoRegistroManual('numIdentificacion')" />
-      </div>
-      <div class="item date_exp">
-        <label for="date_exp"><span>{{ 'HUESPED.REGISTRO_MANUAL.EXPEDICION' | translate }}</span> <span
-            class="label_error"
-            *ngIf="erroresRegistroManual.fechaExpedicion=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <input id="date_exp" type="date"
-          class="{{erroresRegistroManual.fechaExpedicion || fastcheckin.date_exp == '' ? 'error' : ''}}"
-          [(ngModel)]="fastcheckin.date_exp" ngDefaultControl
-          (ngModelChange)="modificaCampoRegistroManual('fechaExpedicion')" />
-      </div>
-      <div class="item name">
-        <label for="name"><span>{{ 'HUESPED.REGISTRO_MANUAL.NOMBRE' | translate }}</span> <span class="label_error"
-            *ngIf="erroresRegistroManual.nombre=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <input id="name" type="text" class="{{erroresRegistroManual.nombre || fastcheckin.name=='' ? 'error' : ''}}"
-          [(ngModel)]="fastcheckin.name" ngDefaultControl (ngModelChange)="modificaCampoRegistroManual('nombre')" />
-      </div>
-      <div class="item surnameOne">
-        <label for="surnameOne"><span>{{ 'HUESPED.REGISTRO_MANUAL.APELLIDO_1' | translate }}</span> <span
-            class="label_error"
-            *ngIf="erroresRegistroManual.apellido1=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <input id="surnameOne" class="{{erroresRegistroManual.apellido1 || fastcheckin.surnameOne=='' ? 'error' : ''}}"
-          type="text" [(ngModel)]="fastcheckin.surnameOne" ngDefaultControl
-          (ngModelChange)="modificaCampoRegistroManual('apellido1')" />
-      </div>
+        </ion-select> -->
+
+      <!-- <ion-select disabled="true" class="centrado" [(ngModel)]="fastcheckin.typeOfDocument" okText="Aceptar"
+          cancelText="Cancelar">
+          <ion-select-option value="dni">{{ 'HUESPED.DNI' | translate }}</ion-select-option>
+          <ion-select-option value="pasaporte">{{ 'HUESPED.PASAPORTE' | translate }}</ion-select-option>
+        </ion-select>
+      </ion-item> -->
+
+      <ion-item *ngIf="fastcheckin.typeOfDocument=='D'">
+        <ion-label position="floating">
+          <ion-text>{{ 'HUESPED.REGISTRO_MANUAL.NUM_IDENTIFICACION' | translate }}</ion-text>
+        </ion-label>
+        <ion-input [(ngModel)]="fastcheckin.dni.identifier" maxlength="30" formControlName="numIdentificacion" required
+          (ngModelChange)="modificaCampoRegistroManual('numIdentificacion')"></ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="fastcheckin.typeOfDocument=='P'">
+        <ion-label position="floating">
+          <ion-text>{{ 'HUESPED.REGISTRO_MANUAL.NUM_IDENTIFICACION' | translate }}</ion-text>
+        </ion-label>
+        <ion-input [(ngModel)]="fastcheckin.passport.identifier" maxlength="30" formControlName="numIdentificacion"
+          required (ngModelChange)="modificaCampoRegistroManual('numIdentificacion')"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">
+          <ion-text>{{ 'HUESPED.REGISTRO_MANUAL.EXPEDICION' | translate }}</ion-text>
+        </ion-label>
+        <ion-input [(ngModel)]="fastcheckin.date_exp" type="date" maxlength="30" formControlName="fechaExpedicion"
+          required (ngModelChange)="modificaCampoRegistroManual('fechaExpedicion')"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">
+          <ion-text>{{ 'HUESPED.REGISTRO_MANUAL.NOMBRE' | translate }}</ion-text>
+        </ion-label>
+        <ion-input [(ngModel)]="fastcheckin.name" maxlength="30" formControlName="nombre" required
+          (ngModelChange)="modificaCampoRegistroManual('nombre')"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">
+          <ion-text>{{ 'HUESPED.REGISTRO_MANUAL.APELLIDO_1' | translate }}</ion-text>
+        </ion-label>
+        <ion-input [(ngModel)]="fastcheckin.surnameOne" maxlength="50" formControlName="apellido1"
+          (ngModelChange)="modificaCampoRegistroManual('apellido1')"></ion-input>
+      </ion-item>
+
       <!-- EL SEGUNDO APELLIDO SE PONDRÁ COMO OPCIONAL  -->
-      <div class="item surnameTwo">
-        <label for="surnameTwo"><span>{{ 'HUESPED.REGISTRO_MANUAL.APELLIDO_2' | translate }}</span> <span
-            class="label_error"
-            *ngIf="erroresRegistroManual.apellido2=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <input id="surnameTwo" class="{{erroresRegistroManual.apellido2 ? 'error' : ''}}" type="text"
-          [(ngModel)]="fastcheckin.surnameTwo" (ngModelChange)="modificaCampoRegistroManual('apellido2')" />
-      </div>
+      <ion-item>
+        <ion-label position="floating">
+          <ion-text>{{ 'HUESPED.REGISTRO_MANUAL.APELLIDO_2' | translate }}</ion-text>
+        </ion-label>
+        <ion-input [(ngModel)]="fastcheckin.surnameTwo" maxlength="50" formControlName="apellido2"
+          (ngModelChange)="modificaCampoRegistroManual('apellido2')"></ion-input>
+      </ion-item>
 
-      <div class="item birthday">
-        <label for="birthday"><span>{{ 'HUESPED.REGISTRO_MANUAL.NACIMIENTO' | translate }}</span> <span
-            class="label_error"
-            *ngIf="erroresRegistroManual.fechaNacimiento=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <input id="birthday" type="date"
-          class="{{erroresRegistroManual.fechaNacimiento || fastcheckin.birthday=='' ? 'error' : ''}}"
-          [(ngModel)]="fastcheckin.birthday" ngDefaultControl
-          (ngModelChange)="modificaCampoRegistroManual('fechaNacimiento')" />
-      </div>
-      <div class="item sex">
+      <ion-item>
+        <ion-label position="stacked">
+          <ion-text>{{ 'HUESPED.REGISTRO_MANUAL.NACIMIENTO' | translate }}</ion-text>
+        </ion-label>
+        <ion-input [(ngModel)]="fastcheckin.birthday" type="date" formControlName="fechaNacimiento"
+          (ngModelChange)="modificaCampoRegistroManual('fechaNacimiento')"></ion-input>
+      </ion-item>
 
-        <label for="sex"><span>{{ 'HUESPED.REGISTRO_MANUAL.SEXO' | translate }}</span> <span class="label_error"
-            *ngIf="erroresRegistroManual.sexo=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <select id="sex" [(ngModel)]="fastcheckin.sex" ngDefaultControl (ngModelChange)="cambiarSexo($event)">
-          <option *ngFor="let option of tiposSexo.opciones" [ngValue]="option.id">
-            {{option.name}} </option>
-        </select>
+      <ion-item>
+        <ion-label position="stacked">
+          <ion-text>{{ 'HUESPED.REGISTRO_MANUAL.SEXO' | translate }}</ion-text>
+        </ion-label>
+        <ion-select placeholder="Seleccione uno" [(ngModel)]="fastcheckin.sex" okText="Aceptar" required
+          cancelText="Cancelar" formControlName="sex">
+          <!-- <option *ngFor="let option of tiposSexo.opciones" [ngValue]="option.id" selected="option.id==fastcheckin.sex">
+            {{option.name}} </option> -->
+          <ion-select-option value="F">{{ 'HUESPED.REGISTRO_MANUAL.MUJER' | translate }}</ion-select-option>
+          <ion-select-option value="M">{{ 'HUESPED.REGISTRO_MANUAL.HOMBRE' | translate }}</ion-select-option>
+        </ion-select>
+      </ion-item>
 
-      </div>
-      <div class="item nationality">
-        <label for="nationality"><span>{{ 'HUESPED.REGISTRO_MANUAL.NACIONALIDAD' | translate }}</span> <span
-            class="label_error"
-            *ngIf="erroresRegistroManual.nacionalidad=='obligatorio'">{{ 'HUESPED.REGISTRO_MANUAL.OBLIGATORIO' | translate }}</span></label>
-        <input id="nationality" type="text"
-          class="{{erroresRegistroManual.nacionalidad || fastcheckin.nationality=='' ? 'error' : ''}}"
-          [(ngModel)]="fastcheckin.nationality" ngDefaultControl
-          (ngModelChange)="modificaCampoRegistroManual('nacionalidad')" />
-      </div>
-      <div class="item province">
-        <label for="province"><span>{{ 'HUESPED.REGISTRO_MANUAL.PROVINCIA' | translate }}</span></label>
-        <input id="province" type="text" [(ngModel)]="fastcheckin.province" ngDefaultControl />
-      </div>
-      <div class="boton_continuar">
-        <button class="{{erroresRegistroManual.tieneErrores ? 'boton_error' : ''}}"
-          (click)="guardarDatosManuales()">{{ 'HUESPED.REGISTRO_MANUAL.CONTINUAR' | translate }}</button>
-      </div>
-    </div>
+      <ion-item>
+        <ion-label position="floating">
+          <ion-text>{{ 'HUESPED.REGISTRO_MANUAL.NACIONALIDAD' | translate }}</ion-text>
+        </ion-label>
+        <ion-input [(ngModel)]="fastcheckin.nationality" maxlength="50" formControlName="nacionalidad"
+          (ngModelChange)="modificaCampoRegistroManual('nacionalidad')"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">
+          <ion-text>{{ 'HUESPED.REGISTRO_MANUAL.PROVINCIA' | translate }}</ion-text>
+        </ion-label>
+        <ion-input [(ngModel)]="fastcheckin.province" formControlName="provincia" [ngModelOptions]="{standalone: true}"
+          maxlength="50"></ion-input>
+      </ion-item>
+
+      <ion-button expand="full" type="submit">
+          <ion-text *ngIf="this.erroresRegistroManual.tieneErrores" class="error_button">
+            {{ 'HUESPED.REGISTRO_MANUAL.CONTINUAR' | translate }}
+          </ion-text>
+          <ion-text *ngIf="!this.erroresRegistroManual.tieneErrores">
+            {{ 'HUESPED.REGISTRO_MANUAL.CONTINUAR' | translate }}
+          </ion-text>
+      </ion-button>
+
+    </form>
     <!-- FIN PASO 0 -->
-
-    <!-- PROGRESO -->
-    <div class="progreso">
-      <span [ngStyle]="{width: progreso}"></span>
-    </div>
   </div>
 
-</div>
+</ion-content>
+<ion-footer>
+  <!-- PROGRESO -->
+  <div class="progreso">
+    <span [ngStyle]="{width: progreso}"></span>
+  </div>
+</ion-footer>

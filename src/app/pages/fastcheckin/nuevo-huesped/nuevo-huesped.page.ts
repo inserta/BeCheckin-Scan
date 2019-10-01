@@ -128,6 +128,17 @@ export class NuevoHuespedPage implements OnInit {
   datosDniFrontal: DatosDniFrontal;
   datosDniTrasero: DatosDniTrasero;
   datosPasaporte: DatosPasaporte;
+  manualForm: FormGroup;
+  readyForm: boolean;
+
+  /**
+   * Función para comparar objetos y que se seleccione la opción elegida por defecto en el selector del formulario.
+   */
+  compareWithFn = (o1, o2) => {
+    return o1 && o2 ? o1 === o2.id : false;
+  };
+  compareWith = this.compareWithFn;
+  
 
   constructor(
     public navCtrl: NavController,
@@ -161,6 +172,18 @@ export class NuevoHuespedPage implements OnInit {
     this.inicializaHuesped();
 
     this.inicializaReserva();
+
+    this.manualForm = this.formBuilder.group({
+      numIdentificacion: ['', Validators.compose([Validators.required])],
+      fechaExpedicion: [null, Validators.compose([Validators.required])],
+      nombre: ['', Validators.compose([Validators.required])],
+      apellido1: ['', Validators.compose([Validators.required])],
+      apellido2: [''],
+      fechaNacimiento: [null, Validators.compose([Validators.required])],
+      sex: ['', Validators.compose([Validators.required])],
+      nacionalidad: ['', Validators.compose([Validators.required])],
+      provincia: [''],
+    });
 
     this.globalService.leerCookies(true).then(res => {
       if (!res) {
@@ -865,31 +888,37 @@ export class NuevoHuespedPage implements OnInit {
     this.erroresRegistroManual = new ErroresFormularioRegistro();
     this.fastcheckin.typeOfDocument = (this.tipoDoc == 'dni') ? 'D' : 'P';
     this.fastcheckin.sex = "M";
+    //Para la carga del formulario, dejamos que todos los datos carguen primero.
+    this.readyForm = false;
+    setTimeout(() => {
+      this.readyForm = true;
+    }, 500);
     this.vuelcaDatosFastcheckin();
     //Generamos un código aleatorio de 20 caracteres.
     let cadena = this.globalService.generarCadenaAleatoria(20);
     //Subimos la imagen obtenida en la carpeta de errores con el nuevo código generado.
-    if (this.tipoDoc == "dni") {
-      this.globalService.subirArchivo(this.photosNifSubida[0], "huespedes/errores/dni", cadena).then(res => {
-        let asunto = "[TEST] Error al registrarse en webapp con DNI";
-        let mensaje = "<p>Se ha producido un error en el registro de un huésped</p><p>Se puede ver la imagen utilizada a través del siguiente enlace:</p><p>" + res + "</p>";
-        let mailTo = "javier@becheckin.com, amalia@becheckin.com";
-        //Enviamos informe de error.
-        this.dm.sendGenericMail(asunto, mensaje, mailTo).then(res => {
-          console.log("informe de errores enviado.");
-        });
-      });
-    } else {
-      this.globalService.subirArchivo(this.photosPassportSubida[0], "huespedes/errores/passport", cadena).then(res => {
-        let asunto = "[TEST] Error al registrarse en webapp con Pasaporte";
-        let mensaje = "<p>Se ha producido un error en el registro de un huésped</p><p>Se puede ver la imagen utilizada a través del siguiente enlace:</p><p>" + res + "</p>";
-        let mailTo = "javier@becheckin.com, amalia@becheckin.com";
-        //Enviamos informe de error.
-        this.dm.sendGenericMail(asunto, mensaje, mailTo).then(res => {
-          console.log("informe de errores enviado.");
-        });
-      });
-    }
+    // COMENTAMOS EL SIGUIENTE CÓDIGO PARA EVITAR EL ENVÍO DE ERRORES
+    // if (this.tipoDoc == "dni") {
+    //   this.globalService.subirArchivo(this.photosNifSubida[0], "huespedes/errores/dni", cadena).then(res => {
+    //     let asunto = "[TEST] Error al registrarse en webapp con DNI";
+    //     let mensaje = "<p>Se ha producido un error en el registro de un huésped</p><p>Se puede ver la imagen utilizada a través del siguiente enlace:</p><p>" + res + "</p>";
+    //     let mailTo = "javier@becheckin.com, amalia@becheckin.com";
+    //     //Enviamos informe de error.
+    //     this.dm.sendGenericMail(asunto, mensaje, mailTo).then(res => {
+    //       console.log("informe de errores enviado.");
+    //     });
+    //   });
+    // } else {
+    //   this.globalService.subirArchivo(this.photosPassportSubida[0], "huespedes/errores/passport", cadena).then(res => {
+    //     let asunto = "[TEST] Error al registrarse en webapp con Pasaporte";
+    //     let mensaje = "<p>Se ha producido un error en el registro de un huésped</p><p>Se puede ver la imagen utilizada a través del siguiente enlace:</p><p>" + res + "</p>";
+    //     let mailTo = "javier@becheckin.com, amalia@becheckin.com";
+    //     //Enviamos informe de error.
+    //     this.dm.sendGenericMail(asunto, mensaje, mailTo).then(res => {
+    //       console.log("informe de errores enviado.");
+    //     });
+    //   });
+    // }
     //Vamos al paso especial para mostrar formulario manual.
     let pasoAnterior = new PasoAnterior();
     pasoAnterior.paso = this.paso;

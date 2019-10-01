@@ -461,7 +461,29 @@ page-change-user {
 
 /* Nuevo código css (javi) */
 
-.huesped-box {
+.atras {
+  margin: 0;
+
+  span {
+    display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+    display: -ms-flexbox; /* TWEENER - IE 10 */
+    display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+    display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 12px;
+    background: #c0c0c04d;
+    transition: 0.5s all;
+    min-height: 55px;
+
+    &:hover {
+      background: #9b9b9b4d;
+    }
+  }
+}
+
+ion-content {
   width: 100%;
   height: 100%;
   background: #f9f9f9;
@@ -481,131 +503,46 @@ page-change-user {
     flex-direction: column;
     font-family: "fontbecheckin";
     width: 100%;
-    .top {
-      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-      display: -ms-flexbox; /* TWEENER - IE 10 */
-      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
-      justify-content: space-between;
-      padding: 5px 10px;
+    height: 100%;
 
-      min-height: 40px;
-
-      .atras {
-        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-        display: -ms-flexbox; /* TWEENER - IE 10 */
-        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
-        justify-content: center;
-        align-items: center;
-
-        span {
-          display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-          display: -ms-flexbox; /* TWEENER - IE 10 */
-          display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-          display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
-          justify-content: center;
-          align-items: center;
-          cursor: pointer;
-          padding: 5px;
-          border-radius: 5px;
-          font-size: 12px;
-          border: 1px solid #000000;
-          background: #c0c0c04d;
-          transition: 0.5s all;
-
-          &:hover {
-            border: 1px solid #0000005d;
-            background: #9b9b9b4d;
-          }
-        }
-      }
-      .omitir {
-        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-        display: -ms-flexbox; /* TWEENER - IE 10 */
-        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        padding: 5px;
-        border-radius: 5px;
-        font-size: 12px;
-        border: 1px solid #000044;
-        background: #3f3f534d;
-        transition: 0.5s all;
-
-        &:hover {
-          border: 1px solid #0000ce5d;
-          background: #c4c4d34d;
-        }
-      }
+    .atras {
+      height: 55px;
     }
-    .titulo {
-      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-      display: -ms-flexbox; /* TWEENER - IE 10 */
-      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
-      justify-content: center;
-      font-size: 32px;
-      min-height: 45px;
-      color: #b1ddcb;
-    }
+
     .introduccion {
-      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-      display: -ms-flexbox; /* TWEENER - IE 10 */
-      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
-      flex-direction: column;
-      min-height: 111px;
-      padding-left: 10%;
-      padding-right: 10%;
+      min-height: 91px;
+      padding-top: 20px;
+      padding-left: 20px;
+      padding-right: 20px;
       justify-content: center;
       align-items: center;
 
-      p {
-        padding: 0;
-        margin: 0;
-        margin-bottom: 10px;
-        font-size: 18px;
+      label {
+        width: 100%;
 
-        .nombre_hotel {
-          color: #d3d2a7;
-          font-weight: bold;
+        p {
+          padding: 0;
+          margin: 0;
+          margin-bottom: 10px;
+          font-size: 18px;
         }
       }
     }
     .opciones {
-      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-      display: -ms-flexbox; /* TWEENER - IE 10 */
-      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
-      flex-direction: column;
-      justify-content: center;
-      padding-top: 10px;
       min-height: 135px;
-      color: #141414;
-      align-items: center;
 
       .select {
-        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-        display: -ms-flexbox; /* TWEENER - IE 10 */
-        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
-        flex-direction: column;
-        justify-content: center;
-        width: 100%;
         padding-left: 20px;
         padding-right: 20px;
-        text-align: center;
-        color: #141414;
-        background: transparent !important;
+        font-weight: bold;
+        color: #61a0a2;
 
         .centrado {
-          justify-content: center;
-          color: #141414;
+          color: #474747;
           font-size: 20px;
           font-weight: bold;
+          font-style: italic;
+          min-width: 200px;
         }
 
         .en_linea {
@@ -775,43 +712,34 @@ page-change-user {
         display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
         display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
         flex-direction: column;
+        width: 100%;
 
         .texto_confirmacion {
           display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
           display: -ms-flexbox; /* TWEENER - IE 10 */
           display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
           display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
+          justify-content: center;
         }
+
         .boton_confirmacion {
           display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
           display: -ms-flexbox; /* TWEENER - IE 10 */
           display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
           display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
-          justify-content: center;
-          align-items: center;
+          align-items: flex-end;
+          -webkit-align-items: flex-end;
           flex-grow: 1;
 
-          .btn_conf {
-            display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-            display: -ms-flexbox; /* TWEENER - IE 10 */
-            display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-            display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            padding: 7px 15px;
-            background: #c4dcc3;
-            border-radius: 5px;
-            transition: 0.2s all;
-            border-radius: 5px;
-            border-width: 1px;
-            border-style: outset;
-            border-image: initial;
-
-            &:hover {
-              background: #175b92;
-              border-style: inset;
-            }
+          ion-button {
+            --border-radius: 0px;
+            width: 100%;
+            --background: #616161b9;
+            --color: #ffffff;
+            --background-hover: #6e6e6eb9;
+            --transition: 0.5s all;
+            --background-focused: #6e6e6eb9;
+            --background-activated: #6e6e6eb9;
           }
         }
       }
@@ -865,7 +793,7 @@ page-change-user {
               }
             }
           }
-          .panel_firma {    
+          .panel_firma {
             border: 5px outset #ab9a9a;
             border-style: outset;
             box-sizing: border-box;
@@ -999,159 +927,19 @@ page-change-user {
       }
     }
     .form_manual {
-      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-      display: -ms-flexbox; /* TWEENER - IE 10 */
-      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
-      flex-direction: column;
-      flex-grow: 1;
-      padding: 10px;
-      overflow: scroll;
-      overflow-x: hidden;
-      align-items: center;
-
-      .explicacion {
-        margin-bottom: 10px;
-        width: 90%;
-        text-align: center;
-      }
-      .item {
-        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-        display: -ms-flexbox; /* TWEENER - IE 10 */
-        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
-        flex-direction: column;
-        max-width: 400px;
-        margin-bottom: 10px;
-        width: 90%;
-
-        label {
-          color: #777777;
-          display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-          display: -ms-flexbox; /* TWEENER - IE 10 */
-          display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-          display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
-          justify-content: space-between;
-
-          .label_error {
-            color: #ff3838;
-            margin-left: 20px;
-            font-size: 15px;
-          }
+      ion-button {
+        --border-radius: 0px;
+        width: 100%;
+        --background: #616161b9;
+        --color: #ffffff;
+        --background-hover: #6e6e6eb9;
+        --transition: 0.5s all;
+        --background-focused: #6e6e6eb9;
+        --background-activated: #6e6e6eb9;
+        .error_button {
+          color: #8d0303;
+          --transition: 0.5s all;
         }
-        input {
-          height: 30px;
-          margin: 0px;
-          margin-bottom: 5px;
-          border: 1px solid $border;
-          text-align: center;
-          background-color: transparent;
-          background-image: linear-gradient(to bottom, $fondo, #ffffff0c);
-          border-bottom: 1px solid #cccccc;
-          transition: all ease-out 0.3s;
-          box-sizing: border-box;
-          color: #000000;
-
-          &:focus {
-            font-size: 20px;
-            background-color: #ffffff0c;
-            border: 1px solid #cccccc;
-          }
-        }
-        .error {
-          background-image: linear-gradient(to bottom, $fondo, #ff000041);
-
-          &:focus {
-            font-size: 20px;
-            background-image: none;
-            background-color: #ff000041;
-            border: 1px solid #cccccc;
-          }
-        }
-      }
-      .typeOfDocument {
-        select {
-          padding: 5px;
-          background-color: $fondo;
-          border-color: $border;
-          border-bottom-color: #cccccc;
-          text-align: center;
-        }
-      }
-      .sex {
-        select {
-          padding: 5px;
-          background-color: $fondo;
-          border-color: $border;
-          border-bottom-color: #cccccc;
-          text-align: center;
-        }
-      }
-      .boton_continuar {
-        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-        display: -ms-flexbox; /* TWEENER - IE 10 */
-        display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-        display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
-        flex-grow: 1;
-        justify-content: center;
-        align-items: center;
-        padding-bottom: 20px;
-        padding-top: 20px;
-        margin-bottom: 20px;
-
-        button {
-          padding: 5px 55px;
-          font-size: 18px;
-          min-width: 150px;
-          background: #e4e4e4;
-          border-radius: 5px;
-          border-width: 2px;
-          border-style: outset;
-          border-image: initial;
-          color: #545454;
-          font-weight: bold;
-          transition: 0.5s all;
-
-          &:hover {
-            background: #bbbbbb;
-          }
-
-          &:active {
-            border-style: inset;
-          }
-        }
-        .boton_error {
-          background: #ff000041;
-          &:hover {
-            background: #c5000041;
-          }
-
-          &:active {
-            border-style: inset;
-          }
-        }
-      }
-    }
-    .progreso {
-      display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-      display: -ms-flexbox; /* TWEENER - IE 10 */
-      display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-      display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
-      height: 20px; /* Can be anything */
-      position: relative;
-      background: #a1a1a15d;
-      box-shadow: inset 0 -1px 1px #ffffff4d;
-      span {
-        display: block;
-        height: 20px;
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
-        background-color: rgba(43, 194, 83, 0.479);
-        background-image: linear-gradient(to center bottom, #2bc253 37%, rgb(84, 240, 84) 69%);
-        box-shadow: inset 0 2px 9px #ffffff4d, inset 0 -2px 6px rgba(0, 0, 0, 0.4);
-        position: relative;
-        overflow: hidden;
-        transition: 0.5s width;
       }
     }
 
@@ -1272,6 +1060,31 @@ page-change-user {
   }
 }
 
+ion-footer {
+  .progreso {
+    display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+    display: -ms-flexbox; /* TWEENER - IE 10 */
+    display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+    display: flex; /* NEW, Spec - Firefox, Chrome, Opera */
+    height: 20px; /* Can be anything */
+    position: relative;
+    background: #a1a1a15d;
+    box-shadow: inset 0 -1px 1px #ffffff4d;
+    span {
+      display: block;
+      height: 20px;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      background-color: rgba(43, 194, 83, 0.479);
+      background-image: linear-gradient(to center bottom, #2bc253 37%, rgb(84, 240, 84) 69%);
+      box-shadow: inset 0 2px 9px #ffffff4d, inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+      transition: 0.5s width;
+    }
+  }
+}
+
 /* Personalización de checkbox */
 
 /* The container */
@@ -1340,12 +1153,13 @@ page-change-user {
 }
 
 @media (max-width: 515px) {
-  .huesped-box {
+  ion-content {
     .container_fastcheckin {
       .introduccion {
-        padding-top: 10px;
-        p {
-          padding-bottom: 15px;
+        label {
+          width: auto;
+          p {
+          }
         }
       }
       .formulario {
