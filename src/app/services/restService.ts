@@ -78,6 +78,21 @@ export class RestWS extends AbstractWS {
       });
   }
 
+  public getAllOfClientDate(idHotel: string, fechaIni, fechaFin) {
+    const fd = new HttpParams()
+    .set('client',idHotel)
+    .set('fechaini',fechaIni)
+    .set('fechafin',fechaFin);
+    return this.makePostRequest(this.path + 'utils/getAllOfClientDate/', fd)
+      .then(res => {
+        return Promise.resolve(res);
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+        return Promise.reject(error);
+      });
+  }
+
   public getHotel(idCliente: string) {
     const fd = new HttpParams()
     .set('idCliente',idCliente);

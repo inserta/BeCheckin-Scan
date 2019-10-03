@@ -48,6 +48,20 @@ export class DataManagement {
       return Promise.reject('error');
     })
   }
+  
+  /**
+   * Función optimizada para obtener todos los datos necesarios del cliente y reservas
+   * @param id Id del hotel 
+   * @param fechaIni Fecha inicial de búsqueda para la reserva (yyyy-mm-dd)
+   * @param fechaFin Fecha final de búsqueda para la reserva (yyyy-mm-dd)
+   */
+  public getAllOfClientByDate(id: string, fechaIni: string, fechaFin: string): Promise<any> {
+    return this.restService.getAllOfClientDate(id, fechaIni, fechaFin).then(data => {
+      return Promise.resolve(data);
+    }).catch(error => {
+      return Promise.reject('error');
+    })
+  }
 
   /**
    * Obtener datos del hotel
