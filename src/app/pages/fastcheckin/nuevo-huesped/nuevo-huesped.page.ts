@@ -9,11 +9,12 @@ import { TranslateService } from '@ngx-translate/core';
 // import { ApiComponents } from '../../components/api-components'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // import { StorageService } from '../../app/services/service.storage';
-import { AlertController, NavController } from '@ionic/angular';
+import { AlertController, NavController, ModalController } from '@ionic/angular';
 // import { AuthProvider } from '../../providers/auth/auth';
 import { GoogleCloudVisionServiceProvider } from '../../../providers/vision/google-cloud-vision-service';
 // import { DNIValidator } from '../../validators/dni';
 // import { ImageViewerController } from "ionic-img-viewer";
+import { ImageViewerComponent } from '../../../components/image-viewer/image-viewer.component';
 
 // let moment = require('moment');
 // import moment from 'moment';
@@ -26,6 +27,7 @@ import { DataManagement } from 'src/app/services/dataManagement';
 // var moment = require('moment');
 import * as moment from 'moment';
 import * as i18nIsoCountries from 'i18n-iso-countries';
+import { CookieService } from 'ngx-cookie-service';
 // import * as i18nIsoEsp from 'i18n-iso-countries/langs/es.json';
 
 @Component({
@@ -157,13 +159,16 @@ export class NuevoHuespedPage implements OnInit {
     // private events: Events,
     // private service: ServiceAPI,
     // private modalCtrl: ModalController,
+    public modalController: ModalController,
     private vision: GoogleCloudVisionServiceProvider,
     private cryptProvider: CryptProvider,
-    // public imageViewerCtrl: ImageViewerController,
     private router: Router,
     private loader: LoadingService,
     private route: ActivatedRoute,
-    private dm: DataManagement
+    private dm: DataManagement,
+    private document: DocumentViewer,
+    private fileOpener: FileOpener,
+    private cookieService: CookieService
   ) {
 
   }
@@ -172,6 +177,8 @@ export class NuevoHuespedPage implements OnInit {
     this.inicializaHuesped();
 
     this.inicializaReserva();
+
+    this.inicializaCondiciones();
 
     this.manualForm = this.formBuilder.group({
       numIdentificacion: ['', Validators.compose([Validators.required])],
@@ -241,6 +248,10 @@ export class NuevoHuespedPage implements OnInit {
     this.ready = false;
     this.sinPermisos = false;
     this.idReserva = this.route.snapshot.paramMap.get('idReserva');
+  }
+  
+  inicializaCondiciones() {
+    this.condiciones_hotel = this.globalService.recepcionista.hotel.doc ? this.globalService.recepcionista.hotel.doc.doc : "";
   }
 
   filtro() {
@@ -824,11 +835,6 @@ export class NuevoHuespedPage implements OnInit {
 
   }
 
-  anotherGuest() {
-    //TODO: Restablecer todos los datos y empezar formulario de nuevo.
-
-  }
-
   vew_conditions() {
     let archivo = "";
     //this.navCtrl.push('pdf', {"archivo": "data:application/pdf;base64, "+this.condiciones_hotel, animate: true, direction: 'backward' });
@@ -837,19 +843,78 @@ export class NuevoHuespedPage implements OnInit {
       archivo = "data:application/pdf;base64, ";
     }
     //TODO: Visualizar condiciones
-    // this.navCtrl.push('pdf', { "archivo": archivo + this.condiciones_hotel, animate: true, direction: 'backward' });
+    // this.router.navigate('pdf', { "archivo": archivo + this.condiciones_hotel, animate: true, direction: 'backward' });
+    let options: DocumentViewerOptions = {
+      title: 'Términos y condiciones'
+    }
+    this.document.viewDocument(archivo + this.condiciones_hotel, 'application/pdf', options);
+
   }
 
   view_policysecurity() {
     //TODO: Visualizar condiciones
     // this.navCtrl.push('pdf', { "archivo": "policysecurity_pdf", animate: true, direction: 'backward' });
+    // let options: DocumentViewerOptions = {
+    //   title: 'Política de seguridad'
+    // }
+    // this.document.viewDocument('https://dashboard.becheckin.com/documentos/policysecurity.pdf', 'application/pdf', options);
+    this.fileOpener.open('https://dashboard.becheckin.com/documentos/policysecurity_es.pdf', 'application/pdf')
+    .then(() => console.log('File is opened'))
+    .catch(e => console.log('Error opening file', e));
+  
+    this.fileOpener.showOpenWithDialog('https://dashboard.becheckin.com/documentos/policysecurity_es.pdf', 'application/pdf')
+      .then(() => console.log('File is opened'))
+      .catch(e => console.log('Error opening file', e));
   }
+  
+  async viewImage(src: string, title: string = '', description: string = '', tipo: string = '') {
+    const modal = await this.modalController.create({
+      component: ImageViewerComponent,
+      componentProps: {
+        src: src,
+        titulo: title,
+        descripcion: description,
+        tipo: tipo
+      },
+      cssClass: 'modal-fullscreen',
+      keyboardClose: true,
+      showBackdrop: true
+    });
 
-  // Visualizar foto:
-  visualizaFoto(imagen) {
-    //TODO: Visualizar foto
-    // const viewer = this.imageViewerCtrl.create(imagen);
-    // viewer.present();
+    return await modal.present();
+  }
+  
+  async viewPDF(tipo_doc: string = '') {
+    let src: string = '';
+    let title: string = 'Documento';
+    let description: string = '';
+    let tipo: string = 'pdf';
+    let language = this.cookieService.get('langRecepApp');
+    if(tipo_doc=='privacidad'){
+      description = "Política de privacidad";
+      src = 'https://dashboard.becheckin.com/documentos/policysecurity_'+language+'.pdf';
+    } else if (tipo_doc=='condiciones'){
+      description = "Términos y condiciones";
+      if (this.condiciones_hotel.substring(0, 4) != "http") {
+        src = "data:application/pdf;base64, "+this.condiciones_hotel;
+      } else {
+        src = this.condiciones_hotel;
+      }
+    }
+    const modal = await this.modalController.create({
+      component: ImageViewerComponent,
+      componentProps: {
+        src: src,
+        titulo: title,
+        descripcion: description,
+        tipo: tipo
+      },
+      cssClass: 'modal-fullscreen',
+      keyboardClose: true,
+      showBackdrop: true
+    });
+
+    return await modal.present();
   }
 
   // Borra foto:
@@ -1027,12 +1092,10 @@ export class NuevoHuespedPage implements OnInit {
     }
     // FGV: Comprobación fecha expedición y fecha de nacimiento:
     // FEcha expedición franja :   30 años atrás y tope fecha checkin
-    // Fecha de nacimiento:  100 años atrás y tope fecha checkin
+    // Fecha de nacimiento:  120 años atrás y tope fecha checkin
     // CONTROL FECHA DE EXPEDICIÓN:
-    if (this.fastcheckin.date_exp) {
-      //TODO: Obtener fecha Inicio checkin
-      let fechainicio_checkin = JSON.parse('{"start": "05/05/2019","finish": "05/05/2019"}');
-      fechainicio_checkin = new Date(fechainicio_checkin.start);
+    if (this.fastcheckin.date_exp) {      
+      let fechainicio_checkin = new Date(this.datosReserva.reserva.roomReservations[0].checkin);
       let exp = new Date(this.fastcheckin.date_exp);
       let anyo30 = new Date();
       anyo30.setFullYear(anyo30.getFullYear() - 30);
@@ -1047,13 +1110,11 @@ export class NuevoHuespedPage implements OnInit {
     }
     // CONTROL FECHA DE NACIMIENTO:
     if (this.fastcheckin.birthday) {
-      //TODO: Obtener fecha Inicio checkin
-      let fechainicio_checkin = JSON.parse('{"start": "05/05/2019","finish": "05/05/2019"}');
-      fechainicio_checkin = new Date(fechainicio_checkin.start);
+      let fechainicio_checkin = new Date(this.datosReserva.reserva.roomReservations[0].checkin);
       let exp = new Date(this.fastcheckin.birthday);
-      let anyo100 = new Date();
-      anyo100.setFullYear(anyo100.getFullYear() - 100);
-      if (exp < anyo100) {
+      let anyo120 = new Date();
+      anyo120.setFullYear(anyo120.getFullYear() - 120);
+      if (exp < anyo120) {
         this.alerta(this.translate.instant("HUESPED.CONTROL_FECHA_NACIMIENTO_TITULO"), this.translate.instant("HUESPED.CONTROL_FECHA_NACIMIENTO_INFERIOR"));
         result = false;
       }

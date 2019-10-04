@@ -24,14 +24,18 @@ import { GlobalService } from './services/globalService';
 import { DataManagement } from './services/dataManagement';
 import { CryptProvider } from './providers/crypt/crypt';
 import { DateFormatPipe } from './pipes/dateFormat/dateFormatPipe';
+import { ImageViewerComponent } from './components/image-viewer/image-viewer.component';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, '../assets/i18n/', '.json');
 }
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
+  declarations: [
+    AppComponent,
+    ImageViewerComponent
+  ],
+  entryComponents: [ImageViewerComponent],
   imports: [
     BrowserModule, 
     IonicModule.forRoot(), 

@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()"> <ion-icon slot="icon-only" name="close"></ion-icon> </ion-button>
+    </ion-buttons>
+    <ion-title>{{ titulo }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [forceOverscroll]="false" fullscreen="true">
+  <ion-slides [options]="slideOpts">
+    <ion-slide>
+      <div class="swiper-zoom-container">
+        <img *ngIf="tipo=='img'" [src]="src" height="100vh" />
+        <iframe *ngIf="tipo=='pdf'" [src]="sanitizer.bypassSecurityTrustResourceUrl(src)" width="100%" height="100%" type="application/pdf" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+      </div>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
+
+<ion-footer *ngIf="descripcion.length">
+  <ion-toolbar class="ion-text-center">
+    <ion-text>{{ descripcion }}</ion-text>
+  </ion-toolbar>
+</ion-footer>

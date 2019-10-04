@@ -29,16 +29,18 @@ export class AppComponent {
       console.log(window.navigator.language);
 
       this.translateService.setDefaultLang('en');
-      if (this.cookieService.check('langControlHora')) {
-        let language = this.cookieService.get('langControlHora');
+      if (this.cookieService.check('langRecepApp')) {
+        let language = this.cookieService.get('langRecepApp');
         this.translateService.use(language);
       } else {
         if(window.navigator.language){
           if( window.navigator.language=='es-ES' || window.navigator.language=='es-US' ){
             this.translateService.use('es');
+            this.cookieService.set('langRecepApp', 'es');
           }
         } else {
           this.translateService.use('en');
+          this.cookieService.set('langRecepApp', 'en');
         }
       }
     });
