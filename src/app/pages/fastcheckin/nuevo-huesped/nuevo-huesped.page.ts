@@ -166,8 +166,6 @@ export class NuevoHuespedPage implements OnInit {
     private loader: LoadingService,
     private route: ActivatedRoute,
     private dm: DataManagement,
-    private document: DocumentViewer,
-    private fileOpener: FileOpener,
     private cookieService: CookieService
   ) {
 
@@ -833,38 +831,6 @@ export class NuevoHuespedPage implements OnInit {
       this.photosPassportSubida[0] = this.files[0];
     }
 
-  }
-
-  vew_conditions() {
-    let archivo = "";
-    //this.navCtrl.push('pdf', {"archivo": "data:application/pdf;base64, "+this.condiciones_hotel, animate: true, direction: 'backward' });
-    // Para archivos en Base64:
-    if (this.condiciones_hotel.substring(0, 4) != "http") {
-      archivo = "data:application/pdf;base64, ";
-    }
-    //TODO: Visualizar condiciones
-    // this.router.navigate('pdf', { "archivo": archivo + this.condiciones_hotel, animate: true, direction: 'backward' });
-    let options: DocumentViewerOptions = {
-      title: 'Términos y condiciones'
-    }
-    this.document.viewDocument(archivo + this.condiciones_hotel, 'application/pdf', options);
-
-  }
-
-  view_policysecurity() {
-    //TODO: Visualizar condiciones
-    // this.navCtrl.push('pdf', { "archivo": "policysecurity_pdf", animate: true, direction: 'backward' });
-    // let options: DocumentViewerOptions = {
-    //   title: 'Política de seguridad'
-    // }
-    // this.document.viewDocument('https://dashboard.becheckin.com/documentos/policysecurity.pdf', 'application/pdf', options);
-    this.fileOpener.open('https://dashboard.becheckin.com/documentos/policysecurity_es.pdf', 'application/pdf')
-    .then(() => console.log('File is opened'))
-    .catch(e => console.log('Error opening file', e));
-  
-    this.fileOpener.showOpenWithDialog('https://dashboard.becheckin.com/documentos/policysecurity_es.pdf', 'application/pdf')
-      .then(() => console.log('File is opened'))
-      .catch(e => console.log('Error opening file', e));
   }
   
   async viewImage(src: string, title: string = '', description: string = '', tipo: string = '') {
