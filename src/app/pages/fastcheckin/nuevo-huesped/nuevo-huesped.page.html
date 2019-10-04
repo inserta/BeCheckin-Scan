@@ -197,51 +197,8 @@
     </div>
     <!-- FIN PASO 5 -->
 
-
-    <ion-list *ngIf="paso == 0 && !readyForm">
-      <ion-item>
-        <ion-label>
-          <h3>
-            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-          </h3>
-          <p>
-            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-          </p>
-          <p>
-            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-          </p>
-        </ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-label>
-          <h3>
-            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-          </h3>
-          <p>
-            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-          </p>
-          <p>
-            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-          </p>
-        </ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-label>
-          <h3>
-            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-          </h3>
-          <p>
-            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-          </p>
-          <p>
-            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-          </p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-
     <!-- PASO 0 (Especial, para formulario manual de fastcheckin) -->
-    <form *ngIf="paso == 0 && readyForm" [formGroup]="manualForm" class="form_manual"
+    <form *ngIf="paso == 0" [formGroup]="manualForm" class="form_manual"
       (ngSubmit)="guardarDatosManuales()">
 
       <!-- <ion-item> -->

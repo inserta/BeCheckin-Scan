@@ -262,4 +262,19 @@ export class DataManagement {
       });
   }
 
+  /**
+   * Enviar push de datos a masteryield.
+   * @param downloadCode 
+   */
+  public sendPushToMasteryield(downloadCode): Promise<any> {
+    return this.restService
+      .sendPushToMasteryield(downloadCode)
+      .then(data => {
+        return Promise.resolve(data);
+      })
+      .catch(error => {
+        return Promise.reject('error');
+      });
+  }
+
 }

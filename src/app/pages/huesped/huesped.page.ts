@@ -36,9 +36,13 @@ export class HuespedPage implements OnInit {
         this.nav.navigateForward("/login");
       } else {
         //Filtramos las reservas por su id para obtener la reserva seleccionada
-        let datosReservas = this.globalService.datosReservas.filter(datosReserva =>
-          datosReserva.reserva.id.toString() == this.idReserva
-        )
+        let datosReservas = this.globalService.datosReservas.filter(datosReserva => {
+          if (datosReserva.reserva.id) {
+            return datosReserva.reserva.id.toString() == this.idReserva;
+          } else {
+            return false;
+          }
+        })
         //Puesto que nos devuelve una lista de un único elemento, lo sacamos de la lista y lo guardamos en una variable.
         this.datosReserva = datosReservas[0];
         if (this.datosReserva) {

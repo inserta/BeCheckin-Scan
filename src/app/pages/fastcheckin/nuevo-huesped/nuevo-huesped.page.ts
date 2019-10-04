@@ -191,9 +191,13 @@ export class NuevoHuespedPage implements OnInit {
         this.navCtrl.navigateForward("/login");
       } else {
         //Filtramos las reservas por su id para obtener la reserva seleccionada
-        let datosReservas = this.globalService.datosReservas.filter(datosReserva =>
-          datosReserva.reserva.id.toString() == this.idReserva
-        )
+        let datosReservas = this.globalService.datosReservas.filter(datosReserva => {
+          if (datosReserva.reserva.id) {
+            return datosReserva.reserva.id.toString() == this.idReserva;
+          } else {
+            return false;
+          }
+        })
         //Puesto que nos devuelve una lista de un único elemento, lo sacamos de la lista y lo guardamos en una variable.
         this.datosReserva = datosReservas[0];
         this._idKeyRoom = this.datosReserva.reserva._id;
@@ -700,15 +704,36 @@ export class NuevoHuespedPage implements OnInit {
         let fastcheckin: FastCheckin = this.fastcheckin;
         let mensaje = "<!doctype html><html><head><title>Becheckin<\/title><style>.cuerpo{margin: 2%;background: #003581;border-radius: 10px;border: 2px solid #444;box-shadow: 0px 0px 10px 4px #888888;color:#E5E5E5;padding: 1%;}.imagen{margin-top: 10px;margin-bottom: 5px;display: flex;justify-content: center;align-items: center;}img{margin: 0 auto; border-radius: 5px;overflow: hidden;}.bienvenida{margin-left: 3%;margin-right: 3%;font-size: 20px;font-weight: bold;}.nombre{color: #f9ffac;}.reserva{font-weight: bold;color: #ecffbf;}.texto{margin-top: 20px;margin-left: 6%;margin-right: 6%;font-size: 18px;}.fecha1{color: #c4ffb5;}.fecha2{color: #ffb5b5;}.info{margin-bottom: 10px;}.fechas{margin-bottom: 10px;}.datos{margin-bottom: 10px;}.dato{font-size: 14px;margin: 5px 2%;}.texto_final{margin-bottom: 30px;font-size: 14px;font-style: italic;}a{color: #feffce;}.pie{text-align: center;font-style: italic;color: #7e7e7e;}<\/style><\/head><body><div class='cuerpo'><div class='imagen'><img src='https:\/\/dashboard.becheckin.com\/imgs\/logo\/inserta.png' width='50' height='50' \/><\/div><div class='bienvenida'>Hola <span class='nombre'>" + (nombreHuesped ? nombreHuesped : "") + "<\/span><\/div><div class='texto'><div class='info'>Tu reserva <span class='reserva'>" + (nombreReserva ? nombreReserva : "") + "<\/span> tiene un nuevo FastCheckin.<\/div><div class='fechas'>Entrada <span class='fecha1'>" + (fechaInicio ? fechaInicio : "") + "<\/span> | Salida <span class='fecha2'>" + (fechaFin ? fechaFin : "") + "<\/span><\/div><div class='datos'>Datos huésped:<div class='dato'>Nombre: " + (fastcheckin.name ? fastcheckin.name : "") + "<\/div><div class='dato'>Apellidos: " + (fastcheckin.surnameOne ? fastcheckin.surnameOne : "") + "<\/div><div class='dato'>Fecha Nacimiento: " + (fastcheckin.birthday ? fastcheckin.birthday : "") + "<\/div><div class='dato'>Fecha Expedicion: " + (fastcheckin.date_exp ? fastcheckin.date_exp : "") + "<\/div><div class='dato'>Dni: " + (fastcheckin.dni.identifier ? fastcheckin.dni.identifier : "") + "<\/div><div class='dato'>Pasaporte: " + (fastcheckin.passport.identifier ? fastcheckin.passport.identifier : "") + "<\/div><div class='dato'>Nacionalidad: " + (fastcheckin.nationality ? fastcheckin.nationality : "") + "<\/div><div class='dato'>Sexo: " + (fastcheckin.sex ? fastcheckin.sex : "") + "<\/div><div class='dato'>Email: " + (fastcheckin.email ? fastcheckin.email : "") + "<\/div><\/div><div class='texto_final'>Puedes consultar los datos FastCheckin en tu dashboard: <a href='https:\/\/dashboard.becheckin.com'target='_blank' style='color:#feffce;'>https:\/\/dashboard.becheckin.com <\/a><br \/>Nos tienes siempre a tu disposición en Booking@becheckin.com y en el teléfono +34 627 07 41 73.<\/div><\/div><\/div><\/body><footer><hr \/><div class='pie'>Atentamente, BeCheckin Team.<\/div><\/footer><\/html>";
         this.dm.sendGenericMail(asunto, mensaje, mailTo, "", cco).then(res => {
+          this.enviaPushMasterYield();
           console.log(res);
           if (this.loader.isLoading) {
             this.loader.dismiss();
           }
           this.checkKeyPermisions();
         });
+        
         // })
 
       });
+  }
+
+  private enviaPushMasterYield(){
+    let nombrePMS = '';
+    let hotel = this.globalService.recepcionista.hotel;
+    console.log("hotel", hotel);
+    if(hotel.pms){
+      if(hotel.pms.pms_user){
+        nombrePMS = hotel.pms.pms_user.toUpperCase();
+      }
+    }
+    if(this.datosReserva.pms && nombrePMS == ''){
+      nombrePMS = this.datosReserva.pms.toUpperCase();
+    }
+    if(nombrePMS=='MASTERYIELD'){
+      this.dm.sendPushToMasteryield(this.datosReserva.reserva.id).then(res => {
+        console.log("push masteryield",res);
+      });
+    }
   }
 
   private muestraFechaString(fecha: Date): string {
@@ -888,11 +913,6 @@ export class NuevoHuespedPage implements OnInit {
     this.erroresRegistroManual = new ErroresFormularioRegistro();
     this.fastcheckin.typeOfDocument = (this.tipoDoc == 'dni') ? 'D' : 'P';
     this.fastcheckin.sex = "M";
-    //Para la carga del formulario, dejamos que todos los datos carguen primero.
-    this.readyForm = false;
-    setTimeout(() => {
-      this.readyForm = true;
-    }, 500);
     this.vuelcaDatosFastcheckin();
     //Generamos un código aleatorio de 20 caracteres.
     let cadena = this.globalService.generarCadenaAleatoria(20);
