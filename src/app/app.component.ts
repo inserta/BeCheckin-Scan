@@ -37,6 +37,9 @@ export class AppComponent {
           if( window.navigator.language=='es-ES' || window.navigator.language=='es-US' ){
             this.translateService.use('es');
             this.cookieService.set('langRecepApp', 'es');
+          } else {
+            this.translateService.use('en');
+            this.cookieService.set('langRecepApp', 'en');
           }
         } else {
           this.translateService.use('en');

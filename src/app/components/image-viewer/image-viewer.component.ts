@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { DomSanitizer } from '@angular/platform-browser';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-image-viewer',
@@ -19,11 +20,14 @@ export class ImageViewerComponent implements OnInit {
 
   constructor(
     private modalController: ModalController,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    private loader: LoadingService
     ) {}
 
   ngOnInit() {
-
+    if(this.loader.isLoading){
+      this.loader.dismiss();
+    }
   }
 
   closeModal() {

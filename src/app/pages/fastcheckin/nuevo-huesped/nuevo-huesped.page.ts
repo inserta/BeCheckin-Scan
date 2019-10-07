@@ -140,7 +140,7 @@ export class NuevoHuespedPage implements OnInit {
     return o1 && o2 ? o1 === o2.id : false;
   };
   compareWith = this.compareWithFn;
-  
+
 
   constructor(
     public navCtrl: NavController,
@@ -247,9 +247,11 @@ export class NuevoHuespedPage implements OnInit {
     this.sinPermisos = false;
     this.idReserva = this.route.snapshot.paramMap.get('idReserva');
   }
-  
+
   inicializaCondiciones() {
-    this.condiciones_hotel = this.globalService.recepcionista.hotel.doc ? this.globalService.recepcionista.hotel.doc.doc : "";
+    //TODO: Obtener los términos y condiciones reales
+    // this.condiciones_hotel = this.globalService.recepcionista.hotel.doc ? this.globalService.recepcionista.hotel.doc.doc : "";
+    this.condiciones_hotel = '';
   }
 
   filtro() {
@@ -720,27 +722,27 @@ export class NuevoHuespedPage implements OnInit {
           }
           this.checkKeyPermisions();
         });
-        
+
         // })
 
       });
   }
 
-  private enviaPushMasterYield(){
+  private enviaPushMasterYield() {
     let nombrePMS = '';
     let hotel = this.globalService.recepcionista.hotel;
     console.log("hotel", hotel);
-    if(hotel.pms){
-      if(hotel.pms.pms_user){
+    if (hotel.pms) {
+      if (hotel.pms.pms_user) {
         nombrePMS = hotel.pms.pms_user.toUpperCase();
       }
     }
-    if(this.datosReserva.pms && nombrePMS == ''){
+    if (this.datosReserva.pms && nombrePMS == '') {
       nombrePMS = this.datosReserva.pms.toUpperCase();
     }
-    if(nombrePMS=='MASTERYIELD'){
+    if (nombrePMS == 'MASTERYIELD') {
       this.dm.sendPushToMasteryield(this.datosReserva.reserva.id).then(res => {
-        console.log("push masteryield",res);
+        console.log("push masteryield", res);
       });
     }
   }
@@ -832,8 +834,9 @@ export class NuevoHuespedPage implements OnInit {
     }
 
   }
-  
+
   async viewImage(src: string, title: string = '', description: string = '', tipo: string = '') {
+    this.loader.present();
     const modal = await this.modalController.create({
       component: ImageViewerComponent,
       componentProps: {
@@ -849,38 +852,74 @@ export class NuevoHuespedPage implements OnInit {
 
     return await modal.present();
   }
-  
+
   async viewPDF(tipo_doc: string = '') {
+    this.loader.present();
     let src: string = '';
     let title: string = 'Documento';
     let description: string = '';
     let tipo: string = 'pdf';
     let language = this.cookieService.get('langRecepApp');
-    if(tipo_doc=='privacidad'){
+    if (tipo_doc == 'privacidad') {
       description = "Política de privacidad";
-      src = 'https://dashboard.becheckin.com/documentos/policysecurity_'+language+'.pdf';
-    } else if (tipo_doc=='condiciones'){
+      src = 'https://dashboard.becheckin.com/documentos/policysecurity_' + language + '.pdf';
+    } else if (tipo_doc == 'condiciones') {
       description = "Términos y condiciones";
       if (this.condiciones_hotel.substring(0, 4) != "http") {
-        src = "data:application/pdf;base64, "+this.condiciones_hotel;
+        src = "data:application/pdf;base64, " + this.condiciones_hotel;
       } else {
         src = this.condiciones_hotel;
       }
     }
-    const modal = await this.modalController.create({
-      component: ImageViewerComponent,
-      componentProps: {
-        src: src,
-        titulo: title,
-        descripcion: description,
-        tipo: tipo
-      },
-      cssClass: 'modal-fullscreen',
-      keyboardClose: true,
-      showBackdrop: true
-    });
+    let oS = this.getMobileOperatingSystem();
 
-    return await modal.present();
+    let isPhone = oS != 'unknown';
+
+    if(isPhone){
+      this.loader.dismiss();
+      window.open('https://dashboard.becheckin.com/documentos/policysecurity_' + language + '.pdf',"_blank");
+    } else {
+      const modal = await this.modalController.create({
+        component: ImageViewerComponent,
+        componentProps: {
+          src: src,
+          titulo: title,
+          descripcion: description,
+          tipo: tipo
+        },
+        cssClass: 'modal-fullscreen',
+        keyboardClose: true,
+        showBackdrop: true
+      });
+      return await modal.present();
+    }
+
+  }
+
+  /**
+   * Determine the mobile operating system.
+   * This function returns one of 'iOS', 'Android', 'Windows Phone', or 'unknown'.
+   *
+   * @returns {String}
+   */
+  getMobileOperatingSystem() {
+    let userAgent = navigator.userAgent || navigator.vendor || window.navigator.userAgent;
+
+    // Windows Phone must come first because its UA also contains "Android"
+    if (/windows phone/i.test(userAgent)) {
+      return "Windows Phone";
+    }
+
+    if (/android/i.test(userAgent)) {
+      return "Android";
+    }
+
+    // iOS detection from: http://stackoverflow.com/a/9039885/177710
+    if (/iPad|iPhone|iPod/.test(userAgent)) {
+      return "iOS";
+    }
+
+    return "unknown";
   }
 
   // Borra foto:
@@ -1060,7 +1099,7 @@ export class NuevoHuespedPage implements OnInit {
     // FEcha expedición franja :   30 años atrás y tope fecha checkin
     // Fecha de nacimiento:  120 años atrás y tope fecha checkin
     // CONTROL FECHA DE EXPEDICIÓN:
-    if (this.fastcheckin.date_exp) {      
+    if (this.fastcheckin.date_exp) {
       let fechainicio_checkin = new Date(this.datosReserva.reserva.roomReservations[0].checkin);
       let exp = new Date(this.fastcheckin.date_exp);
       let anyo30 = new Date();
@@ -1204,19 +1243,19 @@ export class NuevoHuespedPage implements OnInit {
 
   private recognizeFrontalDNIText() {
 
-    if(this.datosDniFrontal.apellido1){
+    if (this.datosDniFrontal.apellido1) {
       this.user.guest.fastcheckin.surnameOne = this.datosDniFrontal.apellido1;
     }
-    if(this.datosDniFrontal.apellido2){
+    if (this.datosDniFrontal.apellido2) {
       this.user.guest.fastcheckin.surnameTwo = this.datosDniFrontal.apellido2;
     }
-    if(this.datosDniFrontal.nombre){
+    if (this.datosDniFrontal.nombre) {
       this.user.guest.fastcheckin.name = this.datosDniFrontal.nombre;
     }
-    if(this.datosDniFrontal.pais){
+    if (this.datosDniFrontal.pais) {
       this.user.guest.fastcheckin.nationality = this.datosDniFrontal.pais;
     }
-    if(this.datosDniFrontal.documento){
+    if (this.datosDniFrontal.documento) {
       this.user.guest.fastcheckin.dni.identifier = this.datosDniFrontal.documento;
     }
 
