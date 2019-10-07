@@ -172,11 +172,8 @@ export class NuevoHuespedPage implements OnInit {
   }
 
   ngOnInit() {
-    this.inicializaHuesped();
 
     this.inicializaReserva();
-
-    this.inicializaCondiciones();
 
     this.manualForm = this.formBuilder.group({
       numIdentificacion: ['', Validators.compose([Validators.required])],
@@ -195,6 +192,11 @@ export class NuevoHuespedPage implements OnInit {
         this.sinPermisos = true;
         this.navCtrl.navigateForward("/login");
       } else {
+        
+        this.inicializaHuesped();
+
+        this.inicializaCondiciones();
+
         //Filtramos las reservas por su id para obtener la reserva seleccionada
         let datosReservas = this.globalService.datosReservas.filter(datosReserva => {
           if (datosReserva.reserva.id) {
@@ -250,8 +252,8 @@ export class NuevoHuespedPage implements OnInit {
 
   inicializaCondiciones() {
     //TODO: Obtener los términos y condiciones reales
-    // this.condiciones_hotel = this.globalService.recepcionista.hotel.doc ? this.globalService.recepcionista.hotel.doc.doc : "";
-    this.condiciones_hotel = '';
+    this.condiciones_hotel = this.globalService.documento ? this.globalService.documento.doc : "";
+    // this.condiciones_hotel = '';
   }
 
   filtro() {
@@ -914,7 +916,6 @@ export class NuevoHuespedPage implements OnInit {
       return "Android";
     }
 
-    // iOS detection from: http://stackoverflow.com/a/9039885/177710
     if (/iPad|iPhone|iPod/.test(userAgent)) {
       return "iOS";
     }

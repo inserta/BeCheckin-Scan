@@ -3,6 +3,14 @@ export class Recepcionista {
     usuario: string;
     hotel: any;
     bienvenida: boolean;
+    doc: Documento[];
+}
+
+export class Documento {
+    Created_date: string;
+    doc: string;
+    odCliente: string;
+    _id: string;
 }
 
 //Datos genéricos

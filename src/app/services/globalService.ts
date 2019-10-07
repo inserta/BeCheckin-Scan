@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { DataManagement } from '../services/dataManagement';
 import { Router } from '@angular/router';
-import { Recepcionista, Cookies, Hotel, DatosReserva, Reservation, RoomReservation, DatosReservaServidor, Booker } from '../models/data.model';
+import { Recepcionista, Cookies, Hotel, DatosReserva, Reservation, RoomReservation, DatosReservaServidor, Booker, Documento } from '../models/data.model';
 import { LoadingService } from './loading.service';
 import { CryptProvider } from '../providers/crypt/crypt';
 import { NavController } from '@ionic/angular';
@@ -19,6 +19,8 @@ export class GlobalService {
   datosReservas: DatosReserva[] = [];
 
   cookies: Cookies;
+
+  documento: Documento;
 
   constructor(
     private cookieService: CookieService,
@@ -129,6 +131,7 @@ export class GlobalService {
           let datosRecepcionista = res[1];
           this.hijos = datosRecepcionista.hijos;
           this.recepcionista = datosRecepcionista.recepcionista[0];
+          this.documento = datosRecepcionista.doc[0];
         } else {
           this.recepcionista = recepcionista;
         }
