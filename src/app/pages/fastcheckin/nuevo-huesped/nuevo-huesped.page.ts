@@ -192,7 +192,7 @@ export class NuevoHuespedPage implements OnInit {
         this.sinPermisos = true;
         this.navCtrl.navigateForward("/login");
       } else {
-        
+
         this.inicializaHuesped();
 
         this.inicializaCondiciones();
@@ -600,63 +600,69 @@ export class NuevoHuespedPage implements OnInit {
 
     try {
 
-      try {
-        this.vision.getLabels(image).subscribe((result: any) => {
-          console.log(result);
-          let res = result.responses[0].fullTextAnnotation;
-          if (res) {
-            //this.typeDocument = res.responses[0].fullTextAnnotation.text.indexOf('passport') >= 0 || res.responses[0].fullTextAnnotation.text.indexOf('PASSPORT') >= 0 ? 'P' : 'D';
+      this.vision.getLabels(image).subscribe((result: any) => {
+        console.log(result);
+        let res = result.responses[0].fullTextAnnotation;
+        if (res) {
+          //this.typeDocument = res.responses[0].fullTextAnnotation.text.indexOf('passport') >= 0 || res.responses[0].fullTextAnnotation.text.indexOf('PASSPORT') >= 0 ? 'P' : 'D';
 
-            if (this.tipoDoc == 'dni') {
-              console.log('dni')
-              this.dm.crearOcrDniTrasero(res.text, this.datosDniFrontal).then(respuestaDniTrasero => {
-                this.typeDocument = 'D';
-                this.datosDniTrasero = respuestaDniTrasero;
-                this.recognizeDNIText();
-              });
-            } else {
-              this.dm.crearOcrPasaporte(res.text).then(respuestaPasaporte => {
-                this.typeDocument = 'P';
-                this.datosPasaporte = respuestaPasaporte;
-                this.recognizePassportText();
-              });
-            }
+          if (this.tipoDoc == 'dni') {
+            console.log('dni')
+            this.dm.crearOcrDniTrasero(res.text, this.datosDniFrontal).then(respuestaDniTrasero => {
+              this.typeDocument = 'D';
+              this.datosDniTrasero = respuestaDniTrasero;
+              this.recognizeDNIText();
+            }).catch(error => {
+              console.log(error);
+              this.loader.dismiss();
+              this.errorScan = this.errorScan + 1;
+              if (this.errorScan >= 2) {
+                this.activarFormularioManual("Fallo en OCR DNI");
+              } else {
+                this.alerta(this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TITULO"), this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TEXTO"));
+              }
+            });
           } else {
-            this.loader.dismiss()
-            this.errorScan = this.errorScan + 1;
-            if (this.errorScan >= 2) {
-              this.activarFormularioManual();
-            } else {
-              this.alerta(this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TITULO"), this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TEXTO"));
-            }
+            this.dm.crearOcrPasaporte(res.text).then(respuestaPasaporte => {
+              this.typeDocument = 'P';
+              this.datosPasaporte = respuestaPasaporte;
+              this.recognizePassportText();
+            }).catch(error => {
+              console.log(error);
+              this.loader.dismiss();
+              this.errorScan = this.errorScan + 1;
+              if (this.errorScan >= 2) {
+                this.activarFormularioManual("Fallo en OCR Pasaporte");
+              } else {
+                this.alerta(this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TITULO"), this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TEXTO"));
+              }
+            });
           }
-        }, err => {
-          this.loader.dismiss();
-          console.log(err);
+        } else {
+          this.loader.dismiss()
           this.errorScan = this.errorScan + 1;
           if (this.errorScan >= 2) {
-            this.activarFormularioManual();
+            this.activarFormularioManual("Fallo al reconocer texto");
           } else {
             this.alerta(this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TITULO"), this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TEXTO"));
           }
-        });
-      } catch (error) {
+        }
+      }, err => {
         this.loader.dismiss();
-        console.log(error);
-        //this.showToast("FASTCHECKIN.NO_SCANNER");
+        console.log(err);
         this.errorScan = this.errorScan + 1;
         if (this.errorScan >= 2) {
-          this.activarFormularioManual();
+          this.activarFormularioManual("Fallo en Google");
         } else {
           this.alerta(this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TITULO"), this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TEXTO"));
         }
-      }
+      });
     } catch (error) {
       this.loader.dismiss();
       console.log(error);
       this.errorScan = this.errorScan + 1;
       if (this.errorScan >= 2) {
-        this.activarFormularioManual();
+        this.activarFormularioManual("Fallo general");
       } else {
         this.alerta(this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TITULO"), this.translate.instant("HUESPED.ERROR_RECO_IMAGEN_TEXTO"));
       }
@@ -877,9 +883,9 @@ export class NuevoHuespedPage implements OnInit {
 
     let isPhone = oS != 'unknown';
 
-    if(isPhone){
+    if (isPhone) {
       this.loader.dismiss();
-      window.open('https://dashboard.becheckin.com/documentos/policysecurity_' + language + '.pdf',"_blank");
+      window.open('https://dashboard.becheckin.com/documentos/policysecurity_' + language + '.pdf', "_blank");
     } else {
       const modal = await this.modalController.create({
         component: ImageViewerComponent,
@@ -949,13 +955,8 @@ export class NuevoHuespedPage implements OnInit {
   }
 
   confirmaImagenes() {
-    // let pasoAnterior = new PasoAnterior();
-    // pasoAnterior.paso = this.paso;
-    // pasoAnterior.progreso = this.progreso;
-    // this.pasosAnteriores.push(pasoAnterior);
-    //this.paso = 4;
     // Volcamos los datos obtenidos en el fastcheckin en caso de éxito:
-    this.activarFormularioManual();
+    this.activarFormularioManual("sin_error");
     // this.vuelcaDatosFastcheckin();
     if (this.tipoDoc == 'pasaporte') {
       this.progreso = "66\%";
@@ -979,7 +980,7 @@ export class NuevoHuespedPage implements OnInit {
   }
 
 
-  activarFormularioManual() {
+  activarFormularioManual(texto) {
     this.fastcheckin = new FastCheckin();
     this.erroresRegistroManual = new ErroresFormularioRegistro();
     this.fastcheckin.typeOfDocument = (this.tipoDoc == 'dni') ? 'D' : 'P';
@@ -989,27 +990,29 @@ export class NuevoHuespedPage implements OnInit {
     let cadena = this.globalService.generarCadenaAleatoria(20);
     //Subimos la imagen obtenida en la carpeta de errores con el nuevo código generado.
     // COMENTAMOS EL SIGUIENTE CÓDIGO PARA EVITAR EL ENVÍO DE ERRORES
-    // if (this.tipoDoc == "dni") {
-    //   this.globalService.subirArchivo(this.photosNifSubida[0], "huespedes/errores/dni", cadena).then(res => {
-    //     let asunto = "[TEST] Error al registrarse en webapp con DNI";
-    //     let mensaje = "<p>Se ha producido un error en el registro de un huésped</p><p>Se puede ver la imagen utilizada a través del siguiente enlace:</p><p>" + res + "</p>";
-    //     let mailTo = "javier@becheckin.com, amalia@becheckin.com";
-    //     //Enviamos informe de error.
-    //     this.dm.sendGenericMail(asunto, mensaje, mailTo).then(res => {
-    //       console.log("informe de errores enviado.");
-    //     });
-    //   });
-    // } else {
-    //   this.globalService.subirArchivo(this.photosPassportSubida[0], "huespedes/errores/passport", cadena).then(res => {
-    //     let asunto = "[TEST] Error al registrarse en webapp con Pasaporte";
-    //     let mensaje = "<p>Se ha producido un error en el registro de un huésped</p><p>Se puede ver la imagen utilizada a través del siguiente enlace:</p><p>" + res + "</p>";
-    //     let mailTo = "javier@becheckin.com, amalia@becheckin.com";
-    //     //Enviamos informe de error.
-    //     this.dm.sendGenericMail(asunto, mensaje, mailTo).then(res => {
-    //       console.log("informe de errores enviado.");
-    //     });
-    //   });
-    // }
+    if (this.tipoDoc == "dni") {
+      this.globalService.subirArchivo(this.photosNifSubida[1], "huespedes/errores/dni/" + cadena + "/frontal", cadena).then(res1 => {
+        this.globalService.subirArchivo(this.photosNifSubida[0], "huespedes/errores/dni/" + cadena + "/trasero", cadena).then(res2 => {
+          let asunto = "[TEST] Error al registrarse en webapp con DNI: " + texto;
+          let mensaje = "<p>Se ha producido un error en el registro de un huésped</p><p>Cara frontal:</p><p>" + res1 + "</p><p>Cara trasera:</p><p>" + res2 + "</p>"; 
+          let mailTo = "javier@becheckin.com, amalia@becheckin.com";
+          //Enviamos informe de error.
+          this.dm.sendGenericMail(asunto, mensaje, mailTo).then(res => {
+            console.log("informe de errores enviado.");
+          });
+        });
+      });
+    } else if (texto != 'sin_error') {
+      this.globalService.subirArchivo(this.photosPassportSubida[0], "huespedes/errores/passport", cadena).then(res => {
+        let asunto = "[TEST] Error al registrarse en webapp con Pasaporte: " + texto;
+        let mensaje = "<p>Se ha producido un error en el registro de un huésped</p><p>Se puede ver la imagen utilizada a través del siguiente enlace:</p><p>" + res + "</p>";
+        let mailTo = "javier@becheckin.com, amalia@becheckin.com";
+        //Enviamos informe de error.
+        this.dm.sendGenericMail(asunto, mensaje, mailTo).then(res => {
+          console.log("informe de errores enviado.");
+        });
+      });
+    }
     //Vamos al paso especial para mostrar formulario manual.
     let pasoAnterior = new PasoAnterior();
     pasoAnterior.paso = this.paso;
