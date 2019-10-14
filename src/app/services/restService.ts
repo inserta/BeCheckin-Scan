@@ -4,7 +4,7 @@ import { AbstractWS } from './abstractService';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { Credenciales } from '../models/form.model';
-import { DatosDniFrontal } from '../models/others.model';
+import { DatosDocumento } from '../models/others.model';
 
 @Injectable()
 export class RestWS extends AbstractWS {
@@ -238,26 +238,38 @@ export class RestWS extends AbstractWS {
       });
   }
   
-  public crearOcrDniTrasero(text, datosDniFrontal: DatosDniFrontal) {
+  public crearOcrDniTrasero(text, datosDocumento: DatosDocumento) {
     
     let fd = new HttpParams()
       .set('text',text);
       
-    if (datosDniFrontal) {
-      if(datosDniFrontal.nombre){
-        fd = fd.append('nombre', datosDniFrontal.nombre);
+    if (datosDocumento) {
+      if(datosDocumento.nombre){
+        fd = fd.append('nombre', datosDocumento.nombre);
       }
-      if(datosDniFrontal.apellido1){
-        fd = fd.append('apellido1', datosDniFrontal.apellido1);
+      if(datosDocumento.apellido1){
+        fd = fd.append('apellido1', datosDocumento.apellido1);
       }
-      if(datosDniFrontal.apellido2){
-        fd = fd.append('apellido2', datosDniFrontal.apellido2);
+      if(datosDocumento.apellido2){
+        fd = fd.append('apellido2', datosDocumento.apellido2);
       }
-      if(datosDniFrontal.documento){
-        fd = fd.append('documento', datosDniFrontal.documento);
+      if(datosDocumento.documento){
+        fd = fd.append('documento', datosDocumento.documento);
       }
-      if(datosDniFrontal.pais){
-        fd = fd.append('pais', datosDniFrontal.pais);
+      if(datosDocumento.pais){
+        fd = fd.append('pais', datosDocumento.pais);
+      }
+      if(datosDocumento.nacimiento){
+        fd = fd.append('nacimiento', datosDocumento.nacimiento);
+      }
+      if(datosDocumento.sexo){
+        fd = fd.append('genero', datosDocumento.sexo);
+      }
+      if(datosDocumento.expedicion){
+        fd = fd.append('expedicion', datosDocumento.expedicion);
+      }
+      if(datosDocumento.tipoDocumento){
+        fd = fd.append('tipoDocumento', datosDocumento.tipoDocumento);
       }
     }
 

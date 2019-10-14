@@ -86,6 +86,11 @@
           "NACIONALIDAD": "País de nacionalidad",
           "PROVINCIA": "Provincia",
           "CONTINUAR": "Continuar"
+      },
+      "DOCUMENTO_ERROR" : {
+          "TITULO": "Hemos detectado un error",
+          "DESCRIPCION_GENERAL": "El documento escaneado no ha podido ser procesado correctamente. Vuelva a intentarlo por favor.",
+          "DESCRIPCION_PASAPORTE": "Por favor, seleccione pasaporte como tipo de documento antes de escanear."
       }
     },
 	"INTERVALO": {
