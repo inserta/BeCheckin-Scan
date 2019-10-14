@@ -793,6 +793,8 @@ export class NuevoHuespedPage implements OnInit {
     this.user.guest.fastcheckin.nationality = this.datosDocumento.pais;
     if(this.datosDocumento.tipoDocumento){
       this.user.guest.fastcheckin.typeOfDocument = this.datosDocumento.tipoDocumento;
+    } else {
+      this.user.guest.fastcheckin.typeOfDocument = this.tipoDoc ? (this.tipoDoc == 'dni' ? 'D' : 'P') : 'P';
     }
     this.loader.dismiss();
     this.comprobardatos();
