@@ -315,20 +315,20 @@ export class NuevoHuespedPage implements OnInit {
     this.crearHuespedSinFastcheckin().then(res => {
 
       // PARA SELECCIÓN DE DNI:
-      if (this.user.guest.fastcheckin.typeOfDocument == 'D') {
+      if (this.user.guest.fastcheckin.typeOfDocument == 'D' || this.user.guest.fastcheckin.typeOfDocument == 'I') {
 
         // SUBIDA PARTE TRASERA DNI:
 
         this.globalService.subirArchivo(this.photosNifSubida[0], 'huespedes/' + this.user.guest._id, 'dni_trasero')
           .then(ok => {
-            console.log('Subido trasero con éxito DNI');
+            console.log('Subido DNI trasero con éxito');
             this.linksSubidos.push({ enlace: 'huespedes/' + this.user.guest._id, nombre: 'dni_trasero' + this.getExtension(this.photosNifSubida[0]) });
 
 
             // SUBIDA PARTE FRONTAL DNI:
             this.globalService.subirArchivo(this.photosNifSubida[1], 'huespedes/' + this.user.guest._id, 'dni_frontal')
               .then(ok => {
-                console.log('Subido trasera con éxito DNI');
+                console.log('Subido DNI frontal con éxito');
                 this.linksSubidos.push({ enlace: 'huespedes/' + this.user.guest._id, nombre: 'dni_frontal' + this.getExtension(this.photosNifSubida[1]) });
                 this.sendProfile();
               }).catch((error) => {
