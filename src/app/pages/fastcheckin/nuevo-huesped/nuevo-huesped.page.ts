@@ -712,7 +712,7 @@ export class NuevoHuespedPage implements OnInit {
         let asunto = "Nuevo Fastcheckin";
         let mailTo = this.globalService.recepcionista.hotel.email;
         let cco = "amalia@becheckin.com, lidia@becheckin.com";
-        let nombreHuesped = this.fastcheckin.name;
+        let nombreHuesped = this.globalService.recepcionista.hotel.nombre;
         let nombreReserva = this.datosReserva.reserva.id;
         let fechaInicio = this.muestraFechaString(this.datosReserva.reserva.roomReservations[0].checkin);
         let fechaFin = this.muestraFechaString(this.datosReserva.reserva.roomReservations[0].checkout);
