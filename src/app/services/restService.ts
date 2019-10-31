@@ -301,7 +301,7 @@ export class RestWS extends AbstractWS {
   public sendPushToMasteryield(downloadCode) {
     let license = downloadCode.substring(0,4);
     let fd = new HttpParams();
-    return this.makeGetRequest('https://push.masteryield.com/channel_post.php?apikey=7a3680c5-9eb4-m52f-8775-440e31dbe0f2&license='+license+'&json='+downloadCode, fd)
+    return this.makeGetRequest('https://masteryield.eu/channel_post.php?apikey=7a3680c5-9eb4-m52f-8775-440e31dbe0f2&license='+license+'&json='+downloadCode, fd)
       .then(res => {
         return Promise.resolve(res);
       })
