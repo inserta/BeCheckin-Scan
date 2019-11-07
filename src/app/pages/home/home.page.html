@@ -39,11 +39,11 @@
       <ion-label class="ion-text-center center">Hasta</ion-label>
     </ion-item> -->
     <ion-item lines="none">
-      <ion-datetime style="--padding-start:'0'" class="center" [(ngModel)]="fechaLimiteInicial"
+      <ion-datetime style="--padding-start:'0'" class="center" [(ngModel)]="fechaLimiteInicial" max="2030"
         (ionChange)="cambiaFecha($event)" cancel-text="cancelar" done-text="aceptar" displayFormat="DD/MM/YYYY">
       </ion-datetime>
       <ion-icon name="calendar"></ion-icon>
-      <ion-datetime style="--padding-start:'0'" class="center" [(ngModel)]="fechaLimiteFinal"
+      <ion-datetime style="--padding-start:'0'" class="center" [(ngModel)]="fechaLimiteFinal" max="2030"
         (ionChange)="cambiaFecha($event)" cancel-text="cancelar" done-text="aceptar" displayFormat="DD/MM/YYYY">
       </ion-datetime>
     </ion-item>

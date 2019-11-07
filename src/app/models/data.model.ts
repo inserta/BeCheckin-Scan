@@ -122,31 +122,43 @@ export class Imagen {
 }
 
 export class FastCheckin {
-    typeOfDocument: string;
+    _id: string; // Autogenerado
+    tipoDoc: string; // Puede ser: "dni", "pasaporte", "empleado"
+    typeOfDocument: string; // Puede ser:
+                            // "D" (para dni español), 
+                            // "P" (para pasaporte español), 
+                            // "I" (para documento extranjero),
+                            // "C" (para permiso de conducir español),
+                            // "N" (para permiso de residencia español),
+                            // "X" (para permiso de residencia de la unión europea)
+                            // (Actualmente sólo en uso: "P" y "D" para españoles y extranjeros)
+    numDoc: string; // Número de identificación del documento.
+    name: string; // Nombre de la persona
+    surnameOne: string; // Apellidos de la persona
+    surnameTwo: string; // Segundo apellido (sólo para españoles)
+    birthday: string; // Fecha de nacimiento
+    nationality: string; // País, escrito en español, obtenido con i18nIsoCountries.
+    sex: string; // Género, puede ser: "M" (hombre), "F" (mujer)
+    date_exp: string; // Fecha de expedición en formato "yyyy-MM-dd"
+    caducate: Date; // Fecha de finalización de la reserva
+    email: string; // email (opcional)
+    signature: string; // firma (imagen)
+    imagenes: Imagen[] = []; // Enlace a las imágenes (o imagen en caso de pasaporte) de los documentos.
+    province: string; // Provincia (opcional)
+    comeFrom: string; // Servidor donde se ha realizado el fastcheckin.
+    //Obsoletos, pero mantenemos para Fastcheckins antiguos
+    hasDni: boolean; // [Vacío]
+    hasPassport: boolean; // [Vacío]
+    update: string; // [Vacío] No se utiliza por el momento.
+    reserve: string; // [Vacío] Número de la reserva (DownloadCode). Actualmente no se está usando.
     dni: {
-        identifier: string;
+        identifier: string; // Identificador del dni actual. 
+                            // Se dejará de usar en próximas versiones para seguir utilizando "numDoc"
     };
     passport: {
-        identifier: string;
+        identifier: string; // Identificador del pasaporte actual. 
+                            // Se dejará de usar en próximass versiones para seguir utilizando "numDoc"
     };
-    name: string;
-    surnameOne: string;
-    surnameTwo: string;
-    birthday: string;
-    nationality: string;
-    sex: string;
-    date_exp: string;
-    caducate: Date;
-    _id: string;
-    email: string;
-    signature: string;
-    reserve: string;
-    update: string;
-    hasDni: boolean;
-    hasPassport: boolean;
-    tipoDoc: string;
-    imagenes: Imagen[] = [];
-    province: string;
 }
 
 export class Cookies {
