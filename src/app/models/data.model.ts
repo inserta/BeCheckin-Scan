@@ -9,7 +9,7 @@ export class Recepcionista {
 export class Documento {
     Created_date: string;
     doc: string;
-    odCliente: string;
+    idCliente: string;
     _id: string;
 }
 
