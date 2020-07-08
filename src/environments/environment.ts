@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  googleCloudVisionAPIKey: 'AIzaSyAUuoGyUcXJ2eRD952aM4PDXt_iGlktodw'
+  googleCloudVisionAPIKey: 'AIzaSyBjULHHODSwdP-pbaveOPG7xEo1UJ_Y_48'
 };
 
 /*
