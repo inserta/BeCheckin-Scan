@@ -33,7 +33,7 @@
     "core-js": "^2.5.4",
     "crypto-js": "^3.1.9-1",
     "i18n-iso-countries": "^4.3.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "ngx-cookie-service": "^2.2.0",
     "rxjs": "^6.5.3",
     "rxjs-operators": "^1.1.2",
